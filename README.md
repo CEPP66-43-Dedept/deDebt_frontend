@@ -7,4 +7,4 @@ Debt management is a way to get your debt under control through financial planni
 
 
 #
-![Logo](https://media.discordapp.net/attachments/1027767973286510602/1197439363928305674/Mask_group_2.png?ex=65bb454f&is=65a8d04f&hm=b4c1d63a2e6d15c3b2b5456709a940e12f4344f08152d05f9031b2873085791e&=&format=webp&quality=lossless&width=881&height=400)
+![Logo](https://media.discordapp.net/attachments/1027767973286510602/1197441080514334781/Mask_group_3.png?ex=65bb46e8&is=65a8d1e8&hm=af609c1c50909d7430c1e13cea69f07c3bda79e1dd3563bf8212e97607ac489b&=&format=webp&quality=lossless&width=656&height=298)
