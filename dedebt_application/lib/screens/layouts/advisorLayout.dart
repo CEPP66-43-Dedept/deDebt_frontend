@@ -2,14 +2,14 @@ import 'package:dedebt_application/routes/route.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class ConsultLayout extends StatefulWidget {
-  const ConsultLayout({super.key});
+class AdvisorLayout extends StatefulWidget {
+  const AdvisorLayout({super.key});
 
   @override
-  State<ConsultLayout> createState() => _ConsultLayoutState();
+  State<AdvisorLayout> createState() => _AdvisorLayoutState();
 }
 
-class _ConsultLayoutState extends State<ConsultLayout> {
+class _AdvisorLayoutState extends State<AdvisorLayout> {
   @override
   void initState() {
     super.initState();
