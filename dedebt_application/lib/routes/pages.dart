@@ -29,9 +29,9 @@ class ROUTE {
         builder: (context, state) => UserLayout(),
       ),
       GoRoute(
-        name: 'main-consult',
-        path: AppRoutes.MAIN_CONSULTANT,
-        builder: (context, state) => ConsultLayout(),
+        name: 'main-advisor',
+        path: AppRoutes.MAIN_ADVISOR,
+        builder: (context, state) => AdvisorLayout(),
       ),
       GoRoute(
         name: 'main-admin',
