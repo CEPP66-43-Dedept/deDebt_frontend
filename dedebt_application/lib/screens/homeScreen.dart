@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Text('Go to sign in'),
             ),
             ElevatedButton(
-              onPressed: () => context.go(AppRoutes.MAIN_CONSULTANT),
+              onPressed: () => context.go(AppRoutes.MAIN_ADVISOR),
               child: const Text('Go to consult'),
             ),
             ElevatedButton(
