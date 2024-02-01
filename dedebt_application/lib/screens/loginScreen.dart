@@ -1,4 +1,5 @@
 import 'package:dedebt_application/routes/route.dart';
+import 'package:dedebt_application/variables/color.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -17,11 +18,33 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () => context.go(AppRoutes.INITIAL),
-          child: const Text('Go to the Details screen'),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        decoration: const BoxDecoration(color: ColorGuide.whiteAccent),
+        child: ListView(
+          children: [
+            const SizedBox(height: 100),
+            Container(
+              decoration: BoxDecoration(
+                color: ColorGuide.white,
+                shape: BoxShape.circle,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 25.0,
+                  horizontal: 60.0,
+                ),
+                child: Image.asset(
+                  "assets/images/Logo.png",
+                  width: 75,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => context.go(AppRoutes.INITIAL),
+              child: const Text('Go to the Details screen'),
+            ),
+          ],
         ),
       ),
     );
