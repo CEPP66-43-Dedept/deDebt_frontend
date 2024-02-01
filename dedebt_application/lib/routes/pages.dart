@@ -2,7 +2,7 @@ import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/screens/HomeScreen.dart';
 import 'package:dedebt_application/screens/User/homeUserScreen.dart';
 import 'package:dedebt_application/screens/layouts/adminLayout.dart';
-import 'package:dedebt_application/screens/layouts/consultLayout.dart';
+import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
 import 'package:dedebt_application/screens/layouts/matcherLayout.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
 import 'package:dedebt_application/screens/loginScreen.dart';
@@ -29,9 +29,9 @@ class ROUTE {
         builder: (context, state) => UserLayout(),
       ),
       GoRoute(
-        name: 'main-consult',
-        path: AppRoutes.MAIN_CONSULTANT,
-        builder: (context, state) => ConsultLayout(),
+        name: 'main-advisor',
+        path: AppRoutes.MAIN_ADVISOR,
+        builder: (context, state) => AdvisorLayout(),
       ),
       GoRoute(
         name: 'main-admin',
