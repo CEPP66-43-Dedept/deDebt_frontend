@@ -6,6 +6,7 @@ import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
 import 'package:dedebt_application/screens/layouts/matcherLayout.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
 import 'package:dedebt_application/screens/loginScreen.dart';
+import 'package:dedebt_application/screens/registerScreen.dart';
 
 import 'package:go_router/go_router.dart';
 
@@ -22,6 +23,11 @@ class ROUTE {
         name: 'main-login',
         path: AppRoutes.SIGN_IN,
         builder: (context, state) => LoginScreen(),
+      ),
+      GoRoute(
+        name: 'main-regis',
+        path: AppRoutes.Register,
+        builder: (context, state) => RegisterScreen(),
       ),
       GoRoute(
         name: 'main-user',

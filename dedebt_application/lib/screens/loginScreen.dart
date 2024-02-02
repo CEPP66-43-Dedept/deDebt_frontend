@@ -1,5 +1,6 @@
 import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/variables/color.dart';
+import 'package:dedebt_application/variables/rolesEnum.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -164,11 +165,14 @@ class _LoginScreenState extends State<LoginScreen> {
               const Text('ยังไม่มีบัญชีผู้ใช้?'),
               const SizedBox(width: 4),
               GestureDetector(
-                child: const Text(
-                  'ลงทะเบียน',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontWeight: FontWeight.bold,
+                child: TextButton(
+                  onPressed: () => context.go(AppRoutes.Register),
+                  child: Text(
+                    'ลงทะเบียน',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
