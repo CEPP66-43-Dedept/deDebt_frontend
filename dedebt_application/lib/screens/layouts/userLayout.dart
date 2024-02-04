@@ -34,11 +34,11 @@ class _UserLayoutState extends State<UserLayout> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Image.asset(
-                          'assets/Logo.png',
+                          'assets/images/Logo.png',
                           fit: BoxFit.contain,
                         ),
                         Image.asset(
-                          'assets/Backicon.png',
+                          'assets/images/Backicon.png',
                           fit: BoxFit.contain,
                           width: 34,
                           height: 30,
