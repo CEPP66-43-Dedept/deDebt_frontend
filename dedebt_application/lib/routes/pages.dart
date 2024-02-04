@@ -1,6 +1,5 @@
 import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/screens/HomeScreen.dart';
-import 'package:dedebt_application/screens/User/homeUserScreen.dart';
 import 'package:dedebt_application/screens/layouts/adminLayout.dart';
 import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
 import 'package:dedebt_application/screens/layouts/matcherLayout.dart';
