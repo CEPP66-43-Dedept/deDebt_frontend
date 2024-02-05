@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "820290461353",
-    "project_id": "dedebt-a9503",
-    "storage_bucket": "dedebt-a9503.appspot.com"
+    "project_number": "690628174020",
+    "project_id": "dedebt-app",
+    "storage_bucket": "dedebt-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:820290461353:android:b4b4754004d090faa7d3b8",
+        "mobilesdk_app_id": "1:690628174020:android:b4231e373146b123eb2991",
         "android_client_info": {
           "package_name": "com.example.dedebt_application"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDSLnPX4sOOCoJxDfmeabdsBRZX3W6JDpg"
+          "current_key": "AIzaSyBjV2dp7A5jX3TYXZUkkeiNmIhICyDBPbc"
         }
       ],
       "services": {

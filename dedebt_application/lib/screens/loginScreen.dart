@@ -1,6 +1,10 @@
 // ignore: file_names
+import 'dart:ffi';
+
 import 'package:dedebt_application/routes/route.dart';
+import 'package:dedebt_application/services/auth.dart';
 import 'package:dedebt_application/variables/color.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,6 +19,32 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  final TextEditingController _controllerEmail = TextEditingController();
+  final TextEditingController _controllerPassword = TextEditingController();
+  bool inLogin = true;
+  String? errorMessage = '';
+  Future<void> signInWithEmailAndPassword() async {
+    try {
+      await Auth().signInWithEmailAndPassword(
+          email: _controllerEmail.text, password: _controllerPassword.text);
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message;
+      });
+    }
+  }
+
+  Future<void> createUserWithEmailAndPassword() async {
+    try {
+      await Auth().createUserWithEmailAndPassword(
+          email: _controllerEmail.text, password: _controllerPassword.text);
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message;
+      });
+    }
   }
 
   @override
@@ -87,6 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 45,
                         width: 250,
                         child: TextField(
+                          controller: _controllerEmail,
                           keyboardType: TextInputType.text,
                           style: const TextStyle(
                             color: Colors.black,
@@ -114,6 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 45,
                         width: 250,
                         child: TextField(
+                          controller: _controllerPassword,
                           obscureText: true,
                           keyboardType: TextInputType.visiblePassword,
                           style: const TextStyle(

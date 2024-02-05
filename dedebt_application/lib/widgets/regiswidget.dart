@@ -1,5 +1,8 @@
+import 'package:dedebt_application/routes/route.dart';
+import 'package:dedebt_application/variables/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 
 class RegisterFormWidget extends StatefulWidget {
   const RegisterFormWidget({super.key});
@@ -21,27 +24,56 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Stepper(
-        currentStep: _currentStep,
-        onStepTapped: (step) => setState(() => _currentStep = step),
-        steps: [
-          _buildStep1(),
-          _buildStep2(),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Form(
+            key: _formKey,
+            child: Stepper(
+              // type: StepperType.horizontal,
+              currentStep: _currentStep,
+              onStepTapped: (step) => setState(() => _currentStep = step),
+              steps: [
+                _buildStep1(),
+                _buildStep2(),
+              ],
+              onStepContinue: () {
+                _onStepContinue();
+              },
+            ),
+          ),
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(ColorGuide.blueAccent),
+              shadowColor: MaterialStateProperty.all(ColorGuide.black),
+            ),
+            onPressed: () => context.go(AppRoutes.INITIAL),
+            child: const Text(
+              'ลงทะเบียน',
+              style: TextStyle(color: ColorGuide.blueLight, fontSize: 16),
+            ),
+          )
         ],
-        onStepContinue: () {
-          _onStepContinue();
-        },
       ),
     );
   }
 
   Step _buildStep1() {
+    bool allFieldsFilled = _ssnController.text.isNotEmpty &&
+        _firstNameController.text.isNotEmpty &&
+        _lastNameController.text.isNotEmpty &&
+        _telController.text.isNotEmpty &&
+        _passwordController.text.isNotEmpty;
     return Step(
       title: const Text('Step 1: ข้อมูลส่วนตัว'),
       isActive: true,
-      state: _currentStep == 0 ? StepState.editing : StepState.complete,
+      state: _ssnController.text.isNotEmpty &&
+              _firstNameController.text.isNotEmpty &&
+              _lastNameController.text.isNotEmpty &&
+              _telController.text.isNotEmpty &&
+              _passwordController.text.isNotEmpty
+          ? StepState.complete
+          : StepState.editing,
       content: Column(
         children: [
           TextFormField(
@@ -112,6 +144,10 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
   }
 
   Step _buildStep2() {
+    bool isContinueButtonVisible = _currentStep == 1 &&
+        isCheckedPersonal == true &&
+        isCheckedAnotherrRoles == true;
+
     return Step(
       title: const Text('Step 2: ยินยอมการเปิดเผยข้อมูล'),
       content: Column(
@@ -201,15 +237,14 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
         ],
       ),
       isActive: _currentStep == 1,
-      state: (_currentStep == 1 &&
-              isCheckedPersonal == true &&
-              isCheckedAnotherrRoles != true)
-          ? StepState.complete
-          : StepState.editing,
+      state: isContinueButtonVisible ? StepState.complete : StepState.editing,
     );
   }
 
   void _onStepContinue() {
+    //if (_currentStep < 1 &&
+    //  _formKey.currentState != null &&
+    //_formKey.currentState!.validate()) {}
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       if (_currentStep < 1) {
         setState(() => _currentStep += 1);
