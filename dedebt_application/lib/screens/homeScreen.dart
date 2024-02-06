@@ -1,4 +1,6 @@
 import 'package:dedebt_application/routes/route.dart';
+import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
+import 'package:dedebt_application/screens/layouts/userLayout.dart';
 import 'package:dedebt_application/screens/loginScreen.dart';
 import 'package:dedebt_application/services/authService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -35,6 +37,14 @@ class _HomeScreenState extends State<HomeScreen> {
         stream: Auth().authStateChanges,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            final User? currentUser = snapshot.data;
+            if (currentUser != null &&
+                currentUser.email!.endsWith('@kmitl.ac.th')) {
+              return AdvisorLayout();
+            } else {
+              return UserLayout();
+            }
+
             return Scaffold(
               appBar: AppBar(title: const Text('Home')),
               body: Center(
