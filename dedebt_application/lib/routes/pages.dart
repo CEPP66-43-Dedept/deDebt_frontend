@@ -19,11 +19,6 @@ class ROUTE {
         builder: (context, state) => HomeScreen(),
       ),
       GoRoute(
-        name: 'main-login',
-        path: AppRoutes.SIGN_IN,
-        builder: (context, state) => LoginScreen(),
-      ),
-      GoRoute(
         name: 'main-regis',
         path: AppRoutes.Register,
         builder: (context, state) => RegisterScreen(),

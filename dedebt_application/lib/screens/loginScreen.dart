@@ -1,8 +1,9 @@
 // ignore: file_names
 import 'dart:ffi';
+import 'package:logging/logging.dart';
 
 import 'package:dedebt_application/routes/route.dart';
-import 'package:dedebt_application/services/auth.dart';
+import 'package:dedebt_application/services/authService.dart';
 import 'package:dedebt_application/variables/color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool isLogin = true;
   @override
   void initState() {
     super.initState();
@@ -27,10 +29,13 @@ class _LoginScreenState extends State<LoginScreen> {
   String? errorMessage = '';
   Future<void> signInWithEmailAndPassword() async {
     try {
+      Logger('mylog').info('login Now');
+
       await Auth().signInWithEmailAndPassword(
           email: _controllerEmail.text, password: _controllerPassword.text);
     } on FirebaseAuthException catch (e) {
       setState(() {
+        Logger('mylog').warning('failed');
         errorMessage = e.message;
       });
     }
@@ -189,7 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     MaterialStateProperty.all(ColorGuide.blueAccent),
                 shadowColor: MaterialStateProperty.all(ColorGuide.black),
               ),
-              onPressed: () => context.go(AppRoutes.INITIAL),
+              onPressed: signInWithEmailAndPassword,
               child: const Text(
                 'เข้าสู่ระบบ',
                 style: TextStyle(color: ColorGuide.blueLight, fontSize: 16),
