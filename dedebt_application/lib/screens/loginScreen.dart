@@ -1,5 +1,6 @@
 // ignore: file_names
 import 'dart:ffi';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logging/logging.dart';
 
 import 'package:dedebt_application/routes/route.dart';
@@ -41,12 +42,14 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<void> createUserWithEmailAndPassword() async {
+  Future<void> signInWithGoogle(BuildContext context) async {
     try {
-      await Auth().createUserWithEmailAndPassword(
-          email: _controllerEmail.text, password: _controllerPassword.text);
+      Logger('mylog').info('login Now');
+
+      await Auth().signInWithGoogle(context);
     } on FirebaseAuthException catch (e) {
       setState(() {
+        Logger('mylog').warning('failed');
         errorMessage = e.message;
       });
     }
@@ -198,6 +201,20 @@ class _LoginScreenState extends State<LoginScreen> {
               child: const Text(
                 'เข้าสู่ระบบ',
                 style: TextStyle(color: ColorGuide.blueLight, fontSize: 16),
+              ),
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(ColorGuide.whiteAccent),
+                shadowColor: MaterialStateProperty.all(ColorGuide.black),
+              ),
+              onPressed: () {
+                signInWithGoogle(context); // ตั้งค่าเป็นฟังก์ชันที่ไม่ส่งคืนค่า
+              },
+              child: const Text(
+                'Google SignIn',
+                style: TextStyle(color: ColorGuide.blueDarken, fontSize: 16),
               ),
             ),
             const SizedBox(height: 10),

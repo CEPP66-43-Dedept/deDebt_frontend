@@ -6,6 +6,7 @@ import 'package:dedebt_application/screens/layouts/matcherLayout.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
 import 'package:dedebt_application/screens/loginScreen.dart';
 import 'package:dedebt_application/screens/registerScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:go_router/go_router.dart';
 
@@ -20,8 +21,11 @@ class ROUTE {
       ),
       GoRoute(
         name: 'main-regis',
-        path: AppRoutes.Register,
-        builder: (context, state) => RegisterScreen(),
+        path: '/register/:email', // เพิ่ม ":email" ลงใน path
+        builder: (context, state) {
+          final email = state.pathParameters['email'] as String?;
+          return RegisterScreen(email: email ?? '');
+        },
       ),
       GoRoute(
         name: 'main-user',

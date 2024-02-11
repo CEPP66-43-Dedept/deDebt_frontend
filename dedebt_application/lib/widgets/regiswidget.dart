@@ -1,11 +1,14 @@
 import 'package:dedebt_application/routes/route.dart';
+import 'package:dedebt_application/services/authService.dart';
 import 'package:dedebt_application/variables/color.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 class RegisterFormWidget extends StatefulWidget {
-  const RegisterFormWidget({super.key});
+  final String? email;
+  const RegisterFormWidget({required this.email});
 
   @override
   State<RegisterFormWidget> createState() => _RegisterFormWidgetState();
@@ -23,6 +26,18 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
   int _currentStep = 0;
 
   @override
+  Future<void> createUserWithEmailAndPassword(
+      email, ssn, fName, lName, tel, password) async {
+    try {
+      await Auth().createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+          firstName: fName,
+          lastName: lName,
+          tel: tel);
+    } on FirebaseAuthException catch (e) {}
+  }
+
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
@@ -47,7 +62,13 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
               backgroundColor: MaterialStateProperty.all(ColorGuide.blueAccent),
               shadowColor: MaterialStateProperty.all(ColorGuide.black),
             ),
-            onPressed: () => context.go(AppRoutes.INITIAL),
+            onPressed: () => createUserWithEmailAndPassword(
+                widget.email,
+                _ssnController.text,
+                _firstNameController.text,
+                _lastNameController.text,
+                _telController.text,
+                _passwordController.text),
             child: const Text(
               'ลงทะเบียน',
               style: TextStyle(color: ColorGuide.blueLight, fontSize: 16),
@@ -242,9 +263,6 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
   }
 
   void _onStepContinue() {
-    //if (_currentStep < 1 &&
-    //  _formKey.currentState != null &&
-    //_formKey.currentState!.validate()) {}
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       if (_currentStep < 1) {
         setState(() => _currentStep += 1);

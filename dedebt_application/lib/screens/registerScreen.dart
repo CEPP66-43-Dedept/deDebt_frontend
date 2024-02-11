@@ -3,14 +3,20 @@ import 'package:dedebt_application/widgets/regiswidget.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
-
+  final String? email;
+  RegisterScreen({required this.email});
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  String? _email;
   @override
+  void initState() {
+    super.initState();
+    _email = widget.email;
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -59,7 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 fontWeight: FontWeight.normal,
               ),
             ),
-            const RegisterFormWidget(),
+            RegisterFormWidget(email: _email),
           ],
         ),
       ),
