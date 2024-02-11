@@ -34,7 +34,8 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
           password: password,
           firstName: fName,
           lastName: lName,
-          tel: tel);
+          tel: tel,
+          context: context);
     } on FirebaseAuthException catch (e) {}
   }
 

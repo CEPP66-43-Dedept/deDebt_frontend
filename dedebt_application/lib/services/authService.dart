@@ -17,27 +17,38 @@ class Auth {
         email: email, password: password);
   }
 
-  Future<void> createUserWithEmailAndPassword({
-    required String email,
-    required String password,
-    required String firstName,
-    required String lastName,
-    required String tel,
-  }) async {
-    UserCredential userCredential =
-        await _firebaseAuth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-    CollectionReference users = _firestore.collection('users');
-    final user = <String, String>{
-      'email': email,
-      'firstName': firstName,
-      'lastName': lastName,
-      'tel': tel,
-    };
-    users.add(user);
+  Future<void> createUserWithEmailAndPassword(
+      {required String email,
+      required String password,
+      required String firstName,
+      required String lastName,
+      required String tel,
+      required BuildContext context}) async {
+    try {
+      UserCredential userCredential =
+          await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+      CollectionReference users = _firestore.collection('users');
+      final user = <String, String>{
+        'email': email,
+        'firstName': firstName,
+        'lastName': lastName,
+        'tel': tel,
+      };
+      users.add(user);
+
+      if (userCredential != null) {
+        context.go(AppRoutes.INITIAL);
+      } else {
+        print('Error creating user');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
   Future<void> signOut() async {
