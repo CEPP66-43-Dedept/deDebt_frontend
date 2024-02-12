@@ -72,7 +72,6 @@ class _homeUserScreenState extends State<homeUserScreen> {
     super.initState();
   }
 
-  static Color primaryColor = Color(0xFFF3F5FE);
   Users thisuser = Users(
     id: 0,
     ssn: 0,
@@ -103,7 +102,8 @@ class _homeUserScreenState extends State<homeUserScreen> {
       ], //ผ่อนหนี้ [1/3ของรายได้,1/3-1/2ของรายได้,1/2-2/3ของรายได้,มากกว่า 2/3 ของรายได้ ]
       propoty: 25000,
       assignmentId: [],
-      appointmentDate: []);
+      appointmentDate: [DateTime(2024,2,17)],
+      appointmentStatus: []);
 
   Widget build(BuildContext context) {
     return Scaffold(
