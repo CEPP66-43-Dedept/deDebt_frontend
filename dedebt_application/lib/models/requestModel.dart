@@ -1,6 +1,7 @@
 class request {
   final int id;
   final String title;
+  final String detail;
   final int userId;
   final int advisorId;
   final String requestStatus;
@@ -27,6 +28,7 @@ class request {
   request({
     required this.id,
     required this.title,
+    required this.detail,
     required this.userId,
     required this.advisorId,
     required this.requestStatus,
@@ -45,6 +47,7 @@ class request {
     return {
       'id': id,
       'title': title,
+      'detail': detail,
       'userId': userId,
       'advisorId': advisorId,
       'reqeustStatus': requestStatus,
