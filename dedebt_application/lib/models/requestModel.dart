@@ -24,7 +24,8 @@ class request {
   */
   final int propoty;
   final List<int> assignmentId;
-  final List<int> appointmentDate;
+  final List<DateTime> appointmentDate;
+  final List<int> appointmentStatus;
   request({
     required this.id,
     required this.title,
@@ -41,6 +42,7 @@ class request {
     required this.propoty,
     required this.assignmentId,
     required this.appointmentDate,
+    required this.appointmentStatus,
   });
 
   Map<String, dynamic> toMap() {
@@ -59,7 +61,8 @@ class request {
       'burden': burden,
       'propoty': propoty,
       'assignmentId': assignmentId,
-      'appointmentDate': appointmentDate
+      'appointmentDate': appointmentDate,
+      'appointmentStatus': appointmentStatus
     };
   }
 }
