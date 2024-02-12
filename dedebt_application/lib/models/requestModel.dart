@@ -5,23 +5,12 @@ class request {
   final int userId;
   final int advisorId;
   final String requestStatus;
-  final List<int> type;
-  /* 0 -> บัตรเครดิต
-  1 -> สินเชื่อส่วนบุคคล หรือบัตรกดเงินสด
-  2 -> หนี้บ้าน หนี้ที่อยู่อาศัย หนี้บ้านแลกเงิน
-  3 -> หนี้จำนำทะเบียนรถ
-  4 -> หนี้เช่าซื้อรถ
-  */
+  final List<String> type; //ประเภทของหนี้
   final List<String> debtStatus;
   final List<String> provider;
   final List<int> revenue;
-  final List<int> expense;
-  final List<int> burden;
-  /*
-  0 -> ปกติหรือค้างชำระไม่เกิน 90 วัน
-  1 -> Non-performing Loan (NPL) (ค้างชำระเกิน 90 วัน)
-  2 -> อยู่ระหว่างกระบวนการกฎหมายหรือศาลพิพากษาแล้ว
-  */
+  final List<int> expense; 
+  final List<String> burden; //ภาระของหนี้ต่อรายรับ
   final int propoty;
   final List<int> assignmentId;
   final List<DateTime> appointmentDate;
