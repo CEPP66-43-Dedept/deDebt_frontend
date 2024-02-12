@@ -1,7 +1,5 @@
-import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/services/authService.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -34,11 +32,8 @@ class _UserLayoutState extends State<UserLayout> {
       appBar: AppBar(title: const Text('Main-user')),
       body: Center(
         child: ElevatedButton(
-          onPressed: () => context.go(AppRoutes.INITIAL),
-          child: ElevatedButton(
-            onPressed: () => signOut(),
-            child: const Text('Sign out'),
-          ),
+          onPressed: () => signOut(),
+          child: const Text('Sign out'),
         ),
       ),
     );

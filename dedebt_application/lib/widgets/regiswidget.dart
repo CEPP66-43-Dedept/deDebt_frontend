@@ -63,13 +63,15 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
               backgroundColor: MaterialStateProperty.all(ColorGuide.blueAccent),
               shadowColor: MaterialStateProperty.all(ColorGuide.black),
             ),
-            onPressed: () => createUserWithEmailAndPassword(
-                widget.email,
-                _ssnController.text,
-                _firstNameController.text,
-                _lastNameController.text,
-                _telController.text,
-                _passwordController.text),
+            onPressed: () => {
+              createUserWithEmailAndPassword(
+                  widget.email,
+                  _ssnController.text,
+                  _firstNameController.text,
+                  _lastNameController.text,
+                  _telController.text,
+                  _passwordController.text)
+            },
             child: const Text(
               'ลงทะเบียน',
               style: TextStyle(color: ColorGuide.blueLight, fontSize: 16),
@@ -105,15 +107,15 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
             validator: (value) {
               if (value != null && value.isEmpty) {
                 return 'กรุณากรอกเลขประจำตัวประชาชน';
-              } else if (value != null && value.length != 14) {
-                return 'เลขประจำตัวประชาชนต้องมี 14 หลัก';
+              } else if (value != null && value.length != 13) {
+                return 'เลขประจำตัวประชาชนต้องมี 13 หลัก';
               }
               return null;
             },
             keyboardType: TextInputType.number,
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(14),
+              LengthLimitingTextInputFormatter(13),
             ],
           ),
           TextFormField(

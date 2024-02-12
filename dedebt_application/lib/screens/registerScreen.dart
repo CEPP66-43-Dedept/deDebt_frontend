@@ -69,7 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ],
         ),
       ),
-      resizeToAvoidBottomInset: true, // เซ็ต resizeToAvoidBottomInset เป็น true
+      resizeToAvoidBottomInset: true,
     );
   }
 }

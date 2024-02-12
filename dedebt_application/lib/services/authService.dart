@@ -7,8 +7,12 @@ import 'package:flutter/material.dart';
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   User? get currentUser => _firebaseAuth.currentUser;
+
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
+
   Future<void> signInWithEmailAndPassword({
     required String email,
     required String password,
@@ -17,37 +21,38 @@ class Auth {
         email: email, password: password);
   }
 
-  Future<void> createUserWithEmailAndPassword(
-      {required String email,
-      required String password,
-      required String firstName,
-      required String lastName,
-      required String tel,
-      required BuildContext context}) async {
+  Future<void> createUserWithEmailAndPassword({
+    required String email,
+    required String password,
+    required String firstName,
+    required String lastName,
+    required String tel,
+    required BuildContext context,
+  }) async {
     try {
-      UserCredential userCredential =
-          await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      final FirebaseFirestore _firestore = FirebaseFirestore.instance;
       CollectionReference users = _firestore.collection('users');
       final user = <String, String>{
         'email': email,
         'firstName': firstName,
         'lastName': lastName,
         'tel': tel,
+        'role': 'user'
       };
-      users.add(user);
-
-      if (userCredential != null) {
-        context.go(AppRoutes.INITIAL);
-      } else {
-        print('Error creating user');
-      }
+      await users.add(user);
+      context.go(AppRoutes.INITIAL);
     } catch (e) {
       print('Error: $e');
+    }
+  }
+
+  Future<bool?> checkData(User? currentUser) async {
+    try {
+      CollectionReference users = _firestore.collection('users');
+      final QuerySnapshot querySnapshot =
+          await users.where('email', isEqualTo: currentUser!.email).get();
+      return querySnapshot.docs.isNotEmpty;
+    } catch (e) {
+      return false;
     }
   }
 
@@ -61,19 +66,17 @@ class Auth {
       final GoogleSignInAccount? googleSignInAccount =
           await _googleSignIn.signIn();
       if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
+        final currentUser = _firebaseAuth.currentUser;
 
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          idToken: googleSignInAuthentication.idToken,
-          accessToken: googleSignInAuthentication.accessToken,
-        );
-        print('Email: ${googleSignInAccount.email}');
-
-        context.go(
-          AppRoutes.Register + "/" + googleSignInAccount.email,
-        );
+        final userExists = await checkData(currentUser);
+        if (currentUser != null && userExists != null && userExists) {
+          context.go(AppRoutes.INITIAL);
+        } else {
+          context.go(AppRoutes.Register + "/" + currentUser!.email!);
+        }
       }
-    } catch (e) {}
+    } catch (e) {
+      print('Error signing in with Google: $e');
+    }
   }
 }

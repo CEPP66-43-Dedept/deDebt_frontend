@@ -1,14 +1,11 @@
 // ignore: file_names
-import 'dart:ffi';
-import 'package:google_sign_in/google_sign_in.dart';
+
 import 'package:logging/logging.dart';
 
-import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/services/authService.dart';
 import 'package:dedebt_application/variables/color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -24,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
   }
 
+  Auth _auth = Auth();
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
   bool inLogin = true;
@@ -32,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       Logger('mylog').info('login Now');
 
-      await Auth().signInWithEmailAndPassword(
+      await _auth.signInWithEmailAndPassword(
           email: _controllerEmail.text, password: _controllerPassword.text);
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -46,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       Logger('mylog').info('login Now');
 
-      await Auth().signInWithGoogle(context);
+      await _auth.signInWithGoogle(context);
     } on FirebaseAuthException catch (e) {
       setState(() {
         Logger('mylog').warning('failed');
@@ -225,7 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(width: 4),
                 GestureDetector(
                   child: TextButton(
-                    onPressed: () => context.go(AppRoutes.Register),
+                    onPressed: () => signInWithGoogle(context),
                     child: const Text(
                       'ลงทะเบียน',
                       style: TextStyle(

@@ -1,12 +1,7 @@
 import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/screens/HomeScreen.dart';
-import 'package:dedebt_application/screens/layouts/adminLayout.dart';
-import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
-import 'package:dedebt_application/screens/layouts/matcherLayout.dart';
-import 'package:dedebt_application/screens/layouts/userLayout.dart';
-import 'package:dedebt_application/screens/loginScreen.dart';
+
 import 'package:dedebt_application/screens/registerScreen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:go_router/go_router.dart';
 
@@ -27,7 +22,7 @@ class ROUTE {
           return RegisterScreen(email: email ?? '');
         },
       ),
-      GoRoute(
+      /*   GoRoute(
         name: 'main-user',
         path: AppRoutes.MAIN_USER,
         builder: (context, state) => UserLayout(),
@@ -46,7 +41,7 @@ class ROUTE {
         name: 'main-matcher',
         path: AppRoutes.MAIN_MATCHER,
         builder: (context, state) => MatcherLayout(),
-      ),
+      ),*/
     ],
   );
 }
