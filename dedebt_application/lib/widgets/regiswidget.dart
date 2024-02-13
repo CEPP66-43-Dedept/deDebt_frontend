@@ -1,10 +1,8 @@
-import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/services/authService.dart';
 import 'package:dedebt_application/variables/color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 
 class RegisterFormWidget extends StatefulWidget {
   final String? email;
@@ -25,7 +23,6 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
   bool? isCheckedAnotherrRoles = false;
   int _currentStep = 0;
 
-  @override
   Future<void> createUserWithEmailAndPassword(
       email, ssn, fName, lName, tel, password) async {
     try {
@@ -36,26 +33,36 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
           lastName: lName,
           tel: tel,
           context: context);
-    } on FirebaseAuthException catch (e) {}
+    } on FirebaseAuthException {}
   }
 
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Form(
-            key: _formKey,
-            child: Stepper(
-              // type: StepperType.horizontal,
-              currentStep: _currentStep,
-              onStepTapped: (step) => setState(() => _currentStep = step),
-              steps: [
-                _buildStep1(),
-                _buildStep2(),
+          Container(
+            width: 300,
+            decoration: BoxDecoration(
+                color: ColorGuide.white,
+                borderRadius: BorderRadius.circular(20)),
+            child: Column(
+              children: [
+                Form(
+                  key: _formKey,
+                  child: Stepper(
+                    // type: StepperType.horizontal,
+                    currentStep: _currentStep,
+                    onStepTapped: (step) => setState(() => _currentStep = step),
+                    steps: [
+                      _buildStep1(),
+                      _buildStep2(),
+                    ],
+                    onStepContinue: () {
+                      _onStepContinue();
+                    },
+                  ),
+                ),
               ],
-              onStepContinue: () {
-                _onStepContinue();
-              },
             ),
           ),
           ElevatedButton(
@@ -64,13 +71,20 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
               shadowColor: MaterialStateProperty.all(ColorGuide.black),
             ),
             onPressed: () => {
-              createUserWithEmailAndPassword(
-                  widget.email,
-                  _ssnController.text,
-                  _firstNameController.text,
-                  _lastNameController.text,
-                  _telController.text,
-                  _passwordController.text)
+              if (_ssnController.text.isNotEmpty &&
+                  _firstNameController.text.isNotEmpty &&
+                  _lastNameController.text.isNotEmpty &&
+                  _telController.text.isNotEmpty &&
+                  _passwordController.text.isNotEmpty)
+                {
+                  createUserWithEmailAndPassword(
+                      widget.email,
+                      _ssnController.text,
+                      _firstNameController.text,
+                      _lastNameController.text,
+                      _telController.text,
+                      _passwordController.text)
+                }
             },
             child: const Text(
               'ลงทะเบียน',
@@ -83,11 +97,6 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
   }
 
   Step _buildStep1() {
-    bool allFieldsFilled = _ssnController.text.isNotEmpty &&
-        _firstNameController.text.isNotEmpty &&
-        _lastNameController.text.isNotEmpty &&
-        _telController.text.isNotEmpty &&
-        _passwordController.text.isNotEmpty;
     return Step(
       title: const Text('Step 1: ข้อมูลส่วนตัว'),
       isActive: true,
@@ -221,7 +230,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
                 text: TextSpan(
                   text: "-ผู้รับคำปรึกษา",
                   style: DefaultTextStyle.of(context).style,
-                  children: [
+                  children: const [
                     TextSpan(
                       text:
                           "\n\t-เพื่อที่จะสามารถรับรู้รายละเอียดของคำร้องขอได้",
@@ -234,7 +243,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
                 text: TextSpan(
                   text: "-ผู้จับคู่",
                   style: DefaultTextStyle.of(context).style,
-                  children: [
+                  children: const [
                     TextSpan(
                       text:
                           "\n\t-เพื่อที่จะสามารถรับรู้รายละเอียดของคำร้องขอได้",
@@ -247,7 +256,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
                 text: TextSpan(
                   text: "-ผู้ดูแล",
                   style: DefaultTextStyle.of(context).style,
-                  children: [
+                  children: const [
                     TextSpan(
                       text:
                           "\n\t-เพื่อที่จะสามารถตรวจสอบรายละเอียดต่างๆของผู้ใช้งาน",

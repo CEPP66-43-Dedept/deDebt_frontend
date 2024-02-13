@@ -197,40 +197,63 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               onPressed: signInWithEmailAndPassword,
               child: const Text(
-                'เข้าสู่ระบบ',
+                '     เข้าสู่ระบบ     ',
                 style: TextStyle(color: ColorGuide.blueLight, fontSize: 16),
               ),
             ),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all(ColorGuide.whiteAccent),
-                shadowColor: MaterialStateProperty.all(ColorGuide.black),
-              ),
-              onPressed: () {
-                signInWithGoogle(context); // ตั้งค่าเป็นฟังก์ชันที่ไม่ส่งคืนค่า
-              },
-              child: const Text(
-                'Google SignIn',
-                style: TextStyle(color: ColorGuide.blueDarken, fontSize: 16),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Row(
+            const SizedBox(height: 5),
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('ยังไม่มีบัญชีผู้ใช้?'),
-                const SizedBox(width: 4),
+                SizedBox(
+                  width: 150,
+                  child: Divider(
+                    thickness: 1,
+                    color: ColorGuide.blueDarken,
+                  ),
+                ),
+                const Text(
+                  'ยังไม่มีบัญชีผู้ใช้?',
+                  style: TextStyle(
+                    fontSize: 13,
+                  ),
+                ),
+                const SizedBox(
+                  width: 4,
+                  height: 5,
+                ),
                 GestureDetector(
-                  child: TextButton(
-                    onPressed: () => signInWithGoogle(context),
-                    child: const Text(
-                      'ลงทะเบียน',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        fontWeight: FontWeight.bold,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(ColorGuide.white),
+                          shadowColor:
+                              MaterialStateProperty.all(ColorGuide.black),
+                        ),
+                        onPressed: () {
+                          signInWithGoogle(context);
+                        },
+                        child: Row(
+                          children: [
+                            const Text(
+                              'Sign up with Google',
+                              style: TextStyle(
+                                  color: ColorGuide.blueDarken, fontSize: 11),
+                            ),
+                            SizedBox(
+                              width: 3,
+                            ),
+                            Image.asset(
+                              "assets/images/googleLogo.png",
+                              width: 20,
+                            )
+                          ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ],

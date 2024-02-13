@@ -39,7 +39,15 @@ class Auth {
         'role': 'user'
       };
       await users.add(user);
-      context.go(AppRoutes.INITIAL);
+      UserCredential userCredential =
+          await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      if (userCredential != null) {
+        context.go(AppRoutes.INITIAL);
+      }
     } catch (e) {
       print('Error: $e');
     }
@@ -66,6 +74,13 @@ class Auth {
       final GoogleSignInAccount? googleSignInAccount =
           await _googleSignIn.signIn();
       if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+        final AuthCredential credential = GoogleAuthProvider.credential(
+            idToken: googleSignInAuthentication.idToken,
+            accessToken: googleSignInAuthentication.accessToken);
+        final UserCredential userCredential =
+            await _firebaseAuth.signInWithCredential(credential);
         final currentUser = _firebaseAuth.currentUser;
 
         final userExists = await checkData(currentUser);
