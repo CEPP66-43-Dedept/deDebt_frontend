@@ -12,15 +12,50 @@ class UserLayout extends StatefulWidget {
 
 class _UserLayoutState extends State<UserLayout> {
   static Color primaryColor = Color(0xFFF3F5FE);
-
+  int currentPage = 0;
+  final PageController _pageController = PageController(initialPage: 0);
+  final List<IconData> _normalIcon = [
+    Icons.home,
+    Icons.attach_money,
+    Icons.replay,
+    Icons.person
+  ];
+  final List<IconData> _outlinedIcon = [
+    Icons.home_outlined,
+    Icons.attach_money_outlined,
+    Icons.replay_outlined,
+    Icons.person_outline
+  ];
   @override
   void initState() {
     super.initState();
   }
 
+  IconData getIcon(int index) {
+    return currentPage == index ? _normalIcon[index] : _outlinedIcon[index];
+  }
+
+  Color getIconColors(int index) {
+    return currentPage == index ? Colors.white : Colors.grey;
+  }
+
+  void onPageChanged(int page) {
+    setState(() {
+      currentPage = page;
+    });
+  }
+
+  void onTap(int page) {
+    setState(() {
+      currentPage = page;
+      _pageController.jumpToPage(page);
+    });
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: primaryColor,
         toolbarHeight: 55,
         title: Column(
           children: [
@@ -49,21 +84,48 @@ class _UserLayoutState extends State<UserLayout> {
                 )),
           ],
         ),
-        backgroundColor: primaryColor,
       ),
       body: PageView(
+        controller: _pageController,
+        onPageChanged: onPageChanged,
         children: [homeUserScreen()],
       ),
-      bottomNavigationBar: Container(
+      bottomNavigationBar: SizedBox(
         height: 55,
-        child: ElevatedButton(
-            onPressed: () => context.go(AppRoutes.INITIAL),
-            child: const Text('Go to the user screen')),
+        child: BottomAppBar(
+          color: const Color(0xFF444371),
+          padding: const EdgeInsets.all(0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                icon: Icon(getIcon(0), size: 35, color: getIconColors(0)),
+                onPressed: () {
+                  onTap(0);
+                },
+              ),
+              IconButton(
+                icon: Icon(getIcon(1), size: 35, color: getIconColors(1)),
+                onPressed: () {
+                  onTap(1);
+                },
+              ),
+              IconButton(
+                icon: Icon(getIcon(2), size: 35, color: getIconColors(2)),
+                onPressed: () {
+                  onTap(2);
+                },
+              ),
+              IconButton(
+                icon: Icon(getIcon(3), size: 35, color: getIconColors(3)),
+                onPressed: () {
+                  onTap(3);
+                },
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
 }
-/*              ElevatedButton(
-                  onPressed: () => context.go(AppRoutes.INITIAL),
-                  child: const Text('Go to the user screen'),
-                )*/
