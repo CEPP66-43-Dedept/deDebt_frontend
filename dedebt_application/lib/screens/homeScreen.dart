@@ -1,4 +1,5 @@
 import 'package:dedebt_application/routes/route.dart';
+import 'package:dedebt_application/screens/docAssignScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget build(BuildContext context) {
+    return DocAssignScreen();
     return Scaffold(
       appBar: AppBar(title: const Text('Home')),
       body: Center(

@@ -38,6 +38,10 @@ dependencies:
   motion_tab_bar_v2: ^0.3.0
   go_router: ^13.0.1
   firebase_core: ^2.25.1
+  printing: ^5.11.1
+  pdf: ^3.10.7
+  path_provider: ^2.1.2
+  open_file: ^3.3.2
 
 dev_dependencies:
   flutter_test:

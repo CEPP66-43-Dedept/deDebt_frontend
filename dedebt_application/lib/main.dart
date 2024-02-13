@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:dedebt_application/routes/pages.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
