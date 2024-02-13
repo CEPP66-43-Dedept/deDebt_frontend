@@ -75,7 +75,9 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
                   _firstNameController.text.isNotEmpty &&
                   _lastNameController.text.isNotEmpty &&
                   _telController.text.isNotEmpty &&
-                  _passwordController.text.isNotEmpty) {
+                  _passwordController.text.isNotEmpty &&
+                  isCheckedPersonal! &&
+                  isCheckedAnotherrRoles!) {
                 createUserWithEmailAndPassword(
                   widget.email,
                   _ssnController.text,

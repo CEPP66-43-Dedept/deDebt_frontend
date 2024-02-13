@@ -16,32 +16,12 @@ class ROUTE {
       ),
       GoRoute(
         name: 'main-regis',
-        path: '/register/:email', // เพิ่ม ":email" ลงใน path
+        path: '/register/:email',
         builder: (context, state) {
           final email = state.pathParameters['email'] as String?;
           return RegisterScreen(email: email ?? '');
         },
       ),
-      /*   GoRoute(
-        name: 'main-user',
-        path: AppRoutes.MAIN_USER,
-        builder: (context, state) => UserLayout(),
-      ),
-      GoRoute(
-        name: 'main-advisor',
-        path: AppRoutes.MAIN_ADVISOR,
-        builder: (context, state) => AdvisorLayout(),
-      ),
-      GoRoute(
-        name: 'main-admin',
-        path: AppRoutes.MAIN_ADMIN,
-        builder: (context, state) => AdminLayout(),
-      ),
-      GoRoute(
-        name: 'main-matcher',
-        path: AppRoutes.MAIN_MATCHER,
-        builder: (context, state) => MatcherLayout(),
-      ),*/
     ],
   );
 }

@@ -23,6 +23,29 @@ class Auth {
         email: email, password: password);
   }
 
+  Future<void> updatePassword(User user, String newPassword) async {
+    try {
+      await user.updatePassword(newPassword);
+      // ignore: empty_catches
+    } catch (e) {}
+  }
+
+  bool isGoogleSignIn(User user) {
+    return user.providerData
+        .any((userInfo) => userInfo.providerId == 'google.com');
+  }
+
+  bool isEmailPasswordSignIn(User user) {
+    return user.providerData
+        .any((userInfo) => userInfo.providerId == 'password');
+  }
+
+  void updateUserPassword(User user, String newPassword) {
+    if (isEmailPasswordSignIn(user)) {
+      updatePassword(user, newPassword);
+    } else {}
+  }
+
   Future<void> createUserWithEmailAndPassword({
     required String email,
     required String password,
@@ -32,6 +55,11 @@ class Auth {
     required BuildContext context,
   }) async {
     try {
+      final currentUser = _firebaseAuth.currentUser;
+      if (currentUser != null) {
+        updateUserPassword(currentUser, password);
+      }
+
       CollectionReference users = _firestore.collection('users');
 
       final user = <String, dynamic>{
@@ -42,35 +70,9 @@ class Auth {
         'role': role.Roles.USER.index,
       };
       await users.add(user);
-      try {
-        UserCredential userCredential =
-            await _firebaseAuth.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
 
-        // ตรวจสอบว่าการเข้าสู่ระบบเสร็จสมบูรณ์
-        if (userCredential != null) {
-          context.go(AppRoutes.INITIAL);
-        }
-      } catch (e) {
-        // จัดการข้อผิดพลาดเมื่อเข้าสู่ระบบไม่สำเร็จ
-        context.go(AppRoutes.INITIAL);
-        print('Error signing in: $e');
-      }
-
-      /*  UserCredential userCredential =
-          await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      if (userCredential != null) {
-        context.go(AppRoutes.INITIAL);
-      }
-      context.go(AppRoutes.INITIAL);*/
-    } catch (e) {
-      print('Error: $e');
-    }
+      context.go(AppRoutes.INITIAL);
+    } catch (e) {}
   }
 
   Future<bool?> checkData(User? currentUser) async {
@@ -89,11 +91,13 @@ class Auth {
   }
 
   Future<void> signInWithGoogle(BuildContext context) async {
-    final GoogleSignIn _googleSignIn = GoogleSignIn();
+    final GoogleSignIn googleSignIn = GoogleSignIn();
     try {
       final GoogleSignInAccount? googleSignInAccount =
-          await _googleSignIn.signIn();
+          await googleSignIn.signIn();
       if (googleSignInAccount != null) {
+        final currentUser = _firebaseAuth.currentUser;
+
         final GoogleSignInAuthentication googleSignInAuthentication =
             await googleSignInAccount.authentication;
         final AuthCredential credential = GoogleAuthProvider.credential(
@@ -101,17 +105,15 @@ class Auth {
             accessToken: googleSignInAuthentication.accessToken);
         final UserCredential userCredential =
             await _firebaseAuth.signInWithCredential(credential);
-        final currentUser = _firebaseAuth.currentUser;
-
         final userExists = await checkData(currentUser);
         if (currentUser != null && userExists != null && userExists) {
+          // ignore: use_build_context_synchronously
           context.go(AppRoutes.INITIAL);
         } else {
-          context.go(AppRoutes.Register + "/" + currentUser!.email!);
+          // ignore: use_build_context_synchronously
+          context.go("${AppRoutes.Register}/${currentUser!.email!}");
         }
       }
-    } catch (e) {
-      print('Error signing in with Google: $e');
-    }
+    } catch (e) {}
   }
 }
