@@ -41,7 +41,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
       child: Column(
         children: [
           Container(
-            width: 300,
+            width: 400,
             decoration: BoxDecoration(
                 color: ColorGuide.white,
                 borderRadius: BorderRadius.circular(20)),
@@ -70,21 +70,28 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
               backgroundColor: MaterialStateProperty.all(ColorGuide.blueAccent),
               shadowColor: MaterialStateProperty.all(ColorGuide.black),
             ),
-            onPressed: () => {
+            onPressed: () {
               if (_ssnController.text.isNotEmpty &&
                   _firstNameController.text.isNotEmpty &&
                   _lastNameController.text.isNotEmpty &&
                   _telController.text.isNotEmpty &&
-                  _passwordController.text.isNotEmpty)
-                {
-                  createUserWithEmailAndPassword(
-                      widget.email,
-                      _ssnController.text,
-                      _firstNameController.text,
-                      _lastNameController.text,
-                      _telController.text,
-                      _passwordController.text)
-                }
+                  _passwordController.text.isNotEmpty) {
+                createUserWithEmailAndPassword(
+                  widget.email,
+                  _ssnController.text,
+                  _firstNameController.text,
+                  _lastNameController.text,
+                  _telController.text,
+                  _passwordController.text,
+                );
+              } else {
+                print("_ssnController.text: ${_ssnController.text}");
+                print(
+                    "_firstNameController.text: ${_firstNameController.text}");
+                print("_lastNameController.text: ${_lastNameController.text}");
+                print("_telController.text: ${_telController.text}");
+                print("_passwordController.text: ${_passwordController.text}");
+              }
             },
             child: const Text(
               'ลงทะเบียน',
@@ -98,7 +105,11 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
 
   Step _buildStep1() {
     return Step(
-      title: const Text('Step 1: ข้อมูลส่วนตัว'),
+      title: Row(
+        children: [
+          const Text('Step 1: ข้อมูลส่วนตัว'),
+        ],
+      ),
       isActive: true,
       state: _ssnController.text.isNotEmpty &&
               _firstNameController.text.isNotEmpty &&
@@ -111,8 +122,9 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
         children: [
           TextFormField(
             controller: _ssnController,
-            decoration:
-                const InputDecoration(labelText: 'เลขประจำตัวประชาชน SSN'),
+            decoration: const InputDecoration(
+                labelStyle: TextStyle(fontSize: 14),
+                labelText: 'เลขประจำตัวประชาชน SSN'),
             validator: (value) {
               if (value != null && value.isEmpty) {
                 return 'กรุณากรอกเลขประจำตัวประชาชน';
@@ -129,21 +141,25 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
           ),
           TextFormField(
             controller: _firstNameController,
-            decoration:
-                const InputDecoration(labelText: 'ชื่อจริง (Firstname)'),
+            decoration: const InputDecoration(
+                labelStyle: TextStyle(fontSize: 14),
+                labelText: 'ชื่อจริง (Firstname)'),
             validator: (value) =>
                 value != null && value.isEmpty ? 'กรุณากรอกชื่อ' : null,
           ),
           TextFormField(
             controller: _lastNameController,
-            decoration: const InputDecoration(labelText: 'นามสกุล (LastName)'),
+            decoration: const InputDecoration(
+                labelStyle: TextStyle(fontSize: 14),
+                labelText: 'นามสกุล (LastName)'),
             validator: (value) =>
                 value != null && value.isEmpty ? 'กรุณากรอกนามสกุล' : null,
           ),
           TextFormField(
             controller: _telController,
-            decoration:
-                const InputDecoration(labelText: 'เบอร์โทรศัพท์ (Tel.)'),
+            decoration: const InputDecoration(
+                labelStyle: TextStyle(fontSize: 14),
+                labelText: 'เบอร์โทรศัพท์ (Tel.)'),
             validator: (value) {
               if (value != null && value.isEmpty) {
                 return 'กรุณากรอกเบอร์โทรศัพท์';
@@ -161,7 +177,9 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
           TextFormField(
             controller: _passwordController,
             obscureText: true,
-            decoration: const InputDecoration(labelText: 'รหัสผ่าน (Password)'),
+            decoration: const InputDecoration(
+                labelStyle: TextStyle(fontSize: 14),
+                labelText: 'รหัสผ่าน (Password)'),
             validator: (value) {
               if (value != null && value.isEmpty) {
                 return 'กรุณากรอกรหัสผ่านอย่างน้อย6ตัว';

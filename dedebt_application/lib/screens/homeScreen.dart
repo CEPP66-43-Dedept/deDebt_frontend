@@ -100,12 +100,12 @@ class _HomeScreenState extends State<HomeScreen> {
               return UserLayout();
             }
           } else {
-            return RegisterScreen(email: currentUser.email!);
+            return LoginScreen();
           }
         } else if (snapshot.hasError) {
           return Text('Error checking user data');
         } else {
-          return CircularProgressIndicator();
+          return Scaffold(body: CircularProgressIndicator());
         }
       },
     );

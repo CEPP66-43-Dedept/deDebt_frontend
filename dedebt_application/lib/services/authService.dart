@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 
+import 'package:dedebt_application/variables/rolesEnum.dart' as role;
+
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -31,23 +33,41 @@ class Auth {
   }) async {
     try {
       CollectionReference users = _firestore.collection('users');
-      final user = <String, String>{
+
+      final user = <String, dynamic>{
         'email': email,
         'firstName': firstName,
         'lastName': lastName,
         'tel': tel,
-        'role': 'user'
+        'role': role.Roles.USER.index,
       };
       await users.add(user);
-      UserCredential userCredential =
+      try {
+        UserCredential userCredential =
+            await _firebaseAuth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+
+        // ตรวจสอบว่าการเข้าสู่ระบบเสร็จสมบูรณ์
+        if (userCredential != null) {
+          context.go(AppRoutes.INITIAL);
+        }
+      } catch (e) {
+        // จัดการข้อผิดพลาดเมื่อเข้าสู่ระบบไม่สำเร็จ
+        context.go(AppRoutes.INITIAL);
+        print('Error signing in: $e');
+      }
+
+      /*  UserCredential userCredential =
           await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-
       if (userCredential != null) {
         context.go(AppRoutes.INITIAL);
       }
+      context.go(AppRoutes.INITIAL);*/
     } catch (e) {
       print('Error: $e');
     }
