@@ -9,12 +9,12 @@ class request {
   final List<String> debtStatus;
   final List<String> provider;
   final List<int> revenue;
-  final List<int> expense; 
+  final List<int> expense;
   final String burden; //ภาระของหนี้ต่อรายรับ
   final int propoty;
   final List<int> assignmentId;
   final List<DateTime> appointmentDate;
-  final List<int> appointmentStatus;
+  final List<String> appointmentStatus;
   request({
     required this.id,
     required this.title,
