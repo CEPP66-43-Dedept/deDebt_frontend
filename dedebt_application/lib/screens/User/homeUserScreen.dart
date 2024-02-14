@@ -87,7 +87,7 @@ class _homeUserScreenState extends State<homeUserScreen> {
       propoty: 25000,
       assignmentId: [],
       appointmentDate: [DateTime(2024, 2, 17)],
-      appointmentStatus: []);
+      appointmentStatus: ["เสร็จสิ้น",]);
 
   Widget build(BuildContext context) {
     return Scaffold(
