@@ -1,6 +1,9 @@
 import 'package:dedebt_application/routes/route.dart';
+import 'package:dedebt_application/screens/User/profileUserScreen.dart';
 import 'package:dedebt_application/widgets/navbar.dart';
 import 'package:dedebt_application/screens/User/homeUserScreen.dart';
+import 'package:dedebt_application/screens/User/requestUserScreen.dart';
+import 'package:dedebt_application/screens/User/historyUserScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,7 +15,7 @@ class UserLayout extends StatefulWidget {
 }
 
 class _UserLayoutState extends State<UserLayout> {
-  static Color primaryColor = Color(0xFFF3F5FE);
+  static Color primaryColor = const Color(0xFFF3F5FE);
   int currentPage = 0;
   final PageController _pageController = PageController(initialPage: 0);
 
@@ -70,7 +73,12 @@ class _UserLayoutState extends State<UserLayout> {
       body: PageView(
         controller: _pageController,
         onPageChanged: onPageChanged,
-        children: [homeUserScreen()],
+        children: [
+          homeUserScreen(),
+          requestUserScreen(),
+          historyUserScreen(),
+          profileUserScreen()
+        ],
       ),
       bottomNavigationBar: NavBar(
         currUsertype: UserType.User,
