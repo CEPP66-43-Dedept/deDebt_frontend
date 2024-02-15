@@ -22,8 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             ElevatedButton(
-              onPressed: () => context.go(AppRoutes.MAIN_USER),
-              child: const Text('Go to main_user'),
+              onPressed: () => context.go(AppRoutes.HOME_USER),
+              child: const Text('Go to home-user'),
             ),
             ElevatedButton(
               onPressed: () => context.go(AppRoutes.SIGN_IN),
@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton(
               onPressed: () => context.go(AppRoutes.MAIN_MATCHER),
               child: const Text('Go to matcher'),
-            )
+            ),
           ],
         ),
       ),
