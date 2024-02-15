@@ -1,4 +1,5 @@
 import 'package:dedebt_application/variables/color.dart';
+import 'package:dedebt_application/widgets/%E0%B8%B5userList.dart';
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
@@ -49,6 +50,10 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             height: 20,
           ),
           Container(
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Scrollbar(child: UserList()),
+            ),
             width: 350,
             height: 500,
             decoration: BoxDecoration(
