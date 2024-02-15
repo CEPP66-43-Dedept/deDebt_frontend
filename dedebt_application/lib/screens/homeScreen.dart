@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dedebt_application/screens/Admin/%E0%B9%87AdminHomeScreen.dart';
 import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
 import 'package:dedebt_application/screens/loginScreen.dart';
@@ -43,18 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
     controller.add("user");
   }
 
-  Future<bool> checkUserAndNavigate(BuildContext context) async {
-    final User? currentUser = FirebaseAuth.instance.currentUser;
-    final bool userExists = await _checkIfUserExists(currentUser);
-
-    if (userExists) {
-      addData();
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   Future<bool> _checkIfUserExists(User? currentUser) async {
     if (currentUser == null) {
       return false;
@@ -66,6 +55,18 @@ class _HomeScreenState extends State<HomeScreen> {
         await users.where('email', isEqualTo: currentUser.email).get();
 
     return querySnapshot.docs.isNotEmpty;
+  }
+
+  Future<bool> _isAdmin(User? currentUser) async {
+    if (currentUser == null) {
+      return false;
+    }
+    final CollectionReference users =
+        FirebaseFirestore.instance.collection('users');
+    final QuerySnapshot querySnapshot =
+        await users.where('email', isEqualTo: currentUser.email).get();
+
+    return currentUser.email == "64011028@kmitl.ac.th";
   }
 
   Widget build(BuildContext context) {
@@ -93,8 +94,9 @@ class _HomeScreenState extends State<HomeScreen> {
         if (snapshot.hasData) {
           final bool userExists = snapshot.data!;
           if (userExists) {
+            print("snap$currentUser");
             if (currentUser.email!.endsWith('@kmitl.ac.th')) {
-              return AdvisorLayout();
+              return AdminHomeScreen();
             } else {
               return UserLayout();
             }
