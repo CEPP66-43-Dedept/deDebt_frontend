@@ -1,21 +1,24 @@
 class request {
   final int id;
   final String title;
+  final String detail;
   final int userId;
   final int advisorId;
   final String requestStatus;
-  final List<bool> type;
+  final List<String> type; //ประเภทของหนี้
   final List<String> debtStatus;
   final List<String> provider;
   final List<int> revenue;
   final List<int> expense;
-  final List<bool> burden;
+  final String burden; //ภาระของหนี้ต่อรายรับ
   final int propoty;
   final List<int> assignmentId;
-  final List<int> appointmentDate;
+  final List<DateTime> appointmentDate;
+  final List<String> appointmentStatus;
   request({
     required this.id,
     required this.title,
+    required this.detail,
     required this.userId,
     required this.advisorId,
     required this.requestStatus,
@@ -28,12 +31,14 @@ class request {
     required this.propoty,
     required this.assignmentId,
     required this.appointmentDate,
+    required this.appointmentStatus,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
+      'detail': detail,
       'userId': userId,
       'advisorId': advisorId,
       'reqeustStatus': requestStatus,
@@ -45,7 +50,8 @@ class request {
       'burden': burden,
       'propoty': propoty,
       'assignmentId': assignmentId,
-      'appointmentDate': appointmentDate
+      'appointmentDate': appointmentDate,
+      'appointmentStatus': appointmentStatus
     };
   }
 }
