@@ -1,6 +1,9 @@
 import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/screens/HomeScreen.dart';
+import 'package:dedebt_application/screens/User/historyUserScreen.dart';
 import 'package:dedebt_application/screens/User/homeUserScreen.dart';
+import 'package:dedebt_application/screens/User/profileUserScreen.dart';
+import 'package:dedebt_application/screens/User/requestUserScreen.dart';
 import 'package:dedebt_application/screens/layouts/adminLayout.dart';
 import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
 import 'package:dedebt_application/screens/layouts/matcherLayout.dart';
@@ -30,9 +33,25 @@ class ROUTE {
         builder: (context, state) => RegisterScreen(),
       ),
       GoRoute(
-        name: 'main-user',
-        path: AppRoutes.MAIN_USER,
-        builder: (context, state) => UserLayout(),
+        name: 'home-user',
+        path: AppRoutes.HOME_USER,
+        builder: (context, state) => homeUserScreen(),
+        
+      ),
+      GoRoute(
+        name: '/request-user',
+        path: AppRoutes.REQUEST_USER,
+        builder: (context, state) => requestUserScreen(),
+      ),
+      GoRoute(
+        name: '/history-user',
+        path: AppRoutes.HISTORY_USER,
+        builder: (context, state) => historyUserScreen(),
+      ),
+      GoRoute(
+        name: '/profile-user',
+        path: AppRoutes.PROFILE_USER,
+        builder: (context, state) => profileUserScreen(),
       ),
       GoRoute(
         name: 'main-advisor',

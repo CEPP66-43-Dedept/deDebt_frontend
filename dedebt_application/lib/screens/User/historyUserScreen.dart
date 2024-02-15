@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dedebt_application/screens/layouts/userLayout.dart';
 
 class historyUserScreen extends StatefulWidget {
   const historyUserScreen({super.key});
@@ -13,9 +14,7 @@ class _historyUserScreen extends State<historyUserScreen> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    //throw UnimplementedError();
+  Scaffold getBody() {
     return Scaffold(
       body: Center(
           child: Column(
@@ -30,5 +29,10 @@ class _historyUserScreen extends State<historyUserScreen> {
         ],
       )),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return UserLayout(Body: getBody(),currentPage: 2,);
   }
 }
