@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _auth.authStateChanges.listen((user) {
-      userStateController.add(user); // Update with current user
+      userStateController.add(user);
     });
   }
 
@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (currentUser.email!.endsWith('@kmitl.ac.th')) {
               return AdminHomeScreen();
             } else {
-              return UserLayout();
+              return AdminHomeScreen();
             }
           } else {
             return LoginScreen();
