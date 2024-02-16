@@ -92,7 +92,7 @@ class _homeUserScreenState extends State<homeUserScreen> {
     return;
   }
 
-  Scaffold getBody() {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Align(
         alignment: Alignment.center,
@@ -425,13 +425,6 @@ class _homeUserScreenState extends State<homeUserScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget build(BuildContext context) {
-    return UserLayout(
-      Body: getBody(),
-      currentPage: 0,
     );
   }
 }

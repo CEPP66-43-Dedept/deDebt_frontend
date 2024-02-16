@@ -14,7 +14,8 @@ class _requestUserScreen extends State<requestUserScreen> {
     super.initState();
   }
 
-  Scaffold getBody() {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
@@ -77,14 +78,6 @@ class _requestUserScreen extends State<requestUserScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return UserLayout(
-      Body: getBody(),
-      currentPage: 1,
     );
   }
 }

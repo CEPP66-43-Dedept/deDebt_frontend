@@ -14,7 +14,8 @@ class _historyUserScreen extends State<historyUserScreen> {
     super.initState();
   }
 
-  Scaffold getBody() {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
           child: Column(
@@ -29,10 +30,6 @@ class _historyUserScreen extends State<historyUserScreen> {
         ],
       )),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return UserLayout(Body: getBody(),currentPage: 2,);
+    ;
   }
 }
