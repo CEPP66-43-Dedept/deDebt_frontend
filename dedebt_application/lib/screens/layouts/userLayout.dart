@@ -1,19 +1,48 @@
 import 'package:dedebt_application/routes/route.dart';
-import 'package:dedebt_application/screens/User/profileUserScreen.dart';
-import 'package:dedebt_application/screens/User/homeUserScreen.dart';
-import 'package:dedebt_application/screens/User/requestUserScreen.dart';
-import 'package:dedebt_application/screens/User/historyUserScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:dedebt_application/models/userModel.dart';
+import 'package:dedebt_application/models/requestModel.dart';
 
 class UserLayout extends StatefulWidget {
   final Widget Body;
   int currentPage = 0;
   UserLayout({Key? key, required this.Body, required this.currentPage})
       : super(key: key);
-
   @override
   State<UserLayout> createState() => _UserLayoutState();
+
+  static Container getStatusContainer(request uRequest) {
+    Color containerColor;
+    bool isCase1 = false;
+    switch (uRequest.requestStatus) {
+      case "จัดหาที่ปรึกษา":
+        containerColor = const Color(0xFFE1E4F8);
+        isCase1 = true;
+        break;
+      case "กำลังปรึกษา":
+        containerColor = const Color(0xFFF18F80);
+        break;
+      case "เสร็จสิ้น":
+        containerColor = const Color(0xFF2DC09C);
+        break;
+      default:
+        containerColor = const Color(0xFFFFFFFF);
+        break;
+    }
+    Container statusContainer = Container(
+      decoration: BoxDecoration(
+        color: containerColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      child: Text(
+        uRequest.requestStatus,
+        style: TextStyle(color: isCase1 ? const Color(0xFF7673D3) : null),
+      ),
+    );
+    return statusContainer;
+  }
 }
 
 class _UserLayoutState extends State<UserLayout> {
@@ -75,6 +104,7 @@ class _UserLayoutState extends State<UserLayout> {
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
