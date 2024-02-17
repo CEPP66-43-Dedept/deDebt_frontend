@@ -83,21 +83,36 @@ class _requestUserScreen extends State<requestUserScreen> {
           return const Center(child: Text('Error fetching request'));
         } else if (snapshot.data == null) {
           // ไม่มีข้อมูลใน db
-          return Positioned(
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0,
-            child: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset("assets/images/Nothing.png"),
-                  const Text("ไม่มีคำร้องที่ดำเนินการอยู่ในขณะนี้ "),
-                  const Text("สามารถกดลงทะเบียนคำร้องได้ที่ปุ่ม \‘+\’")
-                ],
+          return Stack(
+            children: [
+              const Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Text(
+                    "คำร้องปัจจุบัน",
+                    style: TextStyle(fontSize: 24),
+                  ),
+                ),
               ),
-            ),
+              Positioned(
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/images/Nothing.png"),
+                      const Text("ไม่มีคำร้องที่ดำเนินการอยู่ในขณะนี้ "),
+                      const Text("สามารถกดลงทะเบียนคำร้องได้ที่ปุ่ม \‘+\’")
+                    ],
+                  ),
+                ),
+              ),
+            ],
           );
         } else {
           //รับข้อมูลจาก db สำเร็จ
@@ -148,7 +163,8 @@ class _requestUserScreen extends State<requestUserScreen> {
                                 Row(
                                   children: [
                                     const Text("สถานะ : "),
-                                    UserLayout.getStatusContainer(_request),
+                                    UserLayout.getRequestStatusContainer(
+                                        _request),
                                   ],
                                 ),
                                 const SizedBox(height: 5),
@@ -553,4 +569,3 @@ class _requestUserScreen extends State<requestUserScreen> {
     );
   }
 }
-
