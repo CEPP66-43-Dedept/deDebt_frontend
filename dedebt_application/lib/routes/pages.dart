@@ -1,6 +1,7 @@
 import 'package:dedebt_application/routes/transitionRoute.dart';
 
 import 'package:dedebt_application/routes/route.dart';
+import 'package:dedebt_application/screens/Admin/adminHomeScreen.dart';
 import 'package:dedebt_application/screens/HomeScreen.dart';
 import 'package:dedebt_application/screens/User/historyUserScreen.dart';
 import 'package:dedebt_application/screens/User/homeUserScreen.dart';
@@ -76,9 +77,11 @@ class ROUTE {
         builder: (context, state) => AdvisorLayout(),
       ),
       GoRoute(
-        name: 'main-admin',
-        path: AppRoutes.MAIN_ADMIN,
-        builder: (context, state) => AdminLayout(),
+        name: '/home-admin',
+        path: AppRoutes.HOME_ADMIN,
+        builder: (context, state) => AdminLayout(
+          Body: AdminHomeScreen(),
+        ),
       ),
       GoRoute(
         name: 'main-matcher',
