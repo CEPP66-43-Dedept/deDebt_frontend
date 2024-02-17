@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (collection == 'advisor') {
               return const AdvisorLayout();
             } else if (collection == 'users') {
-              return AdminHomeScreen();
+              return AdminLayout(Body: AdminHomeScreen());
               return UserLayout(Body: const homeUserScreen(), currentPage: 0);
             } else {
               return RegisterScreen(

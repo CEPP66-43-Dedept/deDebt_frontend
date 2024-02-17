@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,7 +35,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
   @override
   void dispose() {
-    userController.close(); // Dispose StreamController
+    userController.close();
     super.dispose();
   }
 
@@ -65,7 +67,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 Center(
                   child: Column(
                     children: [
-                      const SizedBox(height: 80),
+                      const SizedBox(height: 20),
                       const Text(
                         "จัดการผู้ใช้",
                         style: TextStyle(
@@ -92,7 +94,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                             currentIndex = index!;
                           });
                           loadUsersData(currentIndex);
-                          print('Switched to index: $index');
                         },
                       ),
                       const SizedBox(height: 20),
@@ -133,7 +134,45 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(20),
                         onTap: () {
-                          // Handle button press
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return Container(
+                                  height: 1300,
+                                  width: 400,
+                                  decoration: BoxDecoration(
+                                      color: ColorGuide.white,
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.all(20.0),
+                                        child: Text(
+                                          "เพิ่มที่ปรึกษา",
+                                          style: TextStyle(fontSize: 24),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateColor.resolveWith(
+                                                    (states) =>
+                                                        ColorGuide.greenAccent),
+                                            fixedSize:
+                                                MaterialStateProperty.all(
+                                                    Size(350, 60))),
+                                        onPressed: () {},
+                                        child: Text(
+                                          "เพิ่มผู้ใช้งาน",
+                                          style: TextStyle(
+                                              color: ColorGuide.white,
+                                              fontSize: 20),
+                                        ),
+                                      )
+                                    ],
+                                  ));
+                            },
+                          );
                         },
                         child: const Padding(
                           padding: EdgeInsets.all(16),
