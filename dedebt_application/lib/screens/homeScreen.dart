@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dedebt_application/screens/Admin/%E0%B9%87adminHomeScreen.dart';
 import 'package:dedebt_application/screens/User/homeUserScreen.dart';
 import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
@@ -75,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (collection == 'advisor') {
               return const AdvisorLayout();
             } else if (collection == 'users') {
+              return AdminHomeScreen();
               return UserLayout(Body: const homeUserScreen(), currentPage: 0);
             } else {
               return RegisterScreen(

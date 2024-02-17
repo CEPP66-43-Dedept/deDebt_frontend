@@ -1,40 +1,35 @@
 import 'package:dedebt_application/variables/color.dart';
 import 'package:flutter/material.dart';
 
-class UserList extends StatefulWidget {
-  const UserList({Key? key}) : super(key: key);
+class UserList extends StatelessWidget {
+  final List<Map<String, dynamic>> usersData;
 
-  @override
-  _UserListState createState() => _UserListState();
-}
-
-class _UserListState extends State<UserList> {
-  int? _hoveredIndex;
-  void ShowUserDetail(int inDexUser) {}
+  const UserList({required this.usersData, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final items = List<String>.generate(40, (i) => 'Item $i');
-
     return ListView.builder(
-      itemCount: items.length,
-      shrinkWrap: true,
+      itemCount: usersData.length,
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.all(5.0),
           child: ElevatedButton(
-            child: Text(
-              "$index",
-              style: TextStyle(),
-            ),
             style: ElevatedButton.styleFrom(
-              fixedSize: Size(200, 60),
+              fixedSize: const Size(200, 60),
               backgroundColor: ColorGuide.blueLight,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
             onPressed: () {},
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "${usersData[index]['firstName']} ${usersData[index]['lastName']}",
+                style:
+                    const TextStyle(fontSize: 18, color: ColorGuide.blueAccent),
+              ),
+            ),
           ),
         );
       },
