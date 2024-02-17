@@ -63,15 +63,16 @@ class Auth {
       CollectionReference users = _firestore.collection('users');
 
       final user = <String, dynamic>{
+        'uid': currentUser?.uid,
         'email': email,
         'firstName': firstName,
         'lastName': lastName,
         'tel': tel,
         'role': role.Roles.USER.index,
       };
-      await users.add(user);
 
-      context.go(AppRoutes.INITIAL);
+      await users.doc(currentUser?.uid).set(user);
+      // ignore: empty_catches
     } catch (e) {}
   }
 
@@ -98,13 +99,6 @@ class Auth {
       if (googleSignInAccount != null) {
         final currentUser = _firebaseAuth.currentUser;
 
-        final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
-        final AuthCredential credential = GoogleAuthProvider.credential(
-            idToken: googleSignInAuthentication.idToken,
-            accessToken: googleSignInAuthentication.accessToken);
-        final UserCredential userCredential =
-            await _firebaseAuth.signInWithCredential(credential);
         final userExists = await checkData(currentUser);
         if (currentUser != null && userExists != null && userExists) {
           // ignore: use_build_context_synchronously

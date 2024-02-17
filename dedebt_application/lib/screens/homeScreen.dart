@@ -1,10 +1,12 @@
+// ignore: file_names
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dedebt_application/screens/Admin/%E0%B9%87AdminHomeScreen.dart';
+import 'package:dedebt_application/screens/User/homeUserScreen.dart';
 import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
 import 'package:dedebt_application/screens/loginScreen.dart';
+import 'package:dedebt_application/screens/registerScreen.dart';
 import 'package:dedebt_application/services/authService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +19,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Auth _auth = Auth();
+  final Auth _auth = Auth();
   final StreamController<User?> userStateController = StreamController();
 
+  @override
   void initState() {
     super.initState();
     _auth.authStateChanges.listen((user) {
@@ -31,43 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> signOut() async {
     try {
       await _auth.signOut();
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        errorMessage = e.message;
-      });
-    }
+    } on FirebaseAuthException {}
   }
 
   final StreamController<String> controller = StreamController();
-
-  void addData() {
-    controller.add("user");
-  }
-
-  Future<bool> _checkIfUserExists(User? currentUser) async {
-    if (currentUser == null) {
-      return false;
-    }
-
-    final CollectionReference users =
-        FirebaseFirestore.instance.collection('users');
-    final QuerySnapshot querySnapshot =
-        await users.where('email', isEqualTo: currentUser.email).get();
-
-    return querySnapshot.docs.isNotEmpty;
-  }
-
-  Future<bool> _isAdmin(User? currentUser) async {
-    if (currentUser == null) {
-      return false;
-    }
-    final CollectionReference users =
-        FirebaseFirestore.instance.collection('users');
-    final QuerySnapshot querySnapshot =
-        await users.where('email', isEqualTo: currentUser.email).get();
-
-    return currentUser.email == "64011028@kmitl.ac.th";
-  }
 
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
@@ -77,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
           final User? currentUser = snapshot.data;
           return _handleUserNavigation(currentUser);
         } else {
-          return LoginScreen();
+          return const LoginScreen();
         }
       },
     );
@@ -85,31 +55,83 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _handleUserNavigation(User? currentUser) {
     if (currentUser == null) {
-      return LoginScreen();
+      return const LoginScreen();
     }
 
-    return FutureBuilder<bool>(
-      future: _checkIfUserExists(currentUser),
+    return FutureBuilder<Map<String, dynamic>>(
+      future: _getUserData(currentUser),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final bool userExists = snapshot.data!;
-          if (userExists) {
-            print("snap$currentUser");
-            if (currentUser.email!.endsWith('@kmitl.ac.th')) {
-              return AdminHomeScreen();
-            } else {
-              return AdminHomeScreen();
-            }
-          } else {
-            return LoginScreen();
-          }
-        } else if (snapshot.hasError) {
-          return Text('Error checking user data');
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+              body: Center(child: CircularProgressIndicator()));
         } else {
-          return Scaffold(body: CircularProgressIndicator());
+          if (snapshot.hasError) {
+            return const Text('Error checking user data');
+          } else {
+            final userData = snapshot.data!;
+            final String? collection = userData['collection'];
+            print(userData);
+
+            if (collection == 'advisor') {
+              return const AdvisorLayout();
+            } else if (collection == 'users') {
+              return UserLayout(Body: const homeUserScreen(), currentPage: 0);
+            } else {
+              return RegisterScreen(
+                email: currentUser.email,
+              );
+            }
+          }
         }
       },
     );
+  }
+
+  // Future<Map<String, dynamic>> _getUserData(User currentUser) async {
+  //   final QuerySnapshot<Map<String, dynamic>> userSnapshot =
+  //       await FirebaseFirestore.instance
+  //           .collection('users')
+  //           .where('email', isEqualTo: currentUser.email)
+  //           .get();
+  //   if (userSnapshot.docs.isNotEmpty) {
+  //     return {'collection': 'users'};
+  //   }
+
+  //   final QuerySnapshot<Map<String, dynamic>> advisorSnapshot =
+  //       await FirebaseFirestore.instance
+  //           .collection('advisor')
+  //           .where('email', isEqualTo: currentUser.email)
+  //           .get();
+  //   if (advisorSnapshot.docs.isNotEmpty) {
+  //     return {'collection': 'advisor'};
+  //   }
+
+  //   return {'collection': 'none'};
+  // }
+  Future<Map<String, dynamic>> _getUserData(User currentUser) async {
+    final DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUser.uid)
+            .get();
+    if (userSnapshot.exists) {
+      if (userSnapshot.data()!['email'] == currentUser.email) {
+        return {'collection': 'users'};
+      }
+    }
+
+    final DocumentSnapshot<Map<String, dynamic>> advisorSnapshot =
+        await FirebaseFirestore.instance
+            .collection('advisor')
+            .doc(currentUser.uid)
+            .get();
+    if (advisorSnapshot.exists) {
+      if (advisorSnapshot.data()!['email'] == currentUser.email) {
+        return {'collection': 'advisor'};
+      }
+    }
+
+    return {'collection': 'none'};
   }
 
   @override

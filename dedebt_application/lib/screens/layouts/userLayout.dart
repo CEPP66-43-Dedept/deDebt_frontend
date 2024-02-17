@@ -1,6 +1,6 @@
+// ignore_for_file: non_constant_identifier_names, must_be_immutable
+
 import 'package:flutter/material.dart';
-import 'package:dedebt_application/services/authService.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dedebt_application/routes/route.dart';
 

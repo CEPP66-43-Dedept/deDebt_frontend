@@ -10,7 +10,6 @@ import 'package:dedebt_application/screens/layouts/adminLayout.dart';
 import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
 import 'package:dedebt_application/screens/layouts/matcherLayout.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
-import 'package:dedebt_application/screens/loginScreen.dart';
 import 'package:dedebt_application/screens/registerScreen.dart';
 import 'package:go_router/go_router.dart';
 
