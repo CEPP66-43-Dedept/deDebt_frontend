@@ -14,7 +14,9 @@ class _profileUserScreen extends State<profileUserScreen> {
     super.initState();
   }
 
-  Scaffold getBody() {
+  @override
+  Widget build(BuildContext context) {
+    //throw UnimplementedError();
     return Scaffold(
       body: Center(
           child: Column(
@@ -29,11 +31,5 @@ class _profileUserScreen extends State<profileUserScreen> {
         ],
       )),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    //throw UnimplementedError();
-    return UserLayout(Body: getBody(),currentPage: 3,);
   }
 }

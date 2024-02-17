@@ -1,3 +1,5 @@
+import 'package:dedebt_application/routes/transitionRoute.dart';
+
 import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/screens/HomeScreen.dart';
 import 'package:dedebt_application/screens/User/historyUserScreen.dart';
@@ -10,7 +12,6 @@ import 'package:dedebt_application/screens/layouts/matcherLayout.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
 import 'package:dedebt_application/screens/loginScreen.dart';
 import 'package:dedebt_application/screens/registerScreen.dart';
-
 import 'package:go_router/go_router.dart';
 
 class ROUTE {
@@ -33,25 +34,44 @@ class ROUTE {
         builder: (context, state) => RegisterScreen(),
       ),
       GoRoute(
-        name: 'home-user',
+        name: '/Home',
         path: AppRoutes.HOME_USER,
-        builder: (context, state) => homeUserScreen(),
-        
+        builder: (context, state) => TransitionRoutePage(
+          child: UserLayout(
+            Body: homeUserScreen(),
+            currentPage: 0,
+          ),
+        ),
+      ),
+      GoRoute(
+        name: '/User/history',
+        path: AppRoutes.HISTORY_USER,
+        builder: (context, state) => TransitionRoutePage(
+          child: UserLayout(
+            Body: historyUserScreen(),
+            currentPage: 2,
+          ),
+        ),
       ),
       GoRoute(
         name: '/request-user',
         path: AppRoutes.REQUEST_USER,
-        builder: (context, state) => requestUserScreen(),
-      ),
-      GoRoute(
-        name: '/history-user',
-        path: AppRoutes.HISTORY_USER,
-        builder: (context, state) => historyUserScreen(),
+        builder: (context, state) => TransitionRoutePage(
+          child: UserLayout(
+            Body: requestUserScreen(),
+            currentPage: 1,
+          ),
+        ),
       ),
       GoRoute(
         name: '/profile-user',
         path: AppRoutes.PROFILE_USER,
-        builder: (context, state) => profileUserScreen(),
+        builder: (context, state) => TransitionRoutePage(
+          child: UserLayout(
+            Body: profileUserScreen(),
+            currentPage: 3,
+          ),
+        ),
       ),
       GoRoute(
         name: 'main-advisor',
