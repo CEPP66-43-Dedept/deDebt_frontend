@@ -1,11 +1,15 @@
 // ignore_for_file: non_constant_identifier_names, must_be_immutable
 
+import 'package:dedebt_application/services/authService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import 'package:dedebt_application/routes/route.dart';
 
 class UserLayout extends StatefulWidget {
   final Widget Body;
+
   int currentPage = 0;
   UserLayout({Key? key, required this.Body, required this.currentPage})
       : super(key: key);
@@ -17,6 +21,7 @@ class UserLayout extends StatefulWidget {
 class _UserLayoutState extends State<UserLayout> {
   static Color primaryColor = const Color(0xFFF3F5FE);
   final Color navbarcolor = const Color(0xFF444371);
+  late final User? _currentUser;
 
   final List<IconData> _normalIcon = [
     Icons.home,
@@ -24,6 +29,12 @@ class _UserLayoutState extends State<UserLayout> {
     Icons.replay,
     Icons.person
   ];
+  @override
+  void initState() {
+    super.initState();
+    _currentUser = FirebaseAuth.instance.currentUser;
+  }
+
   final List<IconData> _outlinedIcon = [
     Icons.home_outlined,
     Icons.attach_money_outlined,
@@ -39,6 +50,12 @@ class _UserLayoutState extends State<UserLayout> {
 
   Color getIconColors(int index) {
     return widget.currentPage == index ? Colors.white : Colors.grey;
+  }
+
+  Future<void> signOut() async {
+    try {
+      await Auth().signOut();
+    } on FirebaseAuthException {}
   }
 
   @override
@@ -91,11 +108,12 @@ class _UserLayoutState extends State<UserLayout> {
                       'assets/images/Logo.png',
                       fit: BoxFit.contain,
                     ),
-                    Image.asset(
-                      'assets/images/Backicon.png',
-                      fit: BoxFit.contain,
-                      width: 34,
-                      height: 30,
+                    IconButton(
+                      icon: Icon(Icons.exit_to_app),
+                      onPressed: () {
+                        signOut();
+                        context.go(AppRoutes.INITIAL);
+                      },
                     )
                   ],
                 ),

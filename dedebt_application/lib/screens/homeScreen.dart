@@ -87,52 +87,52 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Future<Map<String, dynamic>> _getUserData(User currentUser) async {
-  //   final QuerySnapshot<Map<String, dynamic>> userSnapshot =
-  //       await FirebaseFirestore.instance
-  //           .collection('users')
-  //           .where('email', isEqualTo: currentUser.email)
-  //           .get();
-  //   if (userSnapshot.docs.isNotEmpty) {
-  //     return {'collection': 'users'};
-  //   }
-
-  //   final QuerySnapshot<Map<String, dynamic>> advisorSnapshot =
-  //       await FirebaseFirestore.instance
-  //           .collection('advisor')
-  //           .where('email', isEqualTo: currentUser.email)
-  //           .get();
-  //   if (advisorSnapshot.docs.isNotEmpty) {
-  //     return {'collection': 'advisor'};
-  //   }
-
-  //   return {'collection': 'none'};
-  // }
   Future<Map<String, dynamic>> _getUserData(User currentUser) async {
-    final DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+    final QuerySnapshot<Map<String, dynamic>> userSnapshot =
         await FirebaseFirestore.instance
             .collection('users')
-            .doc(currentUser.uid)
+            .where('email', isEqualTo: currentUser.email)
             .get();
-    if (userSnapshot.exists) {
-      if (userSnapshot.data()!['email'] == currentUser.email) {
-        return {'collection': 'users'};
-      }
+    if (userSnapshot.docs.isNotEmpty) {
+      return {'collection': 'users'};
     }
 
-    final DocumentSnapshot<Map<String, dynamic>> advisorSnapshot =
+    final QuerySnapshot<Map<String, dynamic>> advisorSnapshot =
         await FirebaseFirestore.instance
             .collection('advisor')
-            .doc(currentUser.uid)
+            .where('email', isEqualTo: currentUser.email)
             .get();
-    if (advisorSnapshot.exists) {
-      if (advisorSnapshot.data()!['email'] == currentUser.email) {
-        return {'collection': 'advisor'};
-      }
+    if (advisorSnapshot.docs.isNotEmpty) {
+      return {'collection': 'advisor'};
     }
 
     return {'collection': 'none'};
   }
+  // Future<Map<String, dynamic>> _getUserData(User currentUser) async {
+  //   final DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+  //       await FirebaseFirestore.instance
+  //           .collection('users')
+  //           .doc(currentUser.uid)
+  //           .get();
+  //   if (userSnapshot.exists) {
+  //     if (userSnapshot.data()!['email'] == currentUser.email) {
+  //       return {'collection': 'users'};
+  //     }
+  //   }
+
+  //   final DocumentSnapshot<Map<String, dynamic>> advisorSnapshot =
+  //       await FirebaseFirestore.instance
+  //           .collection('advisor')
+  //           .doc(currentUser.uid)
+  //           .get();
+  //   if (advisorSnapshot.exists) {
+  //     if (advisorSnapshot.data()!['email'] == currentUser.email) {
+  //       return {'collection': 'advisor'};
+  //     }
+  //   }
+
+  //   return {'collection': 'none'};
+  // }
 
   @override
   void dispose() {

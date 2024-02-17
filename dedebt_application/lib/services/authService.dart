@@ -99,6 +99,14 @@ class Auth {
       if (googleSignInAccount != null) {
         final currentUser = _firebaseAuth.currentUser;
 
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+        final AuthCredential credential = GoogleAuthProvider.credential(
+            idToken: googleSignInAuthentication.idToken,
+            accessToken: googleSignInAuthentication.accessToken);
+        // ignore: unused_local_variable
+        final UserCredential userCredential =
+            await _firebaseAuth.signInWithCredential(credential);
         final userExists = await checkData(currentUser);
         if (currentUser != null && userExists != null && userExists) {
           // ignore: use_build_context_synchronously
