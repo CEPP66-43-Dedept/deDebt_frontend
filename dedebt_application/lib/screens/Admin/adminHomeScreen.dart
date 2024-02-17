@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dedebt_application/repositories/adminRepository.dart';
 import 'package:dedebt_application/services/adminService.dart';
 import 'package:dedebt_application/variables/color.dart';
-import 'package:dedebt_application/widgets/%E0%B8%B5userList.dart';
+import 'package:dedebt_application/widgets/userList.dart';
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
