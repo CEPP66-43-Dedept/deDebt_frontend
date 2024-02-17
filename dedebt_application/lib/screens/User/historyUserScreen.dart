@@ -147,9 +147,6 @@ class _historyUserScreen extends State<historyUserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return UserLayout(
-      Body: getBody(),
-      currentPage: 2,
-    );
+    return getBody();
   }
 }

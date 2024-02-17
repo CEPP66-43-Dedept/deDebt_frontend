@@ -361,9 +361,6 @@ class _homeUserScreenState extends State<homeUserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return UserLayout(
-      Body: getBody(),
-      currentPage: 0,
-    );
+    return getBody();
   }
 }
