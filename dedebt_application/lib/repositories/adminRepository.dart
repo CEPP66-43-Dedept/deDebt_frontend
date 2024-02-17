@@ -5,23 +5,27 @@ class AdminRepository {
 
   AdminRepository({required this.firestore});
 
-  Future<List<Map<String, dynamic>>> getAllUsersData() async {
+  Future<List<Map<String, dynamic>>> getAllUsersData(int currentindex) async {
     try {
-      QuerySnapshot<Map<String, dynamic>> snapshot =
-          await firestore.collection('users').get();
+      QuerySnapshot<Map<String, dynamic>> snapshot;
+      if (currentindex == 1) {
+        snapshot = await firestore.collection('users').get();
+      } else {
+        snapshot = await firestore.collection('advisor').get();
+      }
 
       List<Map<String, dynamic>> usersData = [];
+      print(currentindex);
       snapshot.docs.forEach((doc) {
         Map<String, dynamic> userData = {
-          'username': doc['username'],
-          'lastname': doc['lastname'],
+          'firstName': doc['firstName'],
+          'lastName': doc['lastName'],
         };
         usersData.add(userData);
       });
 
       return usersData;
     } catch (e) {
-      // Handle error
       print('Error fetching users data: $e');
       return [];
     }
