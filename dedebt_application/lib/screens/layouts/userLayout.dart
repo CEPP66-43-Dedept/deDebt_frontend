@@ -109,6 +109,7 @@ class _UserLayoutState extends State<UserLayout> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: primaryColor,
+          surfaceTintColor: Colors.transparent,
           toolbarHeight: 55,
           title: Column(
             children: [
