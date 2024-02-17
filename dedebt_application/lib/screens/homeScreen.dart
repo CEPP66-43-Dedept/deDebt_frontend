@@ -2,7 +2,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dedebt_application/screens/Admin/%E0%B9%87adminHomeScreen.dart';
+import 'package:dedebt_application/screens/Admin/adminHomeScreen.dart';
 import 'package:dedebt_application/screens/User/homeUserScreen.dart';
 import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
