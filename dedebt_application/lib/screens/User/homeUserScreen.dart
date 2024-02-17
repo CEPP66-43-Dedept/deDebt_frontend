@@ -118,94 +118,12 @@ class _homeUserScreenState extends State<homeUserScreen> {
                           "คำร้องของคุณ",
                           style: TextStyle(fontSize: 24),
                         )),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF36338C),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      width: 324,
-                      padding: const EdgeInsets.all(16.0),
-                      margin: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: DefaultTextStyle(
+                    DefaultTextStyle(
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: Colors.white,
                               fontSize: 15.0,
                             ),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: SizedBox(
-                                  width: 310,
-                                  child: Text(_request.title,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontSize: 24)),
-                                ),
-                              ),
-                              Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Text("สถานะ : "),
-                                      //สถานะ container
-                                      UserLayout.getStatusContainer(_request),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Row(
-                                    children: [
-                                      const Text("ผู้รับผิดชอบ : "),
-                                      Flexible(
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFF0F4FD),
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10.0),
-                                          child: const Text(
-                                            "นางสมหญิง หญิงมาก",
-                                            style: TextStyle(
-                                                color: Color(0xFF2DC09C)),
-                                            softWrap: true,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Row(
-                                    children: [
-                                      const Text("ประเภท : "),
-                                      SizedBox(
-                                        width: 200,
-                                        child: Text(
-                                          _request.type.join(","),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Row(
-                                    children: [
-                                      const Text("รายละเอียด : "),
-                                      SizedBox(
-                                        width: 200,
-                                        child: Text(
-                                          _request.detail,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ]),
-                      ),
-                    ),
+                        child: UserLayout.createRequestBox(_request)),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Text(
@@ -227,18 +145,16 @@ class _homeUserScreenState extends State<homeUserScreen> {
                           color: const Color(0xFFFFFFFF),
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: ListView(
-                          shrinkWrap: true,
-                          children: [
-                            DefaultTextStyle(
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
+                        child: DefaultTextStyle(
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
                                     color: const Color(0xFF36338C),
                                     fontSize: 15.0,
                                   ),
-                              child: Container(
+                          child: ListView(
+                            shrinkWrap: true,
+                            children: [
+                              Container(
                                 margin:
                                     const EdgeInsets.fromLTRB(19, 10, 19, 0),
                                 decoration: BoxDecoration(
@@ -286,16 +202,7 @@ class _homeUserScreenState extends State<homeUserScreen> {
                                   ],
                                 ),
                               ),
-                            ),
-                            DefaultTextStyle(
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: const Color(0xFF36338C),
-                                    fontSize: 15.0,
-                                  ),
-                              child: Container(
+                              Container(
                                 margin:
                                     const EdgeInsets.fromLTRB(19, 10, 19, 0),
                                 decoration: BoxDecoration(
@@ -343,16 +250,7 @@ class _homeUserScreenState extends State<homeUserScreen> {
                                   ],
                                 ),
                               ),
-                            ),
-                            DefaultTextStyle(
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: const Color(0xFF36338C),
-                                    fontSize: 15.0,
-                                  ),
-                              child: Container(
+                              Container(
                                 margin:
                                     const EdgeInsets.fromLTRB(19, 10, 19, 0),
                                 decoration: BoxDecoration(
@@ -400,16 +298,7 @@ class _homeUserScreenState extends State<homeUserScreen> {
                                   ],
                                 ),
                               ),
-                            ),
-                            DefaultTextStyle(
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: const Color(0xFF36338C),
-                                    fontSize: 15.0,
-                                  ),
-                              child: Container(
+                              Container(
                                 margin:
                                     const EdgeInsets.fromLTRB(19, 10, 19, 0),
                                 decoration: BoxDecoration(
@@ -457,8 +346,8 @@ class _homeUserScreenState extends State<homeUserScreen> {
                                   ],
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
