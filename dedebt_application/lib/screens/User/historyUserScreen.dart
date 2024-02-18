@@ -108,7 +108,7 @@ class _historyUserScreen extends State<historyUserScreen> {
                   child: Column(
                 children: [
                   const Padding(
-                    padding: EdgeInsets.fromLTRB(10, 25, 10, 0),
+                    padding: EdgeInsets.fromLTRB(10, 25, 10, 20),
                     child: Text(
                       "ประวัติคำร้อง",
                       style: TextStyle(fontSize: 24),
