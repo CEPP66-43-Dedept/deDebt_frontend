@@ -6,6 +6,7 @@ import 'package:dedebt_application/screens/User/historyUserScreen.dart';
 import 'package:dedebt_application/screens/User/homeUserScreen.dart';
 import 'package:dedebt_application/screens/User/profileUserScreen.dart';
 import 'package:dedebt_application/screens/User/requestUserScreen.dart';
+import 'package:dedebt_application/screens/User/sendRequestScreen.dart';
 import 'package:dedebt_application/screens/layouts/adminLayout.dart';
 import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
 import 'package:dedebt_application/screens/layouts/matcherLayout.dart';
@@ -61,6 +62,13 @@ class ROUTE {
             Body: requestUserScreen(),
             currentPage: 1,
           ),
+        ),
+      ),
+      GoRoute(
+        name: '/send-request-user',
+        path: AppRoutes.SEND_REQUEST_USER,
+        builder: (context, state) => TransitionRoutePage(
+          child: sendRequestScreen(),
         ),
       ),
       GoRoute(
