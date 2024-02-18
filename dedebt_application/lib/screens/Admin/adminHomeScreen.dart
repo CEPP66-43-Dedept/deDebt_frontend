@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dedebt_application/repositories/adminRepository.dart';
 import 'package:dedebt_application/services/adminService.dart';
 import 'package:dedebt_application/variables/color.dart';
+import 'package:dedebt_application/widgets/createAdvisorBottomsheet.dart';
 import 'package:dedebt_application/widgets/userList.dart';
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -96,7 +97,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                           loadUsersData(currentIndex);
                         },
                       ),
-                      const SizedBox(height: 20),
                       Container(
                         width: 350,
                         height: 500,
@@ -135,42 +135,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                         borderRadius: BorderRadius.circular(20),
                         onTap: () {
                           showModalBottomSheet(
+                            isScrollControlled: true,
                             context: context,
                             builder: (context) {
-                              return Container(
-                                  height: 1300,
-                                  width: 400,
-                                  decoration: BoxDecoration(
-                                      color: ColorGuide.white,
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.all(20.0),
-                                        child: Text(
-                                          "เพิ่มที่ปรึกษา",
-                                          style: TextStyle(fontSize: 24),
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateColor.resolveWith(
-                                                    (states) =>
-                                                        ColorGuide.greenAccent),
-                                            fixedSize:
-                                                MaterialStateProperty.all(
-                                                    Size(350, 60))),
-                                        onPressed: () {},
-                                        child: Text(
-                                          "เพิ่มผู้ใช้งาน",
-                                          style: TextStyle(
-                                              color: ColorGuide.white,
-                                              fontSize: 20),
-                                        ),
-                                      )
-                                    ],
-                                  ));
+                              return CreateAdvisorBottomSheet(
+                                adminRepository: adminRepository,
+                                adminService: adminService,
+                              );
                             },
                           );
                         },

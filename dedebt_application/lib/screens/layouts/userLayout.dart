@@ -21,6 +21,7 @@ class UserLayout extends StatefulWidget {
 class _UserLayoutState extends State<UserLayout> {
   static Color primaryColor = const Color(0xFFF3F5FE);
   final Color navbarcolor = const Color(0xFF444371);
+  // ignore: unused_field
   late final User? _currentUser;
 
   final List<IconData> _normalIcon = [
