@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
 import 'package:dedebt_application/models/userModel.dart';
 import 'package:dedebt_application/models/requestModel.dart';
+import 'package:go_router/go_router.dart';
+import 'package:dedebt_application/routes/route.dart';
 
 class requestUserScreen extends StatefulWidget {
   const requestUserScreen({super.key});
@@ -542,7 +544,7 @@ class _requestUserScreen extends State<requestUserScreen> {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(20),
                     onTap: () {
-                      // Handle button press
+                      context.go(AppRoutes.SEND_REQUEST_USER);
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(16),
