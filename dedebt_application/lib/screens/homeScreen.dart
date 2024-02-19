@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
             final String? collection = userData['collection'];
             print(userData);
 
-            if (collection == 'advisor') {
+            if (collection == 'advisors') {
               return const AdvisorLayout();
             } else if (collection == 'users') {
               return AdminLayout(Body: AdminHomeScreen());

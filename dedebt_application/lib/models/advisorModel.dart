@@ -22,7 +22,6 @@ class Advisors {
       'lastName': lastname,
       'email': email,
       'tel': tel,
-      'password': password,
       'specialist': specialist
     };
   }
