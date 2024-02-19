@@ -2,6 +2,7 @@ import 'package:dedebt_application/routes/transitionRoute.dart';
 
 import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/screens/HomeScreen.dart';
+import 'package:dedebt_application/screens/User/assignmentUserScreen.dart';
 import 'package:dedebt_application/screens/User/historyUserScreen.dart';
 import 'package:dedebt_application/screens/User/homeUserScreen.dart';
 import 'package:dedebt_application/screens/User/profileUserScreen.dart';
@@ -69,6 +70,14 @@ class ROUTE {
         path: AppRoutes.SEND_REQUEST_USER,
         builder: (context, state) => TransitionRoutePage(
           child: sendRequestScreen(),
+        ),
+      ),
+      
+      GoRoute(
+        name: '/assignment-user',
+        path: AppRoutes.ASSIGNMENT_USER,
+        builder: (context, state) => TransitionRoutePage(
+          child: assignmentUserScreen(),
         ),
       ),
       GoRoute(
