@@ -73,7 +73,7 @@ class _sendRequestScreen extends State<sendRequestScreen> {
             child: Container(
                 width: 360,
                 height: 690,
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 15),
                 child: DefaultTextStyle(
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: const Color(0xFF000000),
@@ -246,8 +246,7 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                     print('Next button pressed');
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Color(
-                        0xFF444371), // Set button color to match the BottomAppBar
+                    backgroundColor: navbarColor,
                   ),
                   child: Text(
                     'ถัดไป',
