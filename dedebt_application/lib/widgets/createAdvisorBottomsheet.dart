@@ -34,9 +34,9 @@ class _CreateAdvisorBottomSheetState extends State<CreateAdvisorBottomSheet> {
           email: _controllerEmail.text,
           tel: _controllerTel.text,
           password: _controllerPassword.text,
-          specialist: _controllerSpecialist.text);
+          specialist: _controllerSpecialist.text,
+          uid: "");
       await widget.adminService.createAdvisor(advisor: newAdvisor);
-      // สร้างบัญชีผู้ใช้สำเร็จ
       Navigator.of(context).pop();
     } catch (e) {
       print('Error creating advisor: $e');
@@ -45,191 +45,193 @@ class _CreateAdvisorBottomSheetState extends State<CreateAdvisorBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 700,
-      width: 400,
-      decoration: BoxDecoration(
-        color: ColorGuide.white,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Padding(
+    return SingleChildScrollView(
+      child: Container(
+        height: 800,
+        width: 400,
+        decoration: BoxDecoration(
+          color: ColorGuide.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(Icons.arrow_back_ios, color: Colors.black),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 50,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: Text(
+                    "เพิ่มที่ปรึกษา",
+                    style: TextStyle(fontSize: 24),
+                  ),
+                ),
+              ],
+            ),
+            Scrollbar(
+              child: Container(
+                margin: EdgeInsets.all(30),
+                child: Column(children: [
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.arrow_back_ios, color: Colors.black),
+                    child: TextField(
+                      controller: _controllerSSN,
+                      keyboardType: TextInputType.number,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                      decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        hintText: "เลขประจำตัวประชาชน",
+                        hintStyle: const TextStyle(
+                          color: ColorGuide.blueAccent,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: _controllerFirstName,
+                      keyboardType: TextInputType.text,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                      decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        hintText: "ชื่อจริง",
+                        hintStyle: const TextStyle(
+                          color: ColorGuide.blueAccent,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: _controllerLastName,
+                      keyboardType: TextInputType.text,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                      decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        hintText: "นามสกุล",
+                        hintStyle: const TextStyle(
+                          color: ColorGuide.blueAccent,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: _controllerEmail,
+                      keyboardType: TextInputType.text,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                      decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        hintText: "อีเมลล์",
+                        hintStyle: const TextStyle(
+                          color: ColorGuide.blueAccent,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: _controllerPassword,
+                      keyboardType: TextInputType.text,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                      decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        hintText: "รหัสผ่าน",
+                        hintStyle: const TextStyle(
+                          color: ColorGuide.blueAccent,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: _controllerTel,
+                      keyboardType: TextInputType.phone,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                      decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        hintText: "เบอร์โทรศัพท์",
+                        hintStyle: const TextStyle(
+                          color: ColorGuide.blueAccent,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: _controllerSpecialist,
+                      keyboardType: TextInputType.text,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                      decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        hintText: "ความถนัด",
+                        hintStyle: const TextStyle(
+                          color: ColorGuide.blueAccent,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ]),
               ),
-              SizedBox(
-                width: 50,
-              ),
-              Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Text(
-                  "เพิ่มที่ปรึกษา",
-                  style: TextStyle(fontSize: 24),
-                ),
-              ),
-            ],
-          ),
-          Scrollbar(
-            child: Container(
-              margin: EdgeInsets.all(30),
-              child: Column(children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _controllerSSN,
-                    keyboardType: TextInputType.number,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                    decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      hintText: "เลขประจำตัวประชาชน",
-                      hintStyle: const TextStyle(
-                        color: ColorGuide.blueAccent,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _controllerFirstName,
-                    keyboardType: TextInputType.text,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                    decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      hintText: "ชื่อจริง",
-                      hintStyle: const TextStyle(
-                        color: ColorGuide.blueAccent,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _controllerLastName,
-                    keyboardType: TextInputType.text,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                    decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      hintText: "นามสกุล",
-                      hintStyle: const TextStyle(
-                        color: ColorGuide.blueAccent,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _controllerEmail,
-                    keyboardType: TextInputType.text,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                    decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      hintText: "อีเมลล์",
-                      hintStyle: const TextStyle(
-                        color: ColorGuide.blueAccent,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _controllerPassword,
-                    keyboardType: TextInputType.text,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                    decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      hintText: "รหัสผ่าน",
-                      hintStyle: const TextStyle(
-                        color: ColorGuide.blueAccent,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _controllerTel,
-                    keyboardType: TextInputType.phone,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                    decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      hintText: "เบอร์โทรศัพท์",
-                      hintStyle: const TextStyle(
-                        color: ColorGuide.blueAccent,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _controllerSpecialist,
-                    keyboardType: TextInputType.text,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                    decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      hintText: "ความถนัด",
-                      hintStyle: const TextStyle(
-                        color: ColorGuide.blueAccent,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-              ]),
             ),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateColor.resolveWith(
-                (states) => ColorGuide.greenAccent,
+            SizedBox(
+              height: 30,
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateColor.resolveWith(
+                  (states) => ColorGuide.greenAccent,
+                ),
+                fixedSize: MaterialStateProperty.all(Size(350, 60)),
               ),
-              fixedSize: MaterialStateProperty.all(Size(350, 60)),
-            ),
-            onPressed: _createAdvisor,
-            child: Text(
-              "เพิ่มผู้ใช้งาน",
-              style: TextStyle(color: ColorGuide.white, fontSize: 20),
-            ),
-          )
-        ],
+              onPressed: _createAdvisor,
+              child: Text(
+                "เพิ่มผู้ใช้งาน",
+                style: TextStyle(color: ColorGuide.white, fontSize: 20),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -19,11 +19,7 @@ class _AdvisorLayoutState extends State<AdvisorLayout> {
   Future<void> signOut() async {
     try {
       await Auth().signOut();
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        errorMessage = e.message;
-      });
-    }
+    } on FirebaseAuthException {}
   }
 
   Widget build(BuildContext context) {
@@ -31,7 +27,9 @@ class _AdvisorLayoutState extends State<AdvisorLayout> {
       appBar: AppBar(title: const Text('Main-consult')),
       body: Center(
         child: ElevatedButton(
-          onPressed: () => signOut(),
+          onPressed: () {
+            signOut();
+          },
           child: const Text('Sign out'),
         ),
       ),

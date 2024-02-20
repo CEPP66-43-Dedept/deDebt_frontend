@@ -1,11 +1,23 @@
+import 'package:dedebt_application/repositories/adminRepository.dart';
+import 'package:dedebt_application/services/adminService.dart';
 import 'package:dedebt_application/variables/color.dart';
+import 'package:dedebt_application/variables/rolesEnum.dart';
+import 'package:dedebt_application/widgets/deleteUserBottomsheet.dart';
 import 'package:flutter/material.dart';
 
 class UserList extends StatelessWidget {
   final List<Map<String, dynamic>> usersData;
 
-  const UserList({required this.usersData, Key? key}) : super(key: key);
-
+  const UserList(
+      {required this.usersData,
+      required this.adminRepository,
+      required this.adminService,
+      required this.role,
+      Key? key})
+      : super(key: key);
+  final AdminRepository adminRepository;
+  final AdminService adminService;
+  final Roles role;
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -21,7 +33,21 @@ class UserList extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                builder: (context) {
+                  return DeleteUserBottomsheet(
+                    adminRepository: adminRepository,
+                    adminService: adminService,
+                    index: index,
+                    uid: usersData[index]['uid'],
+                    role: role,
+                  );
+                },
+              );
+            },
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(

@@ -76,8 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
             if (collection == 'advisors') {
               return const AdvisorLayout();
-            } else if (collection == 'users') {
+            } else if (collection == 'admin') {
               return AdminLayout(Body: AdminHomeScreen());
+            } else if (collection == 'users') {
               return UserLayout(Body: const homeUserScreen(), currentPage: 0);
             } else {
               return RegisterScreen(
@@ -91,6 +92,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<Map<String, dynamic>> _getUserData(User currentUser) async {
+    final QuerySnapshot<Map<String, dynamic>> adminSnapshot =
+        await FirebaseFirestore.instance
+            .collection('admin')
+            .where('email', isEqualTo: currentUser.email)
+            .get();
+    if (adminSnapshot.docs.isNotEmpty) {
+      return {'collection': 'admin'};
+    }
+
     final QuerySnapshot<Map<String, dynamic>> userSnapshot =
         await FirebaseFirestore.instance
             .collection('users')
@@ -102,11 +112,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final QuerySnapshot<Map<String, dynamic>> advisorSnapshot =
         await FirebaseFirestore.instance
-            .collection('advisor')
+            .collection('advisors')
             .where('email', isEqualTo: currentUser.email)
             .get();
     if (advisorSnapshot.docs.isNotEmpty) {
-      return {'collection': 'advisor'};
+      return {'collection': 'advisors'};
     }
 
     return {'collection': 'none'};

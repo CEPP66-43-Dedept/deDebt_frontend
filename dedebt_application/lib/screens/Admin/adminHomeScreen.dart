@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dedebt_application/repositories/adminRepository.dart';
 import 'package:dedebt_application/services/adminService.dart';
 import 'package:dedebt_application/variables/color.dart';
+import 'package:dedebt_application/variables/rolesEnum.dart';
 import 'package:dedebt_application/widgets/createAdvisorBottomsheet.dart';
 import 'package:dedebt_application/widgets/userList.dart';
 import 'package:flutter/material.dart';
@@ -114,7 +115,14 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                         child: Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: Scrollbar(
-                            child: UserList(usersData: usersData),
+                            child: UserList(
+                              usersData: usersData,
+                              adminRepository: adminRepository,
+                              adminService: adminService,
+                              role: currentIndex == 1
+                                  ? Roles.USER
+                                  : Roles.ADVISOR,
+                            ),
                           ),
                         ),
                       ),
