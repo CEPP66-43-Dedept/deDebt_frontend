@@ -14,43 +14,10 @@ class historyUserScreen extends StatefulWidget {
 class _historyUserScreen extends State<historyUserScreen> {
   late Future<dynamic> _historyFuture;
   //Mockup Data
-  request userrequest = request(
-      id: 0,
-      title: "การแก้หนี้กับธนาคารกสิกรไทย",
-      detail:
-          "123456แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890",
-      userId: 0,
-      advisorId: 0,
-      requestStatus: "เสร็จสิ้น",
-      type: [
-        "หนี้บัตรเครติด",
-        "สินเชื่อส่วนบุคคล",
-      ], //[หนี้บัตรเครติด,สินเชื่อส่วนบุคคล,หนี้บ้าน,หนี้จำนำรถ,หนี้เช่าซื้อรถ]
-      debtStatus: ["Normal"],
-      provider: ["กสิกร"],
-      revenue: [10000],
-      expense: [1000000],
-      burden:
-          "1/3ของรายได้", //ผ่อนหนี้ [1/3ของรายได้,1/3-1/2ของรายได้,1/2-2/3ของรายได้,มากกว่า 2/3 ของรายได้ ]
-      propoty: 25000,
-      assignmentId: [],
-      appointmentDate: [DateTime(2024, 2, 17)],
-      appointmentStatus: [
-        "เสร็จสิ้น",
-      ]);
 
   @override
   void initState() {
     super.initState();
-    _historyFuture = getMultipleUserRequest();
-  }
-
-  Future<List<request>?> getMultipleUserRequest() async {
-    //ไม่มี user request ใน db
-    //return null;
-
-    //Mockup data
-    return [userrequest, userrequest, userrequest, userrequest];
   }
 
   FutureBuilder getBody() {
@@ -98,9 +65,9 @@ class _historyUserScreen extends State<historyUserScreen> {
             List<Widget> containerList = [
               const SizedBox(height: 10),
             ];
-            var _request = snapshot.data as List<request>;
+            var _request = snapshot.data as List<Request>;
             //สร้าง Listview ที่จะมีคำร้องต่างๆ ของ User
-            for (request requestItem in _request) {
+            for (Request requestItem in _request) {
               Widget container = UserLayout.createRequestBox(requestItem);
               containerList.add(container);
               containerList.add(const SizedBox(height: 10));

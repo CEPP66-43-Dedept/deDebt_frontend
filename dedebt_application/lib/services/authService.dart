@@ -47,6 +47,7 @@ class Auth {
   }
 
   Future<void> createUserWithEmailAndPassword({
+    required int ssn,
     required String email,
     required String password,
     required String firstName,
@@ -64,6 +65,7 @@ class Auth {
 
       final user = <String, dynamic>{
         'uid': currentUser?.uid,
+        'ssn': ssn,
         'email': email,
         'firstName': firstName,
         'lastName': lastName,

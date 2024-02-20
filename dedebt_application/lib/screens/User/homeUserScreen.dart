@@ -1,5 +1,9 @@
 // ignore_for_file: unused_import, unused_field
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dedebt_application/repositories/userRepository.dart';
+import 'package:dedebt_application/services/userService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/models/userModel.dart';
 import 'package:dedebt_application/models/requestModel.dart';
@@ -14,72 +18,34 @@ class homeUserScreen extends StatefulWidget {
 
 class _homeUserScreenState extends State<homeUserScreen> {
   late Future<dynamic> _userFuture;
-
-//Mockup Data
-  Users thisuser = Users(
-    id: 0,
-    ssn: 0,
-    firstname: "สมชาย",
-    lastname: "ชายมาก",
-    roles: "ลูกหนี้",
-    requests: [0],
-    email: "somchai@mail.com",
-    tel: "0123456789",
-    password: "SecureP@ssw0rd",
-  );
-  request userrequest = request(
-      id: 0,
-      title: "การแก้หนี้กับธนาคารกสิกรไทย",
-      detail:
-          "123456แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890",
-      userId: 0,
-      advisorId: 0,
-      requestStatus: "เสร็จสิ้น",
-      type: [
-        "หนี้บัตรเครติด",
-        "สินเชื่อส่วนบุคคล",
-      ], //[หนี้บัตรเครติด,สินเชื่อส่วนบุคคล,หนี้บ้าน,หนี้จำนำรถ,หนี้เช่าซื้อรถ]
-      debtStatus: ["Normal"],
-      provider: ["กสิกร"],
-      revenue: [10000],
-      expense: [1000000],
-      burden:
-          "1/3ของรายได้", //ผ่อนหนี้ [1/3ของรายได้,1/3-1/2ของรายได้,1/2-2/3ของรายได้,มากกว่า 2/3 ของรายได้ ]
-      propoty: 25000,
-      assignmentId: [],
-      appointmentDate: [DateTime(2024, 2, 17)],
-      appointmentStatus: [
-        "เสร็จสิ้น",
-      ]);
+  late final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late final UserRepository userRepository =
+      UserRepository(firestore: firestore);
+  late final UserService _userService =
+      UserService(userRepository: userRepository);
+  User? user = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
     super.initState();
-    _userFuture = getDataHome();
+    _userFuture = _getDataHome();
   }
 
-  Future<List<dynamic>> getDataHome() async {
-    final results = await Future.wait([getUser(), getUserRequest()]);
+  Future<Map<String, dynamic>?> _getUserData(String userId) async {
+    return _userService.getUserData(userId);
+  }
+
+  Future<Map<String, dynamic>?> _getUserActiveRequest(String userId) async {
+    return _userService.getUserActiveRequest(userId);
+  }
+
+  Future<List<dynamic>> _getDataHome() async {
+    final results = await Future.wait(
+        [_getUserData(user!.uid), _getUserActiveRequest(user!.uid)]);
     return results;
   }
 
-  Future<Users?> getUser() async {
-    //ไม่มี User ใน DB
-    //return null;
-
-    //Mockup Data
-    return thisuser;
-  }
-
-  Future<request?> getUserRequest() async {
-    //ไม่มี user request ใน db
-    //return null;
-
-    //Mockup data
-    return userrequest;
-  }
-
-  void createAppointmentContainer(request uRequest) {
+  void createAppointmentContainer(Request uRequest) {
     //leave ทิ้งว่างเพราะว่ายังไม่มี Appointment model
     var list = uRequest.appointmentDate;
     for (int i = 0; i <= list.length; i++) {}
@@ -98,9 +64,9 @@ class _homeUserScreenState extends State<homeUserScreen> {
             // ไม่มีข้อมูลใน db
             return const Center(child: Text('No User'));
           } else {
-            var thisuser = snapshot.data[0] as Users;
-            var _request = snapshot.data[1] as request;
-
+            Users _thisuser = Users.fromMap(snapshot.data[0]);
+            Request _request = Request.fromMap(snapshot.data[1]);
+            //  print(_thisuser.email + _request.advisorId);
             return Scaffold(
               body: Align(
                 alignment: Alignment.center,
@@ -111,7 +77,7 @@ class _homeUserScreenState extends State<homeUserScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(10, 25, 10, 0),
                         child: Text(
-                          "สวัสดี ${thisuser.firstname}",
+                          "สวัสดี ${_thisuser.firstname}",
                           style: const TextStyle(fontSize: 20),
                         ),
                       ),

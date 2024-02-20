@@ -18,7 +18,7 @@ class UserLayout extends StatefulWidget {
   @override
   State<UserLayout> createState() => _UserLayoutState();
 
-  static Container getRequestStatusContainer(request _request) {
+  static Container getRequestStatusContainer(Request _request) {
     Color containerColor;
     bool isCase1 = false;
     switch (_request.requestStatus) {
@@ -43,14 +43,20 @@ class UserLayout extends StatefulWidget {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: Text(
-        _request.requestStatus,
+        _request.requestStatus == 0
+            ? "จัดหาที่ปรึกษา"
+            : _request.requestStatus == 1
+                ? "กำลังปรึกษา"
+                : _request.requestStatus == 2
+                    ? "เสร็จสิ้น"
+                    : "",
         style: TextStyle(color: isCase1 ? const Color(0xFF7673D3) : null),
       ),
     );
     return statusContainer;
   }
 
-  static Container createRequestBox(request _request) {
+  static Container createRequestBox(Request _request) {
     return Container(
       width: 314,
       decoration: BoxDecoration(

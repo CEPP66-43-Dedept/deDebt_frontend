@@ -17,4 +17,13 @@ class UserService {
       return null;
     }
   }
+
+  Future<Map<String, dynamic>?> getUserActiveRequest(String userId) async {
+    try {
+      return await _userRepository.getUserActiveRequest(userId);
+    } catch (e) {
+      print('Error getting user data: $e');
+      return null;
+    }
+  }
 }

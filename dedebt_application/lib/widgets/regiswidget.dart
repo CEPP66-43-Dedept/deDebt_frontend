@@ -24,9 +24,10 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
   int _currentStep = 0;
 
   Future<void> createUserWithEmailAndPassword(
-      email, ssn, fName, lName, tel, password) async {
+      ssn, email, fName, lName, tel, password) async {
     try {
       await Auth().createUserWithEmailAndPassword(
+          ssn: ssn,
           email: email,
           password: password,
           firstName: fName,
@@ -79,8 +80,8 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> {
                   isCheckedPersonal! &&
                   isCheckedAnotherrRoles!) {
                 createUserWithEmailAndPassword(
-                  widget.email,
                   _ssnController.text,
+                  widget.email,
                   _firstNameController.text,
                   _lastNameController.text,
                   _telController.text,
