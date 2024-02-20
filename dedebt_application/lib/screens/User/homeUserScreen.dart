@@ -104,256 +104,265 @@ class _homeUserScreenState extends State<homeUserScreen> {
             return Scaffold(
               body: Align(
                 alignment: Alignment.center,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 25, 10, 0),
-                      child: Text(
-                        "สวัสดี ${thisuser.firstname}",
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 25, 10, 0),
                         child: Text(
-                          "คำร้องของคุณ",
-                          style: TextStyle(fontSize: 24),
-                        )),
-                    DefaultTextStyle(
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.white,
-                              fontSize: 15.0,
-                            ),
-                        child: UserLayout.createRequestBox(_request)),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        "การนัดหมาย",
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ),
-                    RawScrollbar(
-                      thumbColor: const Color(0xFFBBB9F4),
-                      thumbVisibility: true,
-                      radius: const Radius.circular(20),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 6.0, vertical: 10),
-                      thickness: 5,
-                      child: Container(
-                        height: 309,
-                        width: 324,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFFFFF),
-                          borderRadius: BorderRadius.circular(20),
+                          "สวัสดี ${thisuser.firstname}",
+                          style: const TextStyle(fontSize: 20),
                         ),
-                        child: DefaultTextStyle(
+                      ),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Text(
+                            "คำร้องของคุณ",
+                            style: TextStyle(fontSize: 24),
+                          )),
+                      DefaultTextStyle(
                           style:
                               Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    color: const Color(0xFF36338C),
+                                    color: Colors.white,
                                     fontSize: 15.0,
                                   ),
-                          child: ListView(
-                            shrinkWrap: true,
-                            children: [
-                              Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(19, 10, 19, 0),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFDAEAFA),
-                                  borderRadius: BorderRadius.circular(20),
+                          child: UserLayout.createRequestBox(_request)),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        child: Text(
+                          "การนัดหมาย",
+                          style: TextStyle(fontSize: 24),
+                        ),
+                      ),
+                      RawScrollbar(
+                        thumbColor: const Color(0xFFBBB9F4),
+                        thumbVisibility: true,
+                        radius: const Radius.circular(20),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6.0, vertical: 10),
+                        thickness: 5,
+                        child: Container(
+                          height: 309,
+                          width: 324,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFFFFF),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: DefaultTextStyle(
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: const Color(0xFF36338C),
+                                  fontSize: 15.0,
                                 ),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "นัดโทรคุยโทรศัพท์",
-                                            style: TextStyle(fontSize: 20.0),
-                                          ),
-                                          const Text(
-                                              "การแก้หนี้จากธนาคาร oooooo"),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                "สถานะ : ",
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0xFF2DC09C),
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
+                            child: ListView(
+                              shrinkWrap: true,
+                              children: [
+                                Container(
+                                  margin:
+                                      const EdgeInsets.fromLTRB(19, 10, 19, 0),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFDAEAFA),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              "นัดโทรคุยโทรศัพท์",
+                                              style: TextStyle(fontSize: 20.0),
+                                            ),
+                                            const Text(
+                                                "การแก้หนี้จากธนาคาร oooooo"),
+                                            Row(
+                                              children: [
+                                                const Text(
+                                                  "สถานะ : ",
                                                 ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 25.0),
-                                                child: const Text(
-                                                  "เสร็จสิ้น",
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        const Color(0xFF2DC09C),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 25.0),
+                                                  child: const Text(
+                                                    "เสร็จสิ้น",
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(19, 10, 19, 0),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFDAEAFA),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "นัดโทรคุยโทรศัพท์",
-                                            style: TextStyle(fontSize: 20.0),
-                                          ),
-                                          const Text(
-                                              "การแก้หนี้จากธนาคาร oooooo"),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                "สถานะ : ",
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0xFF2DC09C),
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
+                                Container(
+                                  margin:
+                                      const EdgeInsets.fromLTRB(19, 10, 19, 0),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFDAEAFA),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              "นัดโทรคุยโทรศัพท์",
+                                              style: TextStyle(fontSize: 20.0),
+                                            ),
+                                            const Text(
+                                                "การแก้หนี้จากธนาคาร oooooo"),
+                                            Row(
+                                              children: [
+                                                const Text(
+                                                  "สถานะ : ",
                                                 ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 25.0),
-                                                child: const Text(
-                                                  "เสร็จสิ้น",
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        const Color(0xFF2DC09C),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 25.0),
+                                                  child: const Text(
+                                                    "เสร็จสิ้น",
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(19, 10, 19, 0),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFDAEAFA),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "นัดโทรคุยโทรศัพท์",
-                                            style: TextStyle(fontSize: 20.0),
-                                          ),
-                                          const Text(
-                                              "การแก้หนี้จากธนาคาร oooooo"),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                "สถานะ : ",
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0xFF2DC09C),
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
+                                Container(
+                                  margin:
+                                      const EdgeInsets.fromLTRB(19, 10, 19, 0),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFDAEAFA),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              "นัดโทรคุยโทรศัพท์",
+                                              style: TextStyle(fontSize: 20.0),
+                                            ),
+                                            const Text(
+                                                "การแก้หนี้จากธนาคาร oooooo"),
+                                            Row(
+                                              children: [
+                                                const Text(
+                                                  "สถานะ : ",
                                                 ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 25.0),
-                                                child: const Text(
-                                                  "เสร็จสิ้น",
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        const Color(0xFF2DC09C),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 25.0),
+                                                  child: const Text(
+                                                    "เสร็จสิ้น",
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(19, 10, 19, 0),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFDAEAFA),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "นัดโทรคุยโทรศัพท์",
-                                            style: TextStyle(fontSize: 20.0),
-                                          ),
-                                          const Text(
-                                              "การแก้หนี้จากธนาคาร oooooo"),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                "สถานะ : ",
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0xFF2DC09C),
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
+                                Container(
+                                  margin:
+                                      const EdgeInsets.fromLTRB(19, 10, 19, 0),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFDAEAFA),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              "นัดโทรคุยโทรศัพท์",
+                                              style: TextStyle(fontSize: 20.0),
+                                            ),
+                                            const Text(
+                                                "การแก้หนี้จากธนาคาร oooooo"),
+                                            Row(
+                                              children: [
+                                                const Text(
+                                                  "สถานะ : ",
                                                 ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 25.0),
-                                                child: const Text(
-                                                  "เสร็จสิ้น",
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        const Color(0xFF2DC09C),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 25.0),
+                                                  child: const Text(
+                                                    "เสร็จสิ้น",
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );

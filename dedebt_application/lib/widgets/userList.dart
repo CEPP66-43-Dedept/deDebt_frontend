@@ -5,23 +5,29 @@ import 'package:dedebt_application/variables/rolesEnum.dart';
 import 'package:dedebt_application/widgets/deleteUserBottomsheet.dart';
 import 'package:flutter/material.dart';
 
-class UserList extends StatelessWidget {
+class UserList extends StatefulWidget {
   final List<Map<String, dynamic>> usersData;
-
-  const UserList(
-      {required this.usersData,
-      required this.adminRepository,
-      required this.adminService,
-      required this.role,
-      Key? key})
-      : super(key: key);
   final AdminRepository adminRepository;
   final AdminService adminService;
   final Roles role;
+
+  const UserList({
+    required this.usersData,
+    required this.adminRepository,
+    required this.adminService,
+    required this.role,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _UserListState createState() => _UserListState();
+}
+
+class _UserListState extends State<UserList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: usersData.length,
+      itemCount: widget.usersData.length,
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.all(5.0),
@@ -39,11 +45,11 @@ class UserList extends StatelessWidget {
                 context: context,
                 builder: (context) {
                   return DeleteUserBottomsheet(
-                    adminRepository: adminRepository,
-                    adminService: adminService,
+                    adminRepository: widget.adminRepository,
+                    adminService: widget.adminService,
                     index: index,
-                    uid: usersData[index]['uid'],
-                    role: role,
+                    uid: widget.usersData[index]['uid'],
+                    role: widget.role,
                   );
                 },
               );
@@ -51,9 +57,11 @@ class UserList extends StatelessWidget {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "${usersData[index]['firstName']} ${usersData[index]['lastName']}",
-                style:
-                    const TextStyle(fontSize: 18, color: ColorGuide.blueAccent),
+                "${widget.usersData[index]['firstName']} ${widget.usersData[index]['lastName']}",
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: ColorGuide.blueAccent,
+                ),
               ),
             ),
           ),

@@ -13,17 +13,14 @@ dependencies:
   go_router: ^13.0.1
   google_fonts: ^6.1.0
   firebase_core: ^2.25.1
-<<<<<<< HEAD
   firebase_auth: ^4.17.4
   sign_in_button: ^3.2.0
   google_sign_in: ^6.0.2
   firebase_core_dart: ^1.0.1
   cloud_firestore: ^4.15.4
   toggle_switch: ^2.1.0
-=======
   dropdown_textfield: 1.0.8
 
->>>>>>> f4f5a9f2d22d2b152aa4ca9a4fe7aeea89d71951
 dev_dependencies:
   flutter_test:
     sdk: flutter

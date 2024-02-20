@@ -73,7 +73,8 @@ class _sendRequestScreen extends State<sendRequestScreen> {
             child: Container(
                 width: 360,
                 height: 690,
-                padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 child: DefaultTextStyle(
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: const Color(0xFF000000),
@@ -158,8 +159,6 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                       ),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: TextFormField(
-                        //controller for TextForm
-                        //controller: ,
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                           hintText: "Type your SSN Here",
