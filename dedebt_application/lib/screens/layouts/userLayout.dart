@@ -4,6 +4,8 @@ import 'package:dedebt_application/services/authService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:dedebt_application/models/userModel.dart';
+import 'package:dedebt_application/models/requestModel.dart';
 
 import 'package:dedebt_application/routes/route.dart';
 
@@ -13,9 +15,120 @@ class UserLayout extends StatefulWidget {
   int currentPage = 0;
   UserLayout({Key? key, required this.Body, required this.currentPage})
       : super(key: key);
-
   @override
   State<UserLayout> createState() => _UserLayoutState();
+
+  static Container getRequestStatusContainer(request _request) {
+    Color containerColor;
+    bool isCase1 = false;
+    switch (_request.requestStatus) {
+      case "จัดหาที่ปรึกษา":
+        containerColor = const Color(0xFFE1E4F8);
+        isCase1 = true;
+        break;
+      case "กำลังปรึกษา":
+        containerColor = const Color(0xFFF18F80);
+        break;
+      case "เสร็จสิ้น":
+        containerColor = const Color(0xFF2DC09C);
+        break;
+      default:
+        containerColor = const Color(0xFFFFFFFF);
+        break;
+    }
+    Container statusContainer = Container(
+      decoration: BoxDecoration(
+        color: containerColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      child: Text(
+        _request.requestStatus,
+        style: TextStyle(color: isCase1 ? const Color(0xFF7673D3) : null),
+      ),
+    );
+    return statusContainer;
+  }
+
+  static Container createRequestBox(request _request) {
+    return Container(
+      width: 314,
+      decoration: BoxDecoration(
+        color: const Color(0xFF36338C),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: const EdgeInsets.all(16.0),
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: SizedBox(
+            width: 310,
+            child: Text(_request.title,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 24)),
+          ),
+        ),
+        Column(
+          children: [
+            Row(
+              children: [
+                const Text("สถานะ : "),
+                //สถานะ container
+                getRequestStatusContainer(_request),
+              ],
+            ),
+            const SizedBox(height: 5),
+            Row(
+              children: [
+                const Text("ผู้รับผิดชอบ : "),
+                Flexible(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF0F4FD),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: const Text(
+                      "นางสมหญิง หญิงมาก",
+                      style: TextStyle(color: Color(0xFF2DC09C)),
+                      softWrap: true,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(height: 5),
+            Row(
+              children: [
+                const Text("ประเภท : "),
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    _request.type.join(","),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 5),
+            Row(
+              children: [
+                const Text("รายละเอียด : "),
+                SizedBox(
+                  width: 200,
+                  child: Text(
+                    _request.detail,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ]),
+    );
+  }
 }
 
 class _UserLayoutState extends State<UserLayout> {
@@ -60,6 +173,7 @@ class _UserLayoutState extends State<UserLayout> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     void onTap(int page) {
       switch (page) {
@@ -90,39 +204,6 @@ class _UserLayoutState extends State<UserLayout> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: primaryColor,
-        toolbarHeight: 55,
-        title: Column(
-          children: [
-            Container(
-              constraints: const BoxConstraints(
-                maxHeight: 50,
-                maxWidth: double.infinity,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image.asset(
-                      'assets/images/Logo.png',
-                      fit: BoxFit.contain,
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.exit_to_app),
-                      onPressed: () {
-                        signOut();
-                        context.go(AppRoutes.INITIAL);
-                      },
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
       body: widget.Body,
       bottomNavigationBar: SizedBox(
         height: 55,
@@ -158,6 +239,40 @@ class _UserLayoutState extends State<UserLayout> {
               )
             ],
           ),
+        ),
+      ),
+      appBar: AppBar(
+        backgroundColor: primaryColor,
+        surfaceTintColor: Colors.transparent,
+        toolbarHeight: 55,
+        title: Column(
+          children: [
+            Container(
+              constraints: const BoxConstraints(
+                maxHeight: 50,
+                maxWidth: double.infinity,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.asset(
+                      'assets/images/Logo.png',
+                      fit: BoxFit.contain,
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.exit_to_app),
+                      onPressed: () {
+                        signOut();
+                        context.go(AppRoutes.INITIAL);
+                      },
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
