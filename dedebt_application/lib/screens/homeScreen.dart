@@ -3,9 +3,11 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dedebt_application/screens/Admin/adminHomeScreen.dart';
+import 'package:dedebt_application/screens/Matcher/homeMatcher.dart';
 import 'package:dedebt_application/screens/User/homeUserScreen.dart';
 import 'package:dedebt_application/screens/layouts/adminLayout.dart';
 import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
+import 'package:dedebt_application/screens/layouts/matcherLayout.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
 import 'package:dedebt_application/screens/loginScreen.dart';
 import 'package:dedebt_application/screens/registerScreen.dart';
@@ -73,9 +75,13 @@ class _HomeScreenState extends State<HomeScreen> {
             final userData = snapshot.data!;
             final String? collection = userData['collection'];
             print(userData);
-
+            print(currentUser.email);
             if (collection == 'advisors') {
               return const AdvisorLayout();
+            } else if (collection == 'matcher') {
+              return MatcherLayout(
+                Body: HomeMatcher(),
+              );
             } else if (collection == 'admin') {
               return AdminLayout(Body: AdminHomeScreen());
             } else if (collection == 'users') {
@@ -100,7 +106,15 @@ class _HomeScreenState extends State<HomeScreen> {
     if (adminSnapshot.docs.isNotEmpty) {
       return {'collection': 'admin'};
     }
+    final QuerySnapshot<Map<String, dynamic>> matcherSnapshot =
+        await FirebaseFirestore.instance
+            .collection('matcher')
+            .where('email', isEqualTo: currentUser.email)
+            .get();
 
+    if (matcherSnapshot.docs.isNotEmpty) {
+      return {'collection': 'matcher'};
+    }
     final QuerySnapshot<Map<String, dynamic>> userSnapshot =
         await FirebaseFirestore.instance
             .collection('users')
