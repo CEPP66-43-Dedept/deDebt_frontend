@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/models/userModel.dart';
 import 'package:dedebt_application/models/requestModel.dart';
+import 'package:dedebt_application/models/assignmentModel.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
 
 class homeUserScreen extends StatefulWidget {
@@ -49,7 +52,33 @@ class _homeUserScreenState extends State<homeUserScreen> {
       appointmentStatus: [
         "เสร็จสิ้น",
       ]);
-
+  Assignment userAppointment = Assignment(
+      id: 0,
+      type: "การนัดหมาย",
+      title: "การนัดคุยทางโทรศัพท์",
+      detail: "โทรทางมือถือเบอร์ 123-456-7890",
+      status: "ยกเลิก",
+      tid: null,
+      advisorTimeslot: [],
+      userTimeslot: DateTime(2024, 2, 21));
+  Assignment userAssignment = Assignment(
+      id: 1,
+      type: "งาน'",
+      title: "กรอกเอกสาร",
+      detail: "กรอกเอกสารหักเงินของกสิกร",
+      status: "ดำเนินการ",
+      tid: 0,
+      advisorTimeslot: [],
+      userTimeslot: DateTime(2024, 2, 22));
+  Assignment userAssignment_2 = Assignment(
+      id: 1,
+      type: "งาน'",
+      title: "กรอกเอกสาร",
+      detail: "กรอกเอกสารหักเงินของกสิกร",
+      status: "เสร็จสิ้น",
+      tid: 0,
+      advisorTimeslot: [],
+      userTimeslot: DateTime(2024, 2, 22));
   @override
   void initState() {
     super.initState();
@@ -57,7 +86,8 @@ class _homeUserScreenState extends State<homeUserScreen> {
   }
 
   Future<List<dynamic>> getDataHome() async {
-    final results = await Future.wait([getUser(), getUserRequest()]);
+    final results =
+        await Future.wait([getUser(), getUserRequest(), getUserAssignment()]);
     return results;
   }
 
@@ -75,6 +105,10 @@ class _homeUserScreenState extends State<homeUserScreen> {
 
     //Mockup data
     return userrequest;
+  }
+
+  Future<List<Assignment>> getUserAssignment() async {
+    return [userAppointment, userAssignment, userAssignment_2];
   }
 
   void createAppointmentContainer(request uRequest) {
@@ -98,6 +132,17 @@ class _homeUserScreenState extends State<homeUserScreen> {
           } else {
             var thisuser = snapshot.data[0] as Users;
             var _request = snapshot.data[1] as request;
+            var u_assignment = snapshot.data[2] as List<Assignment>;
+            List<Widget> AssignmentStatusContainerList = [
+              const SizedBox(height: 5),
+            ];
+            for (Assignment assignment_item in u_assignment) {
+              Widget container =
+                  UserLayout.createAssignmentContainer(assignment_item);
+
+              AssignmentStatusContainerList.add(container);
+              AssignmentStatusContainerList.add(const SizedBox(height: 5));
+            }
 
             return Scaffold(
               body: Align(
@@ -123,7 +168,10 @@ class _homeUserScreenState extends State<homeUserScreen> {
                               color: Colors.white,
                               fontSize: 15.0,
                             ),
-                        child: UserLayout.createRequestBox(_request)),
+                        child: GestureDetector(
+                          onTap: () => {context.go(AppRoutes.REQUEST_USER)},
+                          child: UserLayout.createRequestBox(_request),
+                        )),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Text(
@@ -131,222 +179,36 @@ class _homeUserScreenState extends State<homeUserScreen> {
                         style: TextStyle(fontSize: 24),
                       ),
                     ),
-                    RawScrollbar(
-                      thumbColor: const Color(0xFFBBB9F4),
-                      thumbVisibility: true,
-                      radius: const Radius.circular(20),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 6.0, vertical: 10),
-                      thickness: 5,
-                      child: Container(
-                        height: 309,
-                        width: 324,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFFFFF),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: DefaultTextStyle(
-                          style:
-                              Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    color: const Color(0xFF36338C),
-                                    fontSize: 15.0,
-                                  ),
-                          child: ListView(
-                            shrinkWrap: true,
-                            children: [
-                              Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(19, 10, 19, 0),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFDAEAFA),
-                                  borderRadius: BorderRadius.circular(20),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 14),
+                      child: RawScrollbar(
+                        thumbColor: const Color(0xFFBBB9F4),
+                        thumbVisibility: true,
+                        radius: const Radius.circular(20),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6.0, vertical: 10),
+                        thickness: 5,
+                        child: Container(
+                          height: 309,
+                          width: 324,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFFFFF),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: DefaultTextStyle(
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: const Color(0xFF36338C),
+                                  fontSize: 15.0,
                                 ),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "นัดโทรคุยโทรศัพท์",
-                                            style: TextStyle(fontSize: 20.0),
-                                          ),
-                                          const Text(
-                                              "การแก้หนี้จากธนาคาร oooooo"),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                "สถานะ : ",
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0xFF2DC09C),
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 25.0),
-                                                child: const Text(
-                                                  "เสร็จสิ้น",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(19, 10, 19, 0),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFDAEAFA),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "นัดโทรคุยโทรศัพท์",
-                                            style: TextStyle(fontSize: 20.0),
-                                          ),
-                                          const Text(
-                                              "การแก้หนี้จากธนาคาร oooooo"),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                "สถานะ : ",
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0xFF2DC09C),
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 25.0),
-                                                child: const Text(
-                                                  "เสร็จสิ้น",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(19, 10, 19, 0),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFDAEAFA),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "นัดโทรคุยโทรศัพท์",
-                                            style: TextStyle(fontSize: 20.0),
-                                          ),
-                                          const Text(
-                                              "การแก้หนี้จากธนาคาร oooooo"),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                "สถานะ : ",
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0xFF2DC09C),
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 25.0),
-                                                child: const Text(
-                                                  "เสร็จสิ้น",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(19, 10, 19, 0),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFDAEAFA),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "นัดโทรคุยโทรศัพท์",
-                                            style: TextStyle(fontSize: 20.0),
-                                          ),
-                                          const Text(
-                                              "การแก้หนี้จากธนาคาร oooooo"),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                "สถานะ : ",
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0xFF2DC09C),
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 25.0),
-                                                child: const Text(
-                                                  "เสร็จสิ้น",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                            child: ListView.builder(
+                              itemCount: AssignmentStatusContainerList.length,
+                              itemBuilder: (context, index) {
+                                return AssignmentStatusContainerList[index];
+                              },
+                            ),
                           ),
                         ),
                       ),
