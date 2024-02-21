@@ -4,8 +4,8 @@ class Assignment {
   final String title;
   final String detail;
   final String status;
-  final int tid;
-  final List<DateTime> advisorTimeslot;
+  final int? tid;
+  final List<DateTime?> advisorTimeslot;
   final DateTime userTimeslot;
 
   Assignment(
