@@ -22,14 +22,14 @@ class UserLayout extends StatefulWidget {
     Color containerColor;
     bool isCase1 = false;
     switch (_request.requestStatus) {
-      case "จัดหาที่ปรึกษา":
+      case 0:
         containerColor = const Color(0xFFE1E4F8);
         isCase1 = true;
         break;
-      case "กำลังปรึกษา":
+      case 1:
         containerColor = const Color(0xFFF18F80);
         break;
-      case "เสร็จสิ้น":
+      case 2:
         containerColor = const Color(0xFF2DC09C);
         break;
       default:

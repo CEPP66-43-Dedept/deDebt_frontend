@@ -61,7 +61,6 @@ class _homeUserScreenState extends State<homeUserScreen> {
           } else if (snapshot.hasError) {
             return const Center(child: Text('Error fetching request'));
           } else if (snapshot.data == null) {
-            // ไม่มีข้อมูลใน db
             return const Center(child: Text('No User'));
           } else {
             Users _thisuser = Users.fromMap(snapshot.data[0]);
