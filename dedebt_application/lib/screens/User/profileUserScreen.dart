@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
+import 'package:dedebt_application/models/requestModel.dart';
 
 class profileUserScreen extends StatefulWidget {
   const profileUserScreen({super.key});
@@ -14,9 +15,7 @@ class _profileUserScreen extends State<profileUserScreen> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    //throw UnimplementedError();
+  Scaffold getBody() {
     return Scaffold(
       body: Center(
           child: Column(
@@ -31,5 +30,11 @@ class _profileUserScreen extends State<profileUserScreen> {
         ],
       )),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //throw UnimplementedError();
+    return getBody();
   }
 }
