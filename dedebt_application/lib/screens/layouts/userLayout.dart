@@ -1,8 +1,9 @@
-import 'package:dedebt_application/routes/route.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/models/userModel.dart';
 import 'package:dedebt_application/models/requestModel.dart';
+import 'package:dedebt_application/models/assignmentModel.dart';
 
 class UserLayout extends StatefulWidget {
   final Widget Body;
@@ -46,7 +47,7 @@ class UserLayout extends StatefulWidget {
 
   static Container createRequestBox(request _request) {
     return Container(
-      width: 314,
+      width: 324,
       decoration: BoxDecoration(
         color: const Color(0xFF36338C),
         borderRadius: BorderRadius.circular(20),
@@ -84,6 +85,7 @@ class UserLayout extends StatefulWidget {
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: const Text(
+                      //ยังไม่ได้ดึงข้อมูลของ advisor
                       "นางสมหญิง หญิงมาก",
                       style: TextStyle(color: Color(0xFF2DC09C)),
                       softWrap: true,
@@ -123,6 +125,79 @@ class UserLayout extends StatefulWidget {
       ]),
     );
   }
+
+  static Container getAssignmentStatusContainer(Assignment _assignment) {
+    var containerColor;
+    var textColor;
+
+    switch (_assignment.status) {
+      case "เสร็จสิ้น":
+        containerColor = const Color(0xFF2DC09C);
+        textColor = const Color(0xFFFAFEFF);
+        break;
+      case "ดำเนินการ":
+        containerColor = const Color(0xFFE1E4F8);
+        textColor = const Color(0xFF7673D3);
+        break;
+      case "ยกเลิก":
+        containerColor = const Color(0xFFF18F80);
+        textColor = const Color(0xFFF0E6EC);
+        break;
+    }
+    return Container(
+      decoration: BoxDecoration(
+        color: containerColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      child: Text(
+        _assignment.status,
+        style: TextStyle(color: textColor),
+      ),
+    );
+  }
+
+  static GestureDetector createAssignmentContainer(Assignment _assignment) {
+    return GestureDetector(
+      onTap: () => {
+        //handle redirect ไปหน้าassignment
+      },
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(19, 10, 19, 0),
+        decoration: BoxDecoration(
+          color: const Color(0xFFDAEAFA),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _assignment.title,
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                  Text(_assignment.type == "การนัดหมาย"
+                      ? "${_assignment.detail} วันที่ ${_assignment.userTimeslot.day}/${_assignment.userTimeslot.month}/${_assignment.userTimeslot.year}"
+                      : _assignment.detail),
+                  Row(
+                    children: [
+                      const Text(
+                        "สถานะ : ",
+                      ),
+                      getAssignmentStatusContainer(_assignment)
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class _UserLayoutState extends State<UserLayout> {
@@ -141,6 +216,7 @@ class _UserLayoutState extends State<UserLayout> {
     Icons.replay_outlined,
     Icons.person_outline
   ];
+
   IconData getIcon(int index) {
     return widget.currentPage == index
         ? _normalIcon[index]
