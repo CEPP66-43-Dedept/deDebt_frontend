@@ -39,7 +39,7 @@ class ROUTE {
         path: AppRoutes.HOME_USER,
         builder: (context, state) => TransitionRoutePage(
           child: UserLayout(
-            Body: homeUserScreen(),
+            Body: HomeUserScreen(),
             currentPage: 0,
           ),
         ),

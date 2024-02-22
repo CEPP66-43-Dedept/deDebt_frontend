@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
 import 'package:dedebt_application/models/userModel.dart';
 import 'package:dedebt_application/models/requestModel.dart';
+import 'package:dedebt_application/models/assignmentModel.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dedebt_application/routes/route.dart';
 
@@ -30,6 +31,34 @@ class _requestUserScreen extends State<requestUserScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<List<Assignment>> getUserAssignment() async {
+    return [];
+  }
+
+  Future<Request> getUserRequest() async {
+    return Request(
+        id: "id",
+        title: "",
+        detail: "",
+        userId: "",
+        advisorId: "",
+        requestStatus: 1,
+        type: [],
+        debtStatus: [],
+        provider: [],
+        revenue: [0],
+        expense: [0],
+        burden: "",
+        propoty: 0,
+        appointmentDate: [],
+        appointmentStatus: 0);
+  }
+
+  Future<List<dynamic>?> getDataRequest() async {
+    final results = await Future.wait([getUserRequest(), getUserAssignment()]);
+    return results;
   }
 
   FutureBuilder getmiddleBody() {
@@ -77,6 +106,19 @@ class _requestUserScreen extends State<requestUserScreen> {
           //รับข้อมูลจาก db สำเร็จ
           var _request = snapshot.data as Request;
           ScrollController _scrollController = ScrollController();
+
+          var u_assignment = snapshot.data[1] as List<Assignment>;
+          List<Widget> AssignmentStatusContainerList = [
+            const SizedBox(height: 5),
+          ];
+          for (Assignment assignment_item in u_assignment) {
+            Widget container =
+                UserLayout.createAssignmentContainer(assignment_item);
+
+            AssignmentStatusContainerList.add(container);
+            AssignmentStatusContainerList.add(const SizedBox(height: 5));
+          }
+
           return SingleChildScrollView(
             controller: _scrollController,
             child: Align(
@@ -235,238 +277,11 @@ class _requestUserScreen extends State<requestUserScreen> {
                           color: const Color(0xFFFFFFFF),
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: ListView(
-                          shrinkWrap: true,
-                          children: [
-                            DefaultTextStyle(
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: const Color(0xFF36338C),
-                                    fontSize: 15.0,
-                                  ),
-                              child: Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(19, 10, 19, 0),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFDAEAFA),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "นัดโทรคุยโทรศัพท์",
-                                            style: TextStyle(fontSize: 20.0),
-                                          ),
-                                          const Text(
-                                              "การแก้หนี้จากธนาคาร oooooo"),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                "สถานะ : ",
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0xFF2DC09C),
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 25.0),
-                                                child: const Text(
-                                                  "เสร็จสิ้น",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            DefaultTextStyle(
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: const Color(0xFF36338C),
-                                    fontSize: 15.0,
-                                  ),
-                              child: Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(19, 10, 19, 0),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFDAEAFA),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "นัดโทรคุยโทรศัพท์",
-                                            style: TextStyle(fontSize: 20.0),
-                                          ),
-                                          const Text(
-                                              "การแก้หนี้จากธนาคาร oooooo"),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                "สถานะ : ",
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0xFF2DC09C),
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 25.0),
-                                                child: const Text(
-                                                  "เสร็จสิ้น",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            DefaultTextStyle(
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: const Color(0xFF36338C),
-                                    fontSize: 15.0,
-                                  ),
-                              child: Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(19, 10, 19, 0),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFDAEAFA),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "นัดโทรคุยโทรศัพท์",
-                                            style: TextStyle(fontSize: 20.0),
-                                          ),
-                                          const Text(
-                                              "การแก้หนี้จากธนาคาร oooooo"),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                "สถานะ : ",
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0xFF2DC09C),
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 25.0),
-                                                child: const Text(
-                                                  "เสร็จสิ้น",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            DefaultTextStyle(
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: const Color(0xFF36338C),
-                                    fontSize: 15.0,
-                                  ),
-                              child: Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(19, 10, 19, 0),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFDAEAFA),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "นัดโทรคุยโทรศัพท์",
-                                            style: TextStyle(fontSize: 20.0),
-                                          ),
-                                          const Text(
-                                              "การแก้หนี้จากธนาคาร oooooo"),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                "สถานะ : ",
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0xFF2DC09C),
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 25.0),
-                                                child: const Text(
-                                                  "เสร็จสิ้น",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
+                        child: ListView.builder(
+                          itemCount: AssignmentStatusContainerList.length,
+                          itemBuilder: (context, index) {
+                            return AssignmentStatusContainerList[index];
+                          },
                         ),
                       ),
                     ),

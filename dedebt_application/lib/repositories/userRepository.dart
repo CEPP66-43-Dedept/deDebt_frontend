@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dedebt_application/models/assignmentModel.dart';
 
 class UserRepository {
   final FirebaseFirestore _firestore;
@@ -38,8 +39,31 @@ class UserRepository {
         return null;
       }
     } catch (e) {
-      print('Error getting user data: $e');
+      print('Error getting user active request: $e');
       return null;
+    }
+  }
+
+  Future<List<Assignment>> getActiveAssignments(String taskId) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection("assignments");
+      QuerySnapshot<Object?> querySnapshot = await collection
+          .where('taskId', isEqualTo: taskId)
+          .where('status', isEqualTo: 1)
+          .get();
+      List<Map<String, dynamic>> assignmentsData = [];
+      if (querySnapshot.docs.isNotEmpty) {
+        assignmentsData = querySnapshot.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList();
+      }
+      List<Assignment> assignments =
+          assignmentsData.map((data) => Assignment.fromMap(data)).toList();
+      return assignments;
+    } catch (e) {
+      print('Error getting active assignments: $e');
+      return [];
     }
   }
 }
