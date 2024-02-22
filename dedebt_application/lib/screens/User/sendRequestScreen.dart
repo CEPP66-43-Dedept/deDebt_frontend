@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
+import 'package:go_router/go_router.dart';
+import 'package:dedebt_application/routes/route.dart';
 
 class sendRequestScreen extends StatefulWidget {
   const sendRequestScreen({super.key});
@@ -10,28 +12,10 @@ class sendRequestScreen extends StatefulWidget {
 
 class _sendRequestScreen extends State<sendRequestScreen> {
   static Color navbarColor = const Color(0xFF444371);
-  static List<DropDownValueModel> debtTypeList = [
-    const DropDownValueModel(
-        name: "บัตรเครดิต(Credit card)", value: "บัตรเครดิต(Credit card)"),
-    const DropDownValueModel(
-        name: "สินเชื่อส่วนบุคคล(Personal lone) หรือ บัตรกดเงินสด",
-        value: "สินเชื่อส่วนบุคคล(Personal lone) หรือ บัตรกดเงินสด"),
-    const DropDownValueModel(
-        name: "หนี้บ้าน หนี้ที่อยู่อาศัย หนี้บ้านแลกเงิน (Home for cash)",
-        value: "หนี้บ้าน หนี้ที่อยู่อาศัย หนี้บ้านแลกเงิน (Home for cash)"),
-    const DropDownValueModel(
-        name: "หนี้จำนำทะเบียนรถ(Car for cash)",
-        value: "หนี้จำนำทะเบียนรถ(Car for cash)"),
-    const DropDownValueModel(
-        name: "หนี้เช่าซื้อรถ (Hire purchase)",
-        value: "หนี้เช่าซื้อรถ (Hire purchase)"),
-  ];
   static List<DropDownValueModel> ssnTypeList = [
-    const DropDownValueModel(
-        name: "เลขประจำตัวประชาชน", value: "เลขประจำตัวประชาชน"),
-    const DropDownValueModel(
-        name: "เลขที่หนังสือเดินทาง", value: "เลขที่หนังสือเดินทาง"),
-  ];
+    "เลขประจำตัวประชาชน",
+    "เลขที่หนังสือเดินทาง"
+  ].map((value) => DropDownValueModel(name: value, value: value)).toList();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -45,8 +29,10 @@ class _sendRequestScreen extends State<sendRequestScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 IconButton(
-                  onPressed: () {},
-                  icon: Icon(
+                  onPressed: () {
+                    context.go(AppRoutes.REQUEST_USER);
+                  },
+                  icon: const Icon(
                     Icons.arrow_back,
                     size: 35,
                     color: Colors.white,
@@ -73,32 +59,14 @@ class _sendRequestScreen extends State<sendRequestScreen> {
             child: Container(
                 width: 360,
                 height: 690,
-                padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 child: DefaultTextStyle(
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: const Color(0xFF000000),
                         fontSize: 18.0,
                       ),
                   child: ListView(children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text("ประเภท"),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: DropDownTextField(
-                        dropDownItemCount: 5,
-                        dropDownList: debtTypeList,
-                        enableSearch: true,
-                      ),
-                    ),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Text("ชื่อ - นามสกุล / ชื่อนิติบุคคล"),
@@ -113,8 +81,6 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                       ),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: TextFormField(
-                        //controller for TextForm
-                        //controller: ,
                         decoration: const InputDecoration(
                           hintText: "Type your name here",
                         ),
@@ -142,6 +108,9 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                       child: DropDownTextField(
                         dropDownItemCount: 2,
                         dropDownList: ssnTypeList,
+                        onChanged: (value) {
+                          // Handle data when user select from drop down
+                        },
                       ),
                     ),
                     const Padding(
@@ -158,8 +127,6 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                       ),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: TextFormField(
-                        //controller for TextForm
-                        //controller: ,
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                           hintText: "Type your SSN Here",
@@ -186,8 +153,6 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                       ),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: TextFormField(
-                        //controller for TextForm
-                        //controller: ,
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                           hintText: "Type your Phone Number Here",
@@ -215,8 +180,6 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                       ),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: TextFormField(
-                        //controller for TextForm
-                        //controller: ,
                         maxLines: 6,
                         maxLength: 300,
                         decoration: const InputDecoration(
@@ -242,16 +205,14 @@ class _sendRequestScreen extends State<sendRequestScreen> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    // Handle button press
-                    print('Next button pressed');
+                    context.go(AppRoutes.SEND_REQUEST_PAGE2_USER);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: navbarColor,
                   ),
-                  child: Text(
+                  child: const Text(
                     'ถัดไป',
-                    style: TextStyle(
-                        fontSize: 18.0, color: Colors.white), // Set text color
+                    style: TextStyle(fontSize: 18.0, color: Colors.white),
                   ),
                 ),
               ),
