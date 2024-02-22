@@ -29,16 +29,6 @@ class _requestUserScreen extends State<requestUserScreen> {
     tel: "0123456789",
     password: "SecureP@ssw0rd",
   );
-  Users advisorUser = Users(
-      id: 1,
-      ssn: 1,
-      firstname: "นายสมปอง",
-      lastname: "งอปมส",
-      roles: "Advisor",
-      requests: [0],
-      email: "sompong@mail.com",
-      tel: "0987654321",
-      password: "AdvisorSecureP@ssw0rd");
   request userrequest = request(
       id: 0,
       title: "การแก้หนี้กับธนาคารกสิกรไทย",
@@ -208,7 +198,7 @@ class _requestUserScreen extends State<requestUserScreen> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10.0),
                                       child: Text(
-                                        "${advisorUser.firstname} ${advisorUser.lastname}",
+                                        userrequest.advisorFullName,
                                         style: const TextStyle(
                                             color: Color(0xFF2DC09C)),
                                         softWrap: true,
@@ -302,11 +292,17 @@ class _requestUserScreen extends State<requestUserScreen> {
                         color: const Color(0xFFFFFFFF),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: ListView.builder(
-                        itemCount: AssignmentStatusContainerList.length,
-                        itemBuilder: (context, index) {
-                          return AssignmentStatusContainerList[index];
-                        },
+                      child: DefaultTextStyle(
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: const Color(0xFF36338C),
+                              fontSize: 15.0,
+                            ),
+                        child: ListView.builder(
+                          itemCount: AssignmentStatusContainerList.length,
+                          itemBuilder: (context, index) {
+                            return AssignmentStatusContainerList[index];
+                          },
+                        ),
                       ),
                     ),
                   ),
