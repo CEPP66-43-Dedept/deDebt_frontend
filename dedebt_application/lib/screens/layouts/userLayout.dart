@@ -84,10 +84,9 @@ class UserLayout extends StatefulWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: const Text(
-                      //ยังไม่ได้ดึงข้อมูลของ advisor
-                      "นางสมหญิง หญิงมาก",
-                      style: TextStyle(color: Color(0xFF2DC09C)),
+                    child: Text(
+                      _request.advisorFullName,
+                      style: const TextStyle(color: Color(0xFF2DC09C)),
                       softWrap: true,
                     ),
                   ),
