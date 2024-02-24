@@ -10,7 +10,21 @@ class sendRequestScreen extends StatefulWidget {
   State<sendRequestScreen> createState() => _sendRequestScreen();
 }
 
-Container createTextField(String TextBanner, bool isNumberOnly) {
+//Controller ในการเข้าถึงข้อมูล
+final NameController = TextEditingController();
+final SSIDController = TextEditingController();
+final PhoneNoContoller = TextEditingController();
+final MonthlyIncomeController = TextEditingController();
+final ExtraworkIncomeController = TextEditingController();
+final InvesmentIncomeComtroller = TextEditingController();
+final PrivateBussnessIncomeController = TextEditingController();
+final MonthlyExpenseController = TextEditingController();
+final DebtExpenseController = TextEditingController();
+final SavingContoller = TextEditingController();
+final DetailController = TextEditingController();
+
+Container createTextField(
+    String TextBanner, bool isNumberOnly, TextEditingController controller) {
   return Container(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,6 +45,7 @@ Container createTextField(String TextBanner, bool isNumberOnly) {
           ),
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: TextFormField(
+            controller: controller,
             keyboardType:
                 isNumberOnly ? TextInputType.number : TextInputType.text,
             decoration: const InputDecoration(
@@ -100,7 +115,8 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                         fontSize: 18.0,
                       ),
                   child: ListView(children: [
-                    createTextField("ชื่อ - นามสกุล / ชื่อนิติบุคคล", false),
+                    createTextField("ชื่อ - นามสกุล / ชื่อนิติบุคคล", false,
+                        NameController),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Text("ประเภทรหัสอ้างอิงบุคคล/นิติบุคคล"),
@@ -117,21 +133,25 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                       child: DropDownTextField(
                         dropDownItemCount: 2,
                         dropDownList: ssnTypeList,
-                        onChanged: (value) {
-                          // Handle data when user select from drop down
-                        },
                       ),
                     ),
-                    createTextField("เลขประจำตัวบุคคลและนิติบุคคล", true),
-                    createTextField("โทรศัพท์มือถือ", true),
-                    createTextField("รายได้หลักต่อเดือน", true),
                     createTextField(
-                        "รายได้เสริม เช่นโบนัส ค่าโอที งานเสริม", true),
-                    createTextField("ผลตอบแทนการลงทุน", true),
-                    createTextField("รายได้จากธุรกิจส่วนตัว", true),
-                    createTextField("ค่าใช้จ่ายในชีวิตประจำวันต่อเดือน", true),
-                    createTextField("ภาระหนี้ต่อเดือน", true),
-                    createTextField("เงินออมหรือทรัพย์สินส่วนตัวรวม", true),
+                        "เลขประจำตัวบุคคลและนิติบุคคล", true, SSIDController),
+                    createTextField("โทรศัพท์มือถือ", true, PhoneNoContoller),
+                    createTextField(
+                        "รายได้หลักต่อเดือน", true, MonthlyIncomeController),
+                    createTextField("รายได้เสริม เช่นโบนัส ค่าโอที งานเสริม",
+                        true, ExtraworkIncomeController),
+                    createTextField(
+                        "ผลตอบแทนการลงทุน", true, InvesmentIncomeComtroller),
+                    createTextField("รายได้จากธุรกิจส่วนตัว", true,
+                        PrivateBussnessIncomeController),
+                    createTextField("ค่าใช้จ่ายในชีวิตประจำวันต่อเดือน", true,
+                        MonthlyExpenseController),
+                    createTextField(
+                        "ภาระหนี้ต่อเดือน", true, DebtExpenseController),
+                    createTextField("เงินออมหรือทรัพย์สินส่วนตัวรวม", true,
+                        SavingContoller),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Text(
@@ -149,6 +169,7 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                       child: TextFormField(
                         maxLines: 6,
                         maxLength: 300,
+                        controller: DetailController,
                         decoration: const InputDecoration(
                           hintText: "Type your Detail Here",
                         ),
