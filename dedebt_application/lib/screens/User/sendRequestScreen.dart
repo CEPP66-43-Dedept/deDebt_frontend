@@ -20,6 +20,8 @@ Container createTextField(String TextBanner, bool isNumberOnly) {
           child: Text(TextBanner),
         ),
         Container(
+          width: 330,
+          height: 52,
           decoration: BoxDecoration(
             border: Border.all(
               color: Colors.black,
@@ -129,7 +131,7 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                     createTextField("รายได้จากธุรกิจส่วนตัว", true),
                     createTextField("ค่าใช้จ่ายในชีวิตประจำวันต่อเดือน", true),
                     createTextField("ภาระหนี้ต่อเดือน", true),
-                    createTextField("เงินออมหรือทรัพย์สินส่วนตัวรวม",true),
+                    createTextField("เงินออมหรือทรัพย์สินส่วนตัวรวม", true),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Text(
