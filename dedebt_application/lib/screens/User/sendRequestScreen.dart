@@ -12,6 +12,7 @@ class sendRequestScreen extends StatefulWidget {
 
 //Controller ในการเข้าถึงข้อมูล
 final NameController = TextEditingController();
+final SSiDtypeController = SingleValueDropDownController();
 final SSIDController = TextEditingController();
 final PhoneNoContoller = TextEditingController();
 final MonthlyIncomeController = TextEditingController();
@@ -131,6 +132,7 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                       ),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: DropDownTextField(
+                        controller: SSiDtypeController,
                         dropDownItemCount: 2,
                         dropDownList: ssnTypeList,
                       ),
@@ -193,6 +195,7 @@ class _sendRequestScreen extends State<sendRequestScreen> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
+                    print(SSiDtypeController.dropDownValue?.value);
                     context.go(AppRoutes.SEND_REQUEST_PAGE2_USER);
                   },
                   style: ElevatedButton.styleFrom(
