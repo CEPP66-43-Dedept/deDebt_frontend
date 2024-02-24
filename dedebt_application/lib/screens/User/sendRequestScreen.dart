@@ -10,6 +10,37 @@ class sendRequestScreen extends StatefulWidget {
   State<sendRequestScreen> createState() => _sendRequestScreen();
 }
 
+Container createTextField(String TextBanner, bool isNumberOnly) {
+  return Container(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Text(TextBanner),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.black,
+              width: 2.0,
+            ),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: TextFormField(
+            keyboardType:
+                isNumberOnly ? TextInputType.number : TextInputType.text,
+            decoration: const InputDecoration(
+              hintText: "Type your info Here",
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 class _sendRequestScreen extends State<sendRequestScreen> {
   static Color navbarColor = const Color(0xFF444371);
   static List<DropDownValueModel> ssnTypeList = [
@@ -67,31 +98,7 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                         fontSize: 18.0,
                       ),
                   child: ListView(children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text("ชื่อ - นามสกุล / ชื่อนิติบุคคล"),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: "Type your name here",
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Please enter Name";
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
+                    createTextField("ชื่อ - นามสกุล / ชื่อนิติบุคคล", false),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Text("ประเภทรหัสอ้างอิงบุคคล/นิติบุคคล"),
@@ -113,58 +120,16 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                         },
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text("เลขประจำตัวบุคคลและนิติบุคคล"),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          hintText: "Type your SSN Here",
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Please enter SSN";
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text("โทรศัพท์มือถือ"),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          hintText: "Type your Phone Number Here",
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Please enter Phone Number";
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
+                    createTextField("เลขประจำตัวบุคคลและนิติบุคคล", true),
+                    createTextField("โทรศัพท์มือถือ", true),
+                    createTextField("รายได้หลักต่อเดือน", true),
+                    createTextField(
+                        "รายได้เสริม เช่นโบนัส ค่าโอที งานเสริม", true),
+                    createTextField("ผลตอบแทนการลงทุน", true),
+                    createTextField("รายได้จากธุรกิจส่วนตัว", true),
+                    createTextField("ค่าใช้จ่ายในชีวิตประจำวันต่อเดือน", true),
+                    createTextField("ภาระหนี้ต่อเดือน", true),
+                    createTextField("เงินออมหรือทรัพย์สินส่วนตัวรวม",true),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Text(
