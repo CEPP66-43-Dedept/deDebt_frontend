@@ -59,7 +59,7 @@ class Request {
       'detail': detail,
       'userId': userId,
       'advisorId': advisorId,
-      'reqeustStatus': requestStatus,
+      'requestStatus': requestStatus,
       'type': type,
       'debtStatus': debtStatus,
       'provider': provider,
