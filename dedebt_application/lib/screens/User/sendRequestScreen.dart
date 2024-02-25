@@ -60,7 +60,8 @@ Container createTextField(
 }
 
 class _sendRequestScreen extends State<sendRequestScreen> {
-  static Color navbarColor = const Color(0xFF444371);
+  static Color appBarColor = const Color(0xFF444371);
+  static Color navBarColor = const Color(0xFF2DC09C);
   static List<DropDownValueModel> ssnTypeList = [
     "เลขประจำตัวประชาชน",
     "เลขที่หนังสือเดินทาง"
@@ -71,7 +72,7 @@ class _sendRequestScreen extends State<sendRequestScreen> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(
-            backgroundColor: navbarColor,
+            backgroundColor: appBarColor,
             surfaceTintColor: Colors.transparent,
             toolbarHeight: 55,
             title: Row(
@@ -188,7 +189,7 @@ class _sendRequestScreen extends State<sendRequestScreen> {
           ),
         )),
         bottomNavigationBar: BottomAppBar(
-          color: navbarColor,
+          color: navBarColor,
           height: 55,
           child: Row(
             children: [
@@ -199,7 +200,7 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                     context.go(AppRoutes.SEND_REQUEST_PAGE2_USER);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: navbarColor,
+                    backgroundColor: navBarColor,
                   ),
                   child: const Text(
                     'ถัดไป',
