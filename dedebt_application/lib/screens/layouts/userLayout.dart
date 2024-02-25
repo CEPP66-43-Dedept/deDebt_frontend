@@ -156,10 +156,14 @@ class UserLayout extends StatefulWidget {
     );
   }
 
-  static GestureDetector createAssignmentContainer(Assignment _assignment) {
+  static GestureDetector createAssignmentContainer(
+      BuildContext context, Assignment _assignment) {
     return GestureDetector(
       onTap: () => {
         //handle redirect ไปหน้าassignment
+        context.go(
+          AppRoutes.ASSIGNMENT_USER,
+        )
       },
       child: Container(
         margin: const EdgeInsets.fromLTRB(19, 10, 19, 0),

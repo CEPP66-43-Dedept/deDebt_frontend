@@ -11,7 +11,8 @@ class sendRequestPage2Screen extends StatefulWidget {
 }
 
 class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
-  static Color navbarColor = const Color(0xFF444371);
+  static Color appBarColor = const Color(0xFF444371);
+  static Color navBarColor = const Color(0xFF2DC09C);
   final ScrollController _scrollController = ScrollController();
   static List<DropDownValueModel> debtTypeList = [
     "บัตรเครดิต(Credit card)",
@@ -216,7 +217,7 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(
-            backgroundColor: navbarColor,
+            backgroundColor: appBarColor,
             surfaceTintColor: Colors.transparent,
             toolbarHeight: 55,
             title: Row(
@@ -277,7 +278,7 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
           ),
         )),
         bottomNavigationBar: BottomAppBar(
-          color: navbarColor,
+          color: navBarColor,
           height: 120,
           child: Column(
             children: [
@@ -317,16 +318,17 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
+                        //Debug for get value from container
                         print(financialServiceProviderControllersList[0]
                             .dropDownValue
                             ?.value);
                         print(financialServiceProviderControllersList[1]
                             .dropDownValue
                             ?.value);
-                        context.go(AppRoutes.HOME_USER);
+                        context.go(AppRoutes.SEND_REQUESt_SUCCESS_USER);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: navbarColor,
+                        backgroundColor: navBarColor,
                       ),
                       child: const Text(
                         'ส่งคำร้อง',
