@@ -325,7 +325,7 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
                         print(financialServiceProviderControllersList[1]
                             .dropDownValue
                             ?.value);
-                        context.go(AppRoutes.HOME_USER);
+                        context.go(AppRoutes.SEND_REQUESt_SUCCESS_USER);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: navBarColor,
