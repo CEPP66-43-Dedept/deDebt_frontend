@@ -11,7 +11,9 @@ import 'package:dedebt_application/screens/User/sendRequestPage2Screen.dart';
 import 'package:dedebt_application/screens/User/sendRequestScreen.dart';
 import 'package:dedebt_application/screens/layouts/adminLayout.dart';
 import 'package:dedebt_application/screens/Advisor/homeAdvisorScreen.dart';
-import 'package:dedebt_application/screens/Advisor/requesListtAdvisorScreen.dart';
+import 'package:dedebt_application/screens/Advisor/requesListAdvisorScreen.dart';
+import 'package:dedebt_application/screens/Advisor/requestAdvisorScreen.dart';
+import 'package:dedebt_application/screens/Advisor/assignmentAdvisorScreen.dart';
 import 'package:dedebt_application/screens/Advisor/historyAdvisorScreen.dart';
 import 'package:dedebt_application/screens/Advisor/profileAdvisorScreen.dart';
 import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
@@ -112,13 +114,30 @@ class ROUTE {
         ),
       ),
       GoRoute(
-        name: '/list-request-advisor',
+        name: '/request-list-advisor',
         path: AppRoutes.REQUEST_LIST_ADVISOR,
         builder: (context, state) => TransitionRoutePage(
           child: AdvisorLayout(
             body: requestListAdvisorScreen(),
             currentPage: 1,
           ),
+        ),
+      ),
+      GoRoute(
+        name: '/request-advisor',
+        path: AppRoutes.REQUEST_ADVISOR,
+        builder: (context, state) => TransitionRoutePage(
+          child: AdvisorLayout(
+            body: requestAdvisorScreen(),
+            currentPage: 1,
+          ),
+        ),
+      ),
+      GoRoute(
+        name: '/assignment-advisor',
+        path: AppRoutes.ASSIGNMENT_ADVISOR,
+        builder: (context, state) => TransitionRoutePage(
+          child: assignmentAdvisorScreen(),
         ),
       ),
       GoRoute(
