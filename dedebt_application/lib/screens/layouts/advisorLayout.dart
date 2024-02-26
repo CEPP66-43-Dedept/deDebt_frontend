@@ -1,6 +1,6 @@
-import 'package:dedebt_application/routes/route.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/models/requestModel.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
 
@@ -40,9 +40,11 @@ class AdvisorLayout extends StatefulWidget {
     return statusContainer;
   }
 
-  static GestureDetector createRequestBox(request _request) {
+  static GestureDetector createRequestBox(
+      BuildContext context, request _request) {
     return GestureDetector(
       onTap: () {
+        context.go(AppRoutes.REQUEST_ADVISOR);
         //ต้อง redirect ไปหน้าที่แสดงรายละเอียดของคำร้อง
         print("You tap me");
       },
@@ -127,9 +129,11 @@ class AdvisorLayout extends StatefulWidget {
     );
   }
 
-  static GestureDetector createAssignmentContainer(Assignment _assignment) {
+  static GestureDetector createAssignmentContainer(
+      BuildContext context, Assignment _assignment) {
     return GestureDetector(
       onTap: () => {
+        context.go(AppRoutes.ASSIGNMENT_ADVISOR)
         //handle redirect ไปหน้าassignment
       },
       child: Container(

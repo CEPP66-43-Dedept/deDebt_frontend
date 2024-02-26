@@ -39,7 +39,8 @@ class _homeAdvisorScreen extends State<homeAdvisorScreen> {
       const SizedBox(height: 5),
     ];
     for (Assignment assign in u_assignment) {
-      Widget container = AdvisorLayout.createAssignmentContainer(assign);
+      Widget container =
+          AdvisorLayout.createAssignmentContainer(context, assign);
       AssignmentContainerList.add(container);
       AssignmentContainerList.add(const SizedBox(height: 10));
     }

@@ -81,7 +81,7 @@ class _requestListAdvisorScreen extends State<requestListAdvisorScreen> {
       ];
       //สร้าง Listview ที่จะมีคำร้องต่างๆ ของ User
       for (request requestItem in _request) {
-        Widget container = AdvisorLayout.createRequestBox(requestItem);
+        Widget container = AdvisorLayout.createRequestBox(context, requestItem);
         containerList.add(container);
         containerList.add(const SizedBox(height: 10));
       }
@@ -128,7 +128,6 @@ class _requestListAdvisorScreen extends State<requestListAdvisorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       body: getBody(),
     );
