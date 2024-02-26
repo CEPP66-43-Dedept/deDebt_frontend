@@ -2,6 +2,7 @@ import 'package:dedebt_application/routes/route.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dedebt_application/models/requestModel.dart';
+import 'package:dedebt_application/models/assignmentModel.dart';
 
 class AdvisorLayout extends StatefulWidget {
   int currentPage = 0;
@@ -39,83 +40,163 @@ class AdvisorLayout extends StatefulWidget {
     return statusContainer;
   }
 
-  static Container createRequestBox(request _request) {
-    return Container(
-      width: 324,
-      decoration: BoxDecoration(
-        color: const Color(0xFF36338C),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: const EdgeInsets.all(16.0),
-      margin: const EdgeInsets.symmetric(horizontal: 15),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: SizedBox(
-            width: 310,
-            child: Text(_request.title,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 24)),
-          ),
+  static GestureDetector createRequestBox(request _request) {
+    return GestureDetector(
+      onTap: () {
+        //ต้อง redirect ไปหน้าที่แสดงรายละเอียดของคำร้อง
+        print("You tap me");
+      },
+      child: Container(
+        width: 324,
+        decoration: BoxDecoration(
+          color: const Color(0xFF36338C),
+          borderRadius: BorderRadius.circular(20),
         ),
-        Column(
-          children: [
-            Row(
-              children: [
-                const Text("สถานะ : "),
-                //สถานะ container
-                getRequestStatusContainer(_request),
-              ],
+        padding: const EdgeInsets.all(16.0),
+        margin: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: SizedBox(
+              width: 310,
+              child: Text(_request.title,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 24)),
             ),
-            const SizedBox(height: 5),
-            Row(
-              children: [
-                const Text("ผู้รับผิดชอบ : "),
-                Flexible(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF0F4FD),
-                      borderRadius: BorderRadius.circular(20),
+          ),
+          Column(
+            children: [
+              Row(
+                children: [
+                  const Text("สถานะ : "),
+                  //สถานะ container
+                  getRequestStatusContainer(_request),
+                ],
+              ),
+              const SizedBox(height: 5),
+              Row(
+                children: [
+                  const Text("เจ้าของคำร้อง : "),
+                  Flexible(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF0F4FD),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Text(
+                        //ดึงข้อมูลชื่อ User
+                        "${_request.userId} ชื่อของ USER",
+                        style: const TextStyle(color: Color(0xFF2DC09C)),
+                        softWrap: true,
+                      ),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  )
+                ],
+              ),
+              const SizedBox(height: 5),
+              Row(
+                children: [
+                  const Text("ประเภท : "),
+                  SizedBox(
+                    width: 200,
                     child: Text(
-                      _request.advisorFullName,
-                      style: const TextStyle(color: Color(0xFF2DC09C)),
-                      softWrap: true,
+                      _request.type.join(","),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                )
-              ],
-            ),
-            const SizedBox(height: 5),
-            Row(
-              children: [
-                const Text("ประเภท : "),
-                SizedBox(
-                  width: 200,
-                  child: Text(
-                    _request.type.join(","),
-                    overflow: TextOverflow.ellipsis,
+                ],
+              ),
+              const SizedBox(height: 5),
+              Row(
+                children: [
+                  const Text("รายละเอียด : "),
+                  SizedBox(
+                    width: 200,
+                    child: Text(
+                      _request.detail,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 5),
-            Row(
-              children: [
-                const Text("รายละเอียด : "),
-                SizedBox(
-                  width: 200,
-                  child: Text(
-                    _request.detail,
-                    overflow: TextOverflow.ellipsis,
+                ],
+              ),
+            ],
+          ),
+        ]),
+      ),
+    );
+  }
+
+  static GestureDetector createAssignmentContainer(Assignment _assignment) {
+    return GestureDetector(
+      onTap: () => {
+        //handle redirect ไปหน้าassignment
+      },
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(19, 10, 19, 0),
+        decoration: BoxDecoration(
+          color: const Color(0xFFDAEAFA),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _assignment.title,
+                    style: TextStyle(fontSize: 20.0),
                   ),
-                ),
-              ],
+                  Text(_assignment.type == "การนัดหมาย"
+                      ? "${_assignment.detail} วันที่ ${_assignment.userTimeslot.day}/${_assignment.userTimeslot.month}/${_assignment.userTimeslot.year}"
+                      : _assignment.detail),
+                  Row(
+                    children: [
+                      const Text(
+                        "สถานะ : ",
+                      ),
+                      getAssignmentStatusContainer(_assignment)
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
-      ]),
+      ),
+    );
+  }
+
+  static Container getAssignmentStatusContainer(Assignment _assignment) {
+    var containerColor;
+    var textColor;
+
+    switch (_assignment.status) {
+      case "เสร็จสิ้น":
+        containerColor = const Color(0xFF2DC09C);
+        textColor = const Color(0xFFFAFEFF);
+        break;
+      case "ดำเนินการ":
+        containerColor = const Color(0xFFE1E4F8);
+        textColor = const Color(0xFF7673D3);
+        break;
+      case "ยกเลิก":
+        containerColor = const Color(0xFFF18F80);
+        textColor = const Color(0xFFF0E6EC);
+        break;
+    }
+    return Container(
+      decoration: BoxDecoration(
+        color: containerColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      child: Text(
+        _assignment.status,
+        style: TextStyle(color: textColor),
+      ),
     );
   }
 
