@@ -10,6 +10,10 @@ import 'package:dedebt_application/screens/User/requestUserScreen.dart';
 import 'package:dedebt_application/screens/User/sendRequestPage2Screen.dart';
 import 'package:dedebt_application/screens/User/sendRequestScreen.dart';
 import 'package:dedebt_application/screens/layouts/adminLayout.dart';
+import 'package:dedebt_application/screens/Advisor/homeAdvisorScreen.dart';
+import 'package:dedebt_application/screens/Advisor/requesListtAdvisorScreen.dart';
+import 'package:dedebt_application/screens/Advisor/historyAdvisorScreen.dart';
+import 'package:dedebt_application/screens/Advisor/profileAdvisorScreen.dart';
 import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
 import 'package:dedebt_application/screens/layouts/matcherLayout.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
@@ -98,9 +102,44 @@ class ROUTE {
         ),
       ),
       GoRoute(
-        name: 'main-advisor',
-        path: AppRoutes.MAIN_ADVISOR,
-        builder: (context, state) => AdvisorLayout(),
+        name: '/home-advisor',
+        path: AppRoutes.HOME_ADVISOR,
+        builder: (context, state) => TransitionRoutePage(
+          child: AdvisorLayout(
+            body: homeAdvisorScreen(),
+            currentPage: 0,
+          ),
+        ),
+      ),
+      GoRoute(
+        name: '/list-request-advisor',
+        path: AppRoutes.REQUEST_LIST_ADVISOR,
+        builder: (context, state) => TransitionRoutePage(
+          child: AdvisorLayout(
+            body: requestListAdvisorScreen(),
+            currentPage: 1,
+          ),
+        ),
+      ),
+      GoRoute(
+        name: '/history-advisor',
+        path: AppRoutes.HISTORY_ADVISOR,
+        builder: (context, state) => TransitionRoutePage(
+          child: AdvisorLayout(
+            body: historyAdvisorScreen(),
+            currentPage: 2,
+          ),
+        ),
+      ),
+      GoRoute(
+        name: '/profile-advisor',
+        path: AppRoutes.PROFILE_ADVISOR,
+        builder: (context, state) => TransitionRoutePage(
+          child: AdvisorLayout(
+            body: profileAdvisorScreen(),
+            currentPage: 1,
+          ),
+        ),
       ),
       GoRoute(
         name: 'main-admin',
