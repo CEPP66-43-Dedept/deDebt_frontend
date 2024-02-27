@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
+import 'package:dedebt_application/models/requestModel.dart';
 import 'package:dedebt_application/repositories/userRepository.dart';
 
 class UserService {
@@ -37,7 +38,16 @@ class UserService {
     }
   }
 
-  Future<List<Assignment>?> getUserAllRequests(String userId) async {
+  Future<List<Assignment>> getAllAssignments(String taskId) async {
+    try {
+      return await _userRepository.getAllAssignments(taskId);
+    } catch (e) {
+      print('Error getting user data: $e');
+      return [];
+    }
+  }
+
+  Future<List<Request>?> getUserAllRequests(String userId) async {
     try {
       return await _userRepository.getUserAllRequests(userId);
     } catch (e) {
@@ -45,6 +55,4 @@ class UserService {
       return [];
     }
   }
-
-  getUserActiveRequestStream(String uid) {}
 }

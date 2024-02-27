@@ -51,7 +51,7 @@ class ROUTE {
         path: AppRoutes.HISTORY_USER,
         builder: (context, state) => TransitionRoutePage(
           child: UserLayout(
-            Body: historyUserScreen(),
+            Body: HistoryUserScreen(),
             currentPage: 2,
           ),
         ),

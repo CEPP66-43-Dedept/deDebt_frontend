@@ -30,7 +30,7 @@ class UserRepository {
           FirebaseFirestore.instance.collection("requests");
       QuerySnapshot<Object?> querySnapshot = await collection
           .where('userId', isEqualTo: userId)
-          .where('requestStatus', isEqualTo: 1)
+          .where('requestStatus', whereIn: [0, 1])
           .limit(1)
           .get();
 
@@ -45,7 +45,7 @@ class UserRepository {
     }
   }
 
-  Future<List<Assignment>?> getUserAllRequests(String userId) async {
+  Future<List<Request>?> getUserAllRequests(String userId) async {
     try {
       CollectionReference collection =
           FirebaseFirestore.instance.collection("requests");
@@ -57,8 +57,8 @@ class UserRepository {
             .map((doc) => doc.data() as Map<String, dynamic>)
             .toList();
       }
-      List<Assignment> requests =
-          requestsData.map((data) => Assignment.fromMap(data)).toList();
+      List<Request> requests =
+          requestsData.map((data) => Request.fromMap(data)).toList();
       return requests;
     } catch (e) {
       print('Error getting user active request: $e');
@@ -74,6 +74,27 @@ class UserRepository {
           .where('taskId', isEqualTo: taskId)
           .where('status', isEqualTo: 1)
           .get();
+      List<Map<String, dynamic>> assignmentsData = [];
+      if (querySnapshot.docs.isNotEmpty) {
+        assignmentsData = querySnapshot.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList();
+      }
+      List<Assignment> assignments =
+          assignmentsData.map((data) => Assignment.fromMap(data)).toList();
+      return assignments;
+    } catch (e) {
+      print('Error getting active assignments: $e');
+      return [];
+    }
+  }
+
+  Future<List<Assignment>> getAllAssignments(String taskId) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection("assignments");
+      QuerySnapshot<Object?> querySnapshot =
+          await collection.where('taskId', isEqualTo: taskId).get();
       List<Map<String, dynamic>> assignmentsData = [];
       if (querySnapshot.docs.isNotEmpty) {
         assignmentsData = querySnapshot.docs

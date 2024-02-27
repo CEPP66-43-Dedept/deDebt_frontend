@@ -80,13 +80,6 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
     );
   }
 
-  void createAppointmentContainer(Request uRequest) {
-    //leave ทิ้งว่างเพราะว่ายังไม่มี Appointment model
-    var list = uRequest.appointmentDate;
-    for (int i = 0; i <= list.length; i++) {}
-    return;
-  }
-
   Widget getBody() {
     return StreamBuilder<Map<String, dynamic>?>(
       stream: _userDataController.stream,
