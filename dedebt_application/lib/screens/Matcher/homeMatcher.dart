@@ -12,6 +12,24 @@ class HomeMatcher extends StatefulWidget {
 class _HomeMatcherState extends State<HomeMatcher> {
   @override
   Widget build(BuildContext context) {
-    return RequestMatcherList();
+    return Center(
+        child: Column(
+      children: [
+        SizedBox(
+          height: 20,
+        ),
+        Text(
+          "คำร้องที่ยังไม่ดำเนินการ",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Scrollbar(
+          child:
+              Container(width: 400, height: 500, child: RequestMatcherList()),
+        )
+      ],
+    ));
   }
 }

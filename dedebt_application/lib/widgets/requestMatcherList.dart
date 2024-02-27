@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dedebt_application/repositories/matcherRepository.dart';
+import 'package:dedebt_application/variables/color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/models/requestModel.dart';
@@ -91,82 +92,109 @@ class _RequestMatcherListState extends State<RequestMatcherList> {
     return statusContainer;
   }
 
-  static Container createRequestBox(Request _request) {
-    return Container(
-      width: 314,
-      decoration: BoxDecoration(
-        color: const Color(0xFF36338C),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: const EdgeInsets.all(16.0),
-      margin: const EdgeInsets.symmetric(horizontal: 15),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: SizedBox(
-            width: 310,
-            child: Text(_request.title,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 24)),
+  static Column createRequestBox(Request _request) {
+    return Column(
+      children: [
+        Container(
+          width: 314,
+          decoration: BoxDecoration(
+            color: const Color(0xFF36338C),
+            borderRadius: BorderRadius.circular(20),
           ),
-        ),
-        Column(
-          children: [
-            Row(
-              children: [
-                const Text("สถานะ : "),
-                getRequestStatusContainer(_request),
-              ],
-            ),
-            const SizedBox(height: 5),
-            Row(
-              children: [
-                const Text("ผู้รับผิดชอบ : "),
-                Flexible(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF0F4FD),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: const Text(
-                      "นางสมหญิง หญิงมาก",
-                      style: TextStyle(color: Color(0xFF2DC09C)),
-                      softWrap: true,
-                    ),
+          padding: const EdgeInsets.all(16.0),
+          margin: const EdgeInsets.symmetric(horizontal: 15),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: SizedBox(
+                width: 310,
+                child: Text(
+                  _request.title,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    color: ColorGuide.white,
                   ),
-                )
-              ],
+                ),
+              ),
             ),
-            const SizedBox(height: 5),
-            Row(
+            Column(
               children: [
-                const Text("ประเภท : "),
-                SizedBox(
-                  width: 200,
-                  child: Text(
-                    _request.type.join(","),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                Row(
+                  children: [
+                    const Text(
+                      "สถานะ : ",
+                      style: TextStyle(color: ColorGuide.white),
+                    ),
+                    getRequestStatusContainer(_request),
+                  ],
+                ),
+                const SizedBox(height: 5),
+                Row(
+                  children: [
+                    const Text(
+                      "ผู้รับผิดชอบ : ",
+                      style: TextStyle(color: ColorGuide.white),
+                    ),
+                    Flexible(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF0F4FD),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: const Text(
+                          "นางสมหญิง หญิงมาก",
+                          style: TextStyle(color: Color(0xFF2DC09C)),
+                          softWrap: true,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 5),
+                Row(
+                  children: [
+                    const Text(
+                      "ประเภท : ",
+                      style: TextStyle(color: ColorGuide.white),
+                    ),
+                    SizedBox(
+                      width: 200,
+                      child: Text(
+                        _request.type.join(","),
+                        style: TextStyle(color: ColorGuide.white),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 5),
+                Row(
+                  children: [
+                    const Text(
+                      "รายละเอียด : ",
+                      style: TextStyle(color: ColorGuide.white),
+                    ),
+                    SizedBox(
+                      width: 200,
+                      child: Text(
+                        _request.detail,
+                        style: TextStyle(color: ColorGuide.white),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            const SizedBox(height: 5),
-            Row(
-              children: [
-                const Text("รายละเอียด : "),
-                SizedBox(
-                  width: 200,
-                  child: Text(
-                    _request.detail,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-          ],
+          ]),
         ),
-      ]),
+        SizedBox(
+          height: 10,
+        )
+      ],
     );
   }
 }

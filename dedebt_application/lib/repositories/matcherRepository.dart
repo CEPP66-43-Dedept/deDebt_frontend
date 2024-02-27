@@ -9,7 +9,8 @@ class MatcherRepository {
   Stream<List<Request>> getWaitingRequest() {
     try {
       CollectionReference collection = _firestore.collection("requests");
-      Stream<QuerySnapshot> snapshots = collection.snapshots();
+      Stream<QuerySnapshot> snapshots =
+          collection.where('requestStatus', isEqualTo: 0).snapshots();
 
       return snapshots.map((snapshot) {
         List<Request> requests = snapshot.docs.map((doc) {
