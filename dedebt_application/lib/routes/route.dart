@@ -5,6 +5,7 @@ class AppRoutes {
   static const REQUEST_USER = '/request-user';
   static const SEND_REQUEST_USER = '/send-request-users';
   static const SEND_REQUEST_PAGE2_USER = '/send-request-page2-users';
+  static const SEND_REQUESt_SUCCESS_USER = '/send-request-success-user';
   static const ASSIGNMENT_USER = '/assignment-user';
   static const HISTORY_USER = '/history-user';
   static const PROFILE_USER = '/profile-user';
