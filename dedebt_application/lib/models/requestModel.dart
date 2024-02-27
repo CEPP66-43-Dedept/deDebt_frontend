@@ -4,6 +4,7 @@ class request {
   final String detail;
   final int userId;
   final int advisorId;
+  final String userFullName;
   final String advisorFullName;
   final String requestStatus;
   final List<String> type; //ประเภทของหนี้
@@ -22,6 +23,7 @@ class request {
     required this.detail,
     required this.userId,
     required this.advisorId,
+    required this.userFullName,
     required this.advisorFullName,
     required this.requestStatus,
     required this.type,
@@ -43,6 +45,7 @@ class request {
       'detail': detail,
       'userId': userId,
       'advisorId': advisorId,
+      'userFullName': userFullName,
       'advisorFullName': advisorFullName,
       'reqeustStatus': requestStatus,
       'type': type,
