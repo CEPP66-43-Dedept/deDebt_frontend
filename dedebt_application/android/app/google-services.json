@@ -1,26 +1,44 @@
 {
   "project_info": {
-    "project_number": "820290461353",
-    "project_id": "dedebt-a9503",
-    "storage_bucket": "dedebt-a9503.appspot.com"
+    "project_number": "690628174020",
+    "project_id": "dedebt-app",
+    "storage_bucket": "dedebt-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:820290461353:android:b4b4754004d090faa7d3b8",
+        "mobilesdk_app_id": "1:690628174020:android:b4231e373146b123eb2991",
         "android_client_info": {
           "package_name": "com.example.dedebt_application"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "690628174020-1l4j19512i4aflpkm41oth2ph586l8g4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dedebt_application",
+            "certificate_hash": "625bcf1897bd81182c5b9f56be3343c125f04751"
+          }
+        },
+        {
+          "client_id": "690628174020-1qslnofmj2h4bsrfhlm2f9pvhjpagdf0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDSLnPX4sOOCoJxDfmeabdsBRZX3W6JDpg"
+          "current_key": "AIzaSyBjV2dp7A5jX3TYXZUkkeiNmIhICyDBPbc"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "690628174020-1qslnofmj2h4bsrfhlm2f9pvhjpagdf0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
