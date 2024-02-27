@@ -36,4 +36,15 @@ class UserService {
       return [];
     }
   }
+
+  Future<List<Assignment>?> getUserAllRequests(String userId) async {
+    try {
+      return await _userRepository.getUserAllRequests(userId);
+    } catch (e) {
+      print('Error getting user active request: $e');
+      return [];
+    }
+  }
+
+  getUserActiveRequestStream(String uid) {}
 }

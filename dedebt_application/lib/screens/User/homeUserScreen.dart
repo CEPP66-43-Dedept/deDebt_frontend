@@ -180,7 +180,7 @@ class _HomeUserScreenState extends State<HomeUserScreen> {
                                         // Build UI for each assignment
                                         return UserLayout
                                             .createAssignmentContainer(
-                                                assignment);
+                                                context, assignment);
                                       },
                                     ),
                                   ),

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
+import 'package:dedebt_application/models/requestModel.dart';
 
 class UserRepository {
   final FirebaseFirestore _firestore;
@@ -38,6 +39,27 @@ class UserRepository {
       } else {
         return null;
       }
+    } catch (e) {
+      print('Error getting user active request: $e');
+      return null;
+    }
+  }
+
+  Future<List<Assignment>?> getUserAllRequests(String userId) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection("requests");
+      QuerySnapshot<Object?> querySnapshot =
+          await collection.where('userId', isEqualTo: userId).get();
+      List<Map<String, dynamic>> requestsData = [];
+      if (querySnapshot.docs.isNotEmpty) {
+        requestsData = querySnapshot.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList();
+      }
+      List<Assignment> requests =
+          requestsData.map((data) => Assignment.fromMap(data)).toList();
+      return requests;
     } catch (e) {
       print('Error getting user active request: $e');
       return null;
