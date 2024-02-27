@@ -1,3 +1,10 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dedebt_application/models/advisorModel.dart';
+import 'package:dedebt_application/repositories/userRepository.dart';
+import 'package:dedebt_application/services/userService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
 import 'package:dedebt_application/models/userModel.dart';
@@ -14,285 +21,256 @@ class requestUserScreen extends StatefulWidget {
 }
 
 class _requestUserScreen extends State<requestUserScreen> {
+  late final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late final UserRepository userRepository =
+      UserRepository(firestore: firestore);
+  late final UserService userService =
+      UserService(userRepository: userRepository);
+  late StreamController<Map<String, dynamic>?> _userRequestController;
+  late User? user = FirebaseAuth.instance.currentUser;
+
   bool isExpanded = false;
-  late Future<Request?> _userFuture;
 
   //Mockup Data
-  Users thisuser = Users(
-    id: "0",
-    ssn: 0,
-    firstname: "สมชาย",
-    lastname: "ชายมาก",
-    role: 1,
-    email: "somchai@mail.com",
-    tel: "0123456789",
-  );
 
   @override
   void initState() {
     super.initState();
+    _userRequestController = StreamController<Map<String, dynamic>?>();
+    _getUserActiveRequest(user!.uid).then((requestData) {
+      _userRequestController.add(requestData);
+    }).catchError((error) {
+      _userRequestController.addError(error);
+    });
   }
 
-  Future<List<Assignment>> getUserAssignment() async {
-    return [];
+  @override
+  void dispose() {
+    _userRequestController.close();
+    super.dispose();
   }
 
-  Future<Request> getUserRequest() async {
-    return Request(
-        id: "id",
-        title: "",
-        detail: "",
-        userId: "",
-        advisorId: "",
-        requestStatus: 1,
-        type: [],
-        debtStatus: [],
-        provider: [],
-        revenue: [0],
-        expense: [0],
-        burden: "",
-        propoty: 0,
-        appointmentDate: [],
-        appointmentStatus: 0);
+  Future<Map<String, dynamic>?> _getUserActiveRequest(String userId) async {
+    return userService.getUserActiveRequest(userId);
   }
 
-  Future<List<dynamic>?> getDataRequest() async {
-    final results = await Future.wait([getUserRequest(), getUserAssignment()]);
-    return results;
-  }
+  dynamic getmiddleBody() {
+    bool isHavedata = false;
+    if (isHavedata) {
+    } else {
+      ScrollController _scrollController = ScrollController();
 
-  FutureBuilder getmiddleBody() {
-    return FutureBuilder(
-      future: _userFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return const Center(child: Text('Error fetching request'));
-        } else if (snapshot.data == null) {
-          // ไม่มีข้อมูลใน db
-          return Stack(
-            children: [
-              const Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: Text(
-                    "คำร้องปัจจุบัน",
-                    style: TextStyle(fontSize: 24),
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0,
-                child: Container(
+      var u_assignment = [];
+      List<Widget> AssignmentStatusContainerList = [
+        const SizedBox(height: 5),
+      ];
+      for (Assignment assignment_item in u_assignment) {
+        Widget container =
+            UserLayout.createAssignmentContainer(context, assignment_item);
+
+        AssignmentStatusContainerList.add(container);
+        AssignmentStatusContainerList.add(const SizedBox(height: 5));
+      }
+      return StreamBuilder<Map<String, dynamic>?>(
+          stream: _userRequestController.stream,
+          builder: (context, requestSnapshot) {
+            if (requestSnapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (requestSnapshot.hasError) {
+              return const Center(child: Text('Error fetching data'));
+            } else if (!requestSnapshot.hasData) {
+              return const Center(child: Text('No Data'));
+            }
+            print(requestSnapshot.data);
+            Request userrequest = Request.fromMap(requestSnapshot.data!);
+            return Container(
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                child: Align(
+                  alignment: Alignment.center,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset("assets/images/Nothing.png"),
-                      const Text("ไม่มีคำร้องที่ดำเนินการอยู่ในขณะนี้ "),
-                      const Text("สามารถกดลงทะเบียนคำร้องได้ที่ปุ่ม \‘+\’")
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(90, 25, 10, 0),
+                        child: Text(
+                          "คำร้องปัจจุบัน",
+                          style: TextStyle(fontSize: 24),
+                        ),
+                      ),
+                      SizedBox(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF36338C),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          width: 324,
+                          padding: const EdgeInsets.all(16.0),
+                          margin: const EdgeInsets.symmetric(vertical: 16.0),
+                          child: DefaultTextStyle(
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: Colors.white,
+                                  fontSize: 15.0,
+                                ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 10),
+                                  child: SizedBox(
+                                    width: 310,
+                                    child: Text(userrequest.title,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 24)),
+                                  ),
+                                ),
+                                Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Text("สถานะ : "),
+                                        UserLayout.getRequestStatusContainer(
+                                            userrequest),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Row(
+                                      children: [
+                                        const Text("ผู้รับผิดชอบ : "),
+                                        Flexible(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFF0F4FD),
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10.0),
+                                            child: Text(
+                                              userrequest.advisorFullName,
+                                              style: const TextStyle(
+                                                  color: Color(0xFF2DC09C)),
+                                              softWrap: true,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text("ประเภท : "),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                userrequest.type.join(","),
+                                                overflow: isExpanded
+                                                    ? TextOverflow.visible
+                                                    : TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text("รายละเอียด : "),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                userrequest.detail,
+                                                overflow: isExpanded
+                                                    ? TextOverflow.visible
+                                                    : TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    IconButton(
+                                      visualDensity: VisualDensity(
+                                          horizontal: -4, vertical: -4),
+                                      icon: Icon(
+                                        isExpanded
+                                            ? Icons.keyboard_arrow_up
+                                            : Icons.keyboard_arrow_down,
+                                        size: 42,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          isExpanded = !isExpanded;
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Text(
+                        "ประวัติการดำเนิน",
+                        style: TextStyle(fontSize: 24),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 15),
+                        child: RawScrollbar(
+                          thumbColor: const Color(0xFFBBB9F4),
+                          thumbVisibility: true,
+                          radius: const Radius.circular(20),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6.0, vertical: 10),
+                          thickness: 5,
+                          child: Container(
+                            height: 309,
+                            width: 324,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFFFFF),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: DefaultTextStyle(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    color: const Color(0xFF36338C),
+                                    fontSize: 15.0,
+                                  ),
+                              child: ListView.builder(
+                                itemCount: AssignmentStatusContainerList.length,
+                                itemBuilder: (context, index) {
+                                  return AssignmentStatusContainerList[index];
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
-            ],
-          );
-        } else {
-          //รับข้อมูลจาก db สำเร็จ
-          var _request = snapshot.data as Request;
-          ScrollController _scrollController = ScrollController();
-
-          var u_assignment = snapshot.data[1] as List<Assignment>;
-          List<Widget> AssignmentStatusContainerList = [
-            const SizedBox(height: 5),
-          ];
-          for (Assignment assignment_item in u_assignment) {
-            Widget container =
-                UserLayout.createAssignmentContainer(assignment_item);
-
-            AssignmentStatusContainerList.add(container);
-            AssignmentStatusContainerList.add(const SizedBox(height: 5));
-          }
-
-          return SingleChildScrollView(
-            controller: _scrollController,
-            child: Align(
-              alignment: Alignment.center,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(90, 25, 10, 0),
-                    child: Text(
-                      "คำร้องปัจจุบัน",
-                      style: TextStyle(fontSize: 24),
-                    ),
-                  ),
-                  SizedBox(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF36338C),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      width: 324,
-                      padding: const EdgeInsets.all(16.0),
-                      margin: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: DefaultTextStyle(
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.white,
-                              fontSize: 15.0,
-                            ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: SizedBox(
-                                width: 310,
-                                child: Text(_request.title,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(fontSize: 24)),
-                              ),
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    const Text("สถานะ : "),
-                                    UserLayout.getRequestStatusContainer(
-                                        _request),
-                                  ],
-                                ),
-                                const SizedBox(height: 5),
-                                Row(
-                                  children: [
-                                    const Text("ผู้รับผิดชอบ : "),
-                                    Flexible(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFFF0F4FD),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0),
-                                        child: const Text(
-                                          //เพิ่มชื่อที่ปรึกษา
-                                          "นายนนทัช มุกลีมาศ",
-                                          style: TextStyle(
-                                              color: Color(0xFF2DC09C)),
-                                          softWrap: true,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(height: 5),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text("ประเภท : "),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            _request.type.join(","),
-                                            overflow: isExpanded
-                                                ? TextOverflow.visible
-                                                : TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 5),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text("รายละเอียด : "),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            _request.detail,
-                                            overflow: isExpanded
-                                                ? TextOverflow.visible
-                                                : TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                IconButton(
-                                  visualDensity: VisualDensity(
-                                      horizontal: -4, vertical: -4),
-                                  icon: Icon(
-                                    isExpanded
-                                        ? Icons.keyboard_arrow_up
-                                        : Icons.keyboard_arrow_down,
-                                    size: 42,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      isExpanded = !isExpanded;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Text(
-                    "ประวัติการดำเนิน",
-                    style: TextStyle(fontSize: 24),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 15),
-                    child: RawScrollbar(
-                      thumbColor: const Color(0xFFBBB9F4),
-                      thumbVisibility: true,
-                      radius: const Radius.circular(20),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 6.0, vertical: 10),
-                      thickness: 5,
-                      child: Container(
-                        height: 309,
-                        width: 324,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFFFFF),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: ListView.builder(
-                          itemCount: AssignmentStatusContainerList.length,
-                          itemBuilder: (context, index) {
-                            return AssignmentStatusContainerList[index];
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-      },
-    );
+            );
+          });
+    }
   }
 
   @override

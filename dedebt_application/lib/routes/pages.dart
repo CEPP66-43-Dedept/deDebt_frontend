@@ -9,6 +9,8 @@ import 'package:dedebt_application/screens/User/historyUserScreen.dart';
 import 'package:dedebt_application/screens/User/homeUserScreen.dart';
 import 'package:dedebt_application/screens/User/profileUserScreen.dart';
 import 'package:dedebt_application/screens/User/requestUserScreen.dart';
+import 'package:dedebt_application/screens/User/sendRequestPage2Screen.dart';
+import 'package:dedebt_application/screens/User/sendRequestSuccessScreen.dart';
 import 'package:dedebt_application/screens/User/sendRequestScreen.dart';
 import 'package:dedebt_application/screens/layouts/adminLayout.dart';
 import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
@@ -65,6 +67,13 @@ class ROUTE {
         ),
       ),
       GoRoute(
+        name: '/send-request-page2-users',
+        path: AppRoutes.SEND_REQUEST_PAGE2_USER,
+        builder: (context, state) => TransitionRoutePage(
+          child: sendRequestPage2Screen(),
+        ),
+      ),
+      GoRoute(
         name: '/send-request-user',
         path: AppRoutes.SEND_REQUEST_USER,
         builder: (context, state) => TransitionRoutePage(
@@ -72,12 +81,19 @@ class ROUTE {
         ),
       ),
       GoRoute(
-        name: '/assignment-user',
-        path: AppRoutes.ASSIGNMENT_USER,
-        builder: (context, state) => TransitionRoutePage(
-          child: assignmentUserScreen(),
-        ),
-      ),
+          name: '/assignment-user',
+          path: AppRoutes.ASSIGNMENT_USER,
+          builder: (context, state) => TransitionRoutePage(
+                child: assignmentUserScreen(),
+              )),
+      GoRoute(
+          name: '/send-request-success-user',
+          path: AppRoutes.SEND_REQUESt_SUCCESS_USER,
+          builder: (context, state) {
+            return TransitionRoutePage(
+              child: sendRequestSuccessScreen(),
+            );
+          }),
       GoRoute(
         name: '/profile-user',
         path: AppRoutes.PROFILE_USER,

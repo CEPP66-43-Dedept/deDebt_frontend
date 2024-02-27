@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
+import 'package:go_router/go_router.dart';
+import 'package:dedebt_application/routes/route.dart';
 
 class sendRequestScreen extends StatefulWidget {
   const sendRequestScreen({super.key});
@@ -8,45 +10,79 @@ class sendRequestScreen extends StatefulWidget {
   State<sendRequestScreen> createState() => _sendRequestScreen();
 }
 
+//Controller ในการเข้าถึงข้อมูล
+final NameController = TextEditingController();
+final SSiDtypeController = SingleValueDropDownController();
+final SSIDController = TextEditingController();
+final PhoneNoContoller = TextEditingController();
+final MonthlyIncomeController = TextEditingController();
+final ExtraworkIncomeController = TextEditingController();
+final InvesmentIncomeComtroller = TextEditingController();
+final PrivateBussnessIncomeController = TextEditingController();
+final MonthlyExpenseController = TextEditingController();
+final DebtExpenseController = TextEditingController();
+final SavingContoller = TextEditingController();
+final DetailController = TextEditingController();
+
+Container createTextField(
+    String TextBanner, bool isNumberOnly, TextEditingController controller) {
+  return Container(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Text(TextBanner),
+        ),
+        Container(
+          width: 330,
+          height: 52,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.black,
+              width: 2.0,
+            ),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: TextFormField(
+            controller: controller,
+            keyboardType:
+                isNumberOnly ? TextInputType.number : TextInputType.text,
+            decoration: const InputDecoration(
+              hintText: "Type your info Here",
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 class _sendRequestScreen extends State<sendRequestScreen> {
-  static Color navbarColor = const Color(0xFF444371);
-  static List<DropDownValueModel> debtTypeList = [
-    const DropDownValueModel(
-        name: "บัตรเครดิต(Credit card)", value: "บัตรเครดิต(Credit card)"),
-    const DropDownValueModel(
-        name: "สินเชื่อส่วนบุคคล(Personal lone) หรือ บัตรกดเงินสด",
-        value: "สินเชื่อส่วนบุคคล(Personal lone) หรือ บัตรกดเงินสด"),
-    const DropDownValueModel(
-        name: "หนี้บ้าน หนี้ที่อยู่อาศัย หนี้บ้านแลกเงิน (Home for cash)",
-        value: "หนี้บ้าน หนี้ที่อยู่อาศัย หนี้บ้านแลกเงิน (Home for cash)"),
-    const DropDownValueModel(
-        name: "หนี้จำนำทะเบียนรถ(Car for cash)",
-        value: "หนี้จำนำทะเบียนรถ(Car for cash)"),
-    const DropDownValueModel(
-        name: "หนี้เช่าซื้อรถ (Hire purchase)",
-        value: "หนี้เช่าซื้อรถ (Hire purchase)"),
-  ];
+  static Color appBarColor = const Color(0xFF444371);
+  static Color navBarColor = const Color(0xFF2DC09C);
   static List<DropDownValueModel> ssnTypeList = [
-    const DropDownValueModel(
-        name: "เลขประจำตัวประชาชน", value: "เลขประจำตัวประชาชน"),
-    const DropDownValueModel(
-        name: "เลขที่หนังสือเดินทาง", value: "เลขที่หนังสือเดินทาง"),
-  ];
+    "เลขประจำตัวประชาชน",
+    "เลขที่หนังสือเดินทาง"
+  ].map((value) => DropDownValueModel(name: value, value: value)).toList();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(
-            backgroundColor: navbarColor,
+            backgroundColor: appBarColor,
             surfaceTintColor: Colors.transparent,
             toolbarHeight: 55,
             title: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 IconButton(
-                  onPressed: () {},
-                  icon: Icon(
+                  onPressed: () {
+                    context.go(AppRoutes.REQUEST_USER);
+                  },
+                  icon: const Icon(
                     Icons.arrow_back,
                     size: 35,
                     color: Colors.white,
@@ -81,52 +117,8 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                         fontSize: 18.0,
                       ),
                   child: ListView(children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text("ประเภท"),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: DropDownTextField(
-                        dropDownItemCount: 5,
-                        dropDownList: debtTypeList,
-                        enableSearch: true,
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text("ชื่อ - นามสกุล / ชื่อนิติบุคคล"),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: TextFormField(
-                        //controller for TextForm
-                        //controller: ,
-                        decoration: const InputDecoration(
-                          hintText: "Type your name here",
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Please enter Name";
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
+                    createTextField("ชื่อ - นามสกุล / ชื่อนิติบุคคล", false,
+                        NameController),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Text("ประเภทรหัสอ้างอิงบุคคล/นิติบุคคล"),
@@ -141,64 +133,28 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                       ),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: DropDownTextField(
+                        controller: SSiDtypeController,
                         dropDownItemCount: 2,
                         dropDownList: ssnTypeList,
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text("เลขประจำตัวบุคคลและนิติบุคคล"),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          hintText: "Type your SSN Here",
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Please enter SSN";
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text("โทรศัพท์มือถือ"),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: TextFormField(
-                        //controller for TextForm
-                        //controller: ,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          hintText: "Type your Phone Number Here",
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Please enter Phone Number";
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
+                    createTextField(
+                        "เลขประจำตัวบุคคลและนิติบุคคล", true, SSIDController),
+                    createTextField("โทรศัพท์มือถือ", true, PhoneNoContoller),
+                    createTextField(
+                        "รายได้หลักต่อเดือน", true, MonthlyIncomeController),
+                    createTextField("รายได้เสริม เช่นโบนัส ค่าโอที งานเสริม",
+                        true, ExtraworkIncomeController),
+                    createTextField(
+                        "ผลตอบแทนการลงทุน", true, InvesmentIncomeComtroller),
+                    createTextField("รายได้จากธุรกิจส่วนตัว", true,
+                        PrivateBussnessIncomeController),
+                    createTextField("ค่าใช้จ่ายในชีวิตประจำวันต่อเดือน", true,
+                        MonthlyExpenseController),
+                    createTextField(
+                        "ภาระหนี้ต่อเดือน", true, DebtExpenseController),
+                    createTextField("เงินออมหรือทรัพย์สินส่วนตัวรวม", true,
+                        SavingContoller),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Text(
@@ -214,10 +170,9 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                       ),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: TextFormField(
-                        //controller for TextForm
-                        //controller: ,
                         maxLines: 6,
                         maxLength: 300,
+                        controller: DetailController,
                         decoration: const InputDecoration(
                           hintText: "Type your Detail Here",
                         ),
@@ -234,23 +189,22 @@ class _sendRequestScreen extends State<sendRequestScreen> {
           ),
         )),
         bottomNavigationBar: BottomAppBar(
-          color: navbarColor,
+          color: navBarColor,
           height: 55,
           child: Row(
             children: [
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    // Handle button press
-                    print('Next button pressed');
+                    print(SSiDtypeController.dropDownValue?.value);
+                    context.go(AppRoutes.SEND_REQUEST_PAGE2_USER);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: navbarColor,
+                    backgroundColor: navBarColor,
                   ),
-                  child: Text(
+                  child: const Text(
                     'ถัดไป',
-                    style: TextStyle(
-                        fontSize: 18.0, color: Colors.white), // Set text color
+                    style: TextStyle(fontSize: 18.0, color: Colors.white),
                   ),
                 ),
               ),

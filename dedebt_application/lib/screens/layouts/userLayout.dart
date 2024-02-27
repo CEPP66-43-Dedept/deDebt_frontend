@@ -97,10 +97,9 @@ class UserLayout extends StatefulWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: const Text(
-                      //ยังไม่ได้ดึงข้อมูลของ advisor
-                      "นางสมหญิง หญิงมาก",
-                      style: TextStyle(color: Color(0xFF2DC09C)),
+                    child: Text(
+                      _request.advisorFullName,
+                      style: const TextStyle(color: Color(0xFF2DC09C)),
                       softWrap: true,
                     ),
                   ),
@@ -174,11 +173,14 @@ class UserLayout extends StatefulWidget {
     );
   }
 
-  static GestureDetector createAssignmentContainer(Assignment _assignment) {
+  static GestureDetector createAssignmentContainer(
+      BuildContext context, Assignment _assignment) {
     return GestureDetector(
-      onTap: () {
-        // Handle navigation to the assignment page
-        // Example using GoRouter:
+      onTap: () => {
+        //handle redirect ไปหน้าassignment
+        context.go(
+          AppRoutes.ASSIGNMENT_USER,
+        )
       },
       child: Container(
         margin: const EdgeInsets.fromLTRB(19, 10, 19, 0),
