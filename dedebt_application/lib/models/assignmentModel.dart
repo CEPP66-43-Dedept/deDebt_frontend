@@ -1,12 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Assignment {
-  final int id;
+  final String id;
   final String type;
   final String title;
   final String detail;
-  final String status;
-  final int? tid;
-  final List<DateTime?> advisorTimeslot;
-  final DateTime userTimeslot;
+  final int status;
+  final String tid;
+  final Timestamp startTime;
+  final Timestamp endTime;
 
   Assignment(
       {required this.id,
@@ -15,9 +17,21 @@ class Assignment {
       required this.detail,
       required this.status,
       required this.tid,
-      required this.advisorTimeslot,
-      required this.userTimeslot});
+      required this.startTime,
+      required this.endTime});
 
+  factory Assignment.fromMap(Map<String, dynamic> map) {
+    return Assignment(
+      id: map['id'],
+      type: map['type'],
+      title: map['title'],
+      detail: map['detail'],
+      status: map['status'],
+      tid: map['tid'],
+      startTime: map['startTime'],
+      endTime: map['endTime'],
+    );
+  }
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -26,8 +40,8 @@ class Assignment {
       'detail': detail,
       'status': status,
       'tid': tid,
-      'advicorTimeslot': advisorTimeslot,
-      'userTimslot': userTimeslot
+      'endTime': endTime,
+      'startTime': startTime
     };
   }
 }
