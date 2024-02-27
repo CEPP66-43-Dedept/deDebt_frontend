@@ -163,7 +163,7 @@ class ROUTE {
         builder: (context, state) => TransitionRoutePage(
           child: AdvisorLayout(
             body: profileAdvisorScreen(),
-            currentPage: 1,
+            currentPage: 3,
           ),
         ),
       ),

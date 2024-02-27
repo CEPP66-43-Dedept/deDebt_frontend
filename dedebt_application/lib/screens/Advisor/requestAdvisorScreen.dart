@@ -5,6 +5,7 @@ import 'package:dedebt_application/models/requestModel.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dedebt_application/routes/route.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class requestAdvisorScreen extends StatefulWidget {
   const requestAdvisorScreen({super.key});
@@ -16,70 +17,69 @@ class requestAdvisorScreen extends StatefulWidget {
 class _requestAdvisorScreen extends State<requestAdvisorScreen> {
   bool isExpanded = false;
   //Mockup Data
-  Users thisuser = Users(
-    id: 0,
+  Users thisAdvisor = Users(
+    id: "0",
     ssn: 0,
-    firstname: "สมชาย",
-    lastname: "ชายมาก",
-    roles: "Advisor",
-    requests: [0],
-    email: "somchai@mail.com",
+    firstname: "สมปรึกษา",
+    lastname: "ปรึกษาทุกอย่าง",
+    role: 1,
+    email: "prugsa@mail.com",
     tel: "0123456789",
-    password: "SecureP@ssw0rd",
   );
-  request userrequest = request(
-      id: 0,
-      title: "การแก้หนี้กับธนาคารกสิกรไทย",
-      detail:
-          "123456แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890",
-      userId: 0,
-      advisorId: 0,
-      advisorFullName: "นายสมปอง งอปมส",
-      requestStatus: "เสร็จสิ้น",
-      type: [
-        "หนี้บัตรเครติด",
-        "สินเชื่อส่วนบุคคล",
-      ], //[หนี้บัตรเครติด,สินเชื่อส่วนบุคคล,หนี้บ้าน,หนี้จำนำรถ,หนี้เช่าซื้อรถ]
-      debtStatus: ["Normal"],
-      provider: ["กสิกร"],
-      revenue: [10000],
-      expense: [1000000],
-      burden:
-          "1/3ของรายได้", //ผ่อนหนี้ [1/3ของรายได้,1/3-1/2ของรายได้,1/2-2/3ของรายได้,มากกว่า 2/3 ของรายได้ ]
-      propoty: 25000,
-      assignmentId: [],
-      appointmentDate: [DateTime(2024, 2, 17)],
-      appointmentStatus: [
-        "เสร็จสิ้น",
-      ]);
-  Assignment userAppointment = Assignment(
-      id: 0,
-      type: "การนัดหมาย",
-      title: "การนัดคุยทางโทรศัพท์",
-      detail: "โทรทางมือถือเบอร์ 123-456-7890",
-      status: "ยกเลิก",
-      tid: null,
-      advisorTimeslot: [],
-      userTimeslot: DateTime(2024, 2, 21));
-  Assignment userAssignment = Assignment(
-      id: 1,
-      type: "งาน'",
-      title: "กรอกเอกสาร",
-      detail: "กรอกเอกสารหักเงินของกสิกร",
-      status: "ดำเนินการ",
-      tid: 0,
-      advisorTimeslot: [],
-      userTimeslot: DateTime(2024, 2, 22));
-  Assignment userAssignment_2 = Assignment(
-      id: 1,
-      type: "งาน'",
-      title: "กรอกเอกสาร",
-      detail: "กรอกเอกสารหักเงินของกสิกร",
-      status: "เสร็จสิ้น",
-      tid: 0,
-      advisorTimeslot: [],
-      userTimeslot: DateTime(2024, 2, 22));
+  Request userrequest = Request(
+    id: "0",
+    title: "การแก้หนี้กับธนาคารกสิกรไทย",
 
+    detail:
+        "123456แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890",
+    userId: "0",
+    advisorId: "1",
+    advisorFullName: "นายสมปอง งอปมส",
+    requestStatus: 0,
+    type: [
+      "หนี้บัตรเครติด",
+      "สินเชื่อส่วนบุคคล",
+    ], //[หนี้บัตรเครติด,สินเชื่อส่วนบุคคล,หนี้บ้าน,หนี้จำนำรถ,หนี้เช่าซื้อรถ]
+    debtStatus: ["Normal"],
+    provider: ["กสิกร"],
+    revenue: [10000],
+    expense: [1000000],
+    burden:
+        "1/3ของรายได้", //ผ่อนหนี้ [1/3ของรายได้,1/3-1/2ของรายได้,1/2-2/3ของรายได้,มากกว่า 2/3 ของรายได้ ]
+    propoty: 25000,
+    appointmentDate: [0],
+    appointmentStatus: 0,
+  );
+  Assignment userAppointment = Assignment(
+    id: "0",
+    type: "การนัดหมาย",
+    title: "การนัดคุยทางโทรศัพท์",
+    detail: "โทรทางมือถือเบอร์ 123-456-7890",
+    status: 0,
+    tid: "เอกสารหักเงินกสิกร",
+    startTime: Timestamp.fromDate(DateTime(2023, 2, 27, 13, 0)),
+    endTime: Timestamp.fromDate(DateTime(2023, 2, 27, 17, 0)),
+  );
+  Assignment userAssignment = Assignment(
+    id: "1",
+    type: "งาน'",
+    title: "กรอกเอกสาร",
+    detail: "กรอกเอกสารหักเงินของกสิกร",
+    status: 0,
+    tid: "0",
+    startTime: Timestamp.fromDate(DateTime(2023, 2, 26, 13, 0)),
+    endTime: Timestamp.fromDate(DateTime(2023, 2, 26, 17, 0)),
+  );
+  Assignment userAssignment_2 = Assignment(
+    id: "1",
+    type: "งาน'",
+    title: "กรอกเอกสาร",
+    detail: "กรอกเอกสารหักเงินของกสิกร",
+    status: 0,
+    tid: "0",
+    startTime: Timestamp.fromDate(DateTime(2023, 2, 26, 13, 0)),
+    endTime: Timestamp.fromDate(DateTime(2023, 2, 26, 17, 0)),
+  );
   dynamic getmiddleBody() {
     bool isHavedata = false;
 
@@ -296,7 +296,7 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(20),
                     onTap: () {
-                      context.go(AppRoutes.ASSIGNMENT_ADVISOR);
+                      //แก้เพิ่ม route ไปหน้าเพิ่ม assignment ของ advisor
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(16),

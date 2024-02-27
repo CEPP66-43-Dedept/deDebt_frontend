@@ -1,27 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/models/requestModel.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
 import 'package:dedebt_application/services/authService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AdvisorLayout extends StatefulWidget {
   int currentPage = 0;
   final Widget body;
   AdvisorLayout({super.key, required this.body, required this.currentPage});
-  static Container getRequestStatusContainer(request _request) {
+  static Container getRequestStatusContainer(Request _request) {
     Color containerColor;
     bool isCase1 = false;
+
     switch (_request.requestStatus) {
-      case "จัดหาที่ปรึกษา":
+      case 0:
+        //จัดหาที่ปรึกษา
         containerColor = const Color(0xFFE1E4F8);
         isCase1 = true;
         break;
-      case "กำลังปรึกษา":
+      case 1:
+        //กำลังปรึกษา
         containerColor = const Color(0xFFF18F80);
         break;
-      case "เสร็จสิ้น":
+      case 2:
+        //เสร็จสิ้น
         containerColor = const Color(0xFF2DC09C);
         break;
       default:
@@ -35,7 +41,15 @@ class AdvisorLayout extends StatefulWidget {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: Text(
-        _request.requestStatus,
+        //request status ต้องแก้ไข
+        _request.requestStatus == 0
+            ? "จัดหาที่ปรึกษา"
+            : _request.requestStatus == 1
+                ? "กำลังปรึกษา"
+                : _request.requestStatus == 1
+                    ? "เสร็จสิ้น"
+                    : "",
+
         style: TextStyle(color: isCase1 ? const Color(0xFF7673D3) : null),
       ),
     );
@@ -43,12 +57,11 @@ class AdvisorLayout extends StatefulWidget {
   }
 
   static GestureDetector createRequestBox(
-      BuildContext context, request _request) {
+      BuildContext context, Request _request) {
     return GestureDetector(
       onTap: () {
+        //ไปหน้า request ที่แสดง request เดียวของ advisor
         context.go(AppRoutes.REQUEST_ADVISOR);
-        //ต้อง redirect ไปหน้าที่แสดงรายละเอียดของคำร้อง
-        print("You tap me");
       },
       child: Container(
         width: 324,
@@ -89,7 +102,7 @@ class AdvisorLayout extends StatefulWidget {
                       ),
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Text(
-                        //ดึงข้อมูลชื่อ User
+                        //แก้ดึงข้อมูลชื่อ User
                         "${_request.userId} ชื่อของ USER",
                         style: const TextStyle(color: Color(0xFF2DC09C)),
                         softWrap: true,
@@ -155,9 +168,14 @@ class AdvisorLayout extends StatefulWidget {
                     _assignment.title,
                     style: TextStyle(fontSize: 20.0),
                   ),
-                  Text(_assignment.type == "การนัดหมาย"
-                      ? "${_assignment.detail} วันที่ ${_assignment.userTimeslot.day}/${_assignment.userTimeslot.month}/${_assignment.userTimeslot.year}"
-                      : _assignment.detail),
+                  Text(
+                    //assignment type อาจจะต้องแก้ไข
+                    _assignment.type == "การนัดหมาย"
+                        //เพิ่มวันที่
+                        ? "${_assignment.detail} "
+                        : _assignment.detail,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   Row(
                     children: [
                       const Text(
@@ -180,15 +198,18 @@ class AdvisorLayout extends StatefulWidget {
     var textColor;
 
     switch (_assignment.status) {
-      case "เสร็จสิ้น":
+      case 0:
+        //เสร็จสิ้น
         containerColor = const Color(0xFF2DC09C);
         textColor = const Color(0xFFFAFEFF);
         break;
-      case "ดำเนินการ":
+      case 1:
+        //ดำเนินการ
         containerColor = const Color(0xFFE1E4F8);
         textColor = const Color(0xFF7673D3);
         break;
-      case "ยกเลิก":
+      case 2:
+        //ยกเลิก
         containerColor = const Color(0xFFF18F80);
         textColor = const Color(0xFFF0E6EC);
         break;
@@ -200,8 +221,76 @@ class AdvisorLayout extends StatefulWidget {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: Text(
-        _assignment.status,
+        _assignment.status == 0
+            ? "เสร็จสิ้น"
+            : _assignment.status == 1
+                ? "ดำเนินการ"
+                : _assignment.status == 1
+                    ? "ยกเลิก"
+                    : "",
         style: TextStyle(color: textColor),
+      ),
+    );
+  }
+
+  static GestureDetector createMonthAssignmentContainer(
+      BuildContext context, Assignment _assignment) {
+    return GestureDetector(
+      onTap: () => {
+        context.go(AppRoutes.ASSIGNMENT_ADVISOR)
+        //handle redirect ไปหน้าassignment
+      },
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(19, 10, 19, 0),
+        decoration: BoxDecoration(
+          color: const Color(0xFFDAEAFA),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _assignment.title,
+                    style: const TextStyle(fontSize: 20.0),
+                  ),
+                  Text(
+                    //assignment type อาจจะต้องแก้ไข
+                    _assignment.type == "การนัดหมาย"
+                        ? "${_assignment.detail} "
+                        : _assignment.detail,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Row(
+                    children: [
+                      const Text(
+                        "เวลา : ",
+                      ),
+                      Container(
+                          width: 100,
+                          height: 22,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF36338C),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "${DateFormat("HH:mm").format(_assignment.startTime.toDate())} : ${DateFormat("HH:mm").format(_assignment.endTime.toDate())}",
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

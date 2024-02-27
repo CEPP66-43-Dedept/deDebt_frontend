@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class assignmentAdvisorScreen extends StatefulWidget {
   const assignmentAdvisorScreen({super.key});
@@ -26,23 +27,35 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
   ];
   //Mockup Data
   Assignment userAppointment = Assignment(
-      id: 0,
-      type: "การนัดหมาย",
-      title: "การนัดคุยทางโทรศัพท์",
-      detail: "โทรทางมือถือเบอร์ 123-456-7890",
-      status: "ยกเลิก",
-      tid: null,
-      advisorTimeslot: [],
-      userTimeslot: DateTime(2024, 2, 21));
+    id: "0",
+    type: "การนัดหมาย",
+    title: "การนัดคุยทางโทรศัพท์",
+    detail: "โทรทางมือถือเบอร์ 123-456-7890",
+    status: 0,
+    tid: "เอกสารหักเงินกสิกร",
+    startTime: Timestamp.fromDate(DateTime(2023, 2, 27, 13, 0)),
+    endTime: Timestamp.fromDate(DateTime(2023, 2, 27, 17, 0)),
+  );
   Assignment userAssignment = Assignment(
-      id: 1,
-      type: "งาน'",
-      title: "กรอกเอกสาร",
-      detail: "กรอกเอกสารหักเงินของกสิกร",
-      status: "ดำเนินการ",
-      tid: 0,
-      advisorTimeslot: [],
-      userTimeslot: DateTime(2024, 2, 22));
+    id: "1",
+    type: "งาน'",
+    title: "กรอกเอกสาร",
+    detail: "กรอกเอกสารหักเงินของกสิกร",
+    status: 0,
+    tid: "0",
+    startTime: Timestamp.fromDate(DateTime(2023, 2, 26, 13, 0)),
+    endTime: Timestamp.fromDate(DateTime(2023, 2, 26, 17, 0)),
+  );
+  Assignment userAssignment_2 = Assignment(
+    id: "1",
+    type: "งาน'",
+    title: "กรอกเอกสาร",
+    detail: "กรอกเอกสารหักเงินของกสิกร",
+    status: 0,
+    tid: "0",
+    startTime: Timestamp.fromDate(DateTime(2023, 2, 26, 13, 0)),
+    endTime: Timestamp.fromDate(DateTime(2023, 2, 26, 17, 0)),
+  );
 
   IconData getIcon(int index) {
     return _normalIcon[index];
@@ -237,7 +250,9 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
                                           ),
                                           // create status container
                                           getAssignmentStatusContainer(
-                                              userAppointment.status),
+                                              //แก้
+                                              userAppointment.status
+                                                  .toString()),
                                         ],
                                       ),
                                       Row(
@@ -270,7 +285,8 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
                                               "วันสิ้นสุดการดำเนินการ: "),
                                           //วันดำเนินการ
                                           Text(
-                                              "${userAppointment.userTimeslot.day}/${userAppointment.userTimeslot.month}/${userAppointment.userTimeslot.year}")
+                                              //แก้
+                                              "แก้")
                                         ],
                                       )
                                     ],
