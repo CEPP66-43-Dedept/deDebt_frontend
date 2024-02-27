@@ -1,4 +1,5 @@
 class Admins {
+  String _uid;
   final int id;
   final int ssn;
   final String firstname;
@@ -7,6 +8,8 @@ class Admins {
   final String email;
   final String tel;
   final String password;
+  final String uid;
+
   Admins(
       {required this.id,
       required this.ssn,
@@ -15,7 +18,12 @@ class Admins {
       required this.roles,
       required this.email,
       required this.tel,
-      required this.password});
+      required this.password,
+      required this.uid})
+      : _uid = uid;
+  set uid(String value) {
+    _uid = value;
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -26,7 +34,8 @@ class Admins {
       'roles': roles,
       'email': email,
       'tel': tel,
-      'password': password
+      'password': password,
+      'uid': uid
     };
   }
 }

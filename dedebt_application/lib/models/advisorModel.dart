@@ -1,38 +1,33 @@
 class Advisors {
-  final int id;
+  String uid;
   final int ssn;
   final String firstname;
   final String lastname;
-  final String roles;
-  final List<int> requests;
   final String email;
   final String tel;
   final String password;
-  final List<String> specialist;
-  Advisors(
-      {required this.id,
-      required this.ssn,
-      required this.firstname,
-      required this.lastname,
-      required this.roles,
-      required this.requests,
-      required this.email,
-      required this.tel,
-      required this.password,
-      required this.specialist});
+  final String specialist;
+
+  Advisors({
+    required this.uid, // เปลี่ยนให้เป็น required parameter
+    required this.ssn,
+    required this.firstname,
+    required this.lastname,
+    required this.email,
+    required this.tel,
+    required this.password,
+    required this.specialist,
+  });
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'uid': uid,
       'ssn': ssn,
-      'firstname': firstname,
-      'lastname': lastname,
-      'roles': roles,
-      'requests': requests,
+      'firstName': firstname,
+      'lastName': lastname,
       'email': email,
       'tel': tel,
-      'password': password,
-      'specialist': specialist
+      'specialist': specialist,
     };
   }
 }

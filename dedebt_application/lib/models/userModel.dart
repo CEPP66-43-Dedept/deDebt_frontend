@@ -1,35 +1,40 @@
 class Users {
-  final int id;
+  final String id;
   final int ssn;
   final String firstname;
   final String lastname;
-  final String roles;
-  final List<int> requests;
+  final int role;
   final String email;
   final String tel;
-  final String password;
-  Users(
-      {required this.id,
-      required this.ssn,
-      required this.firstname,
-      required this.lastname,
-      required this.roles,
-      required this.requests,
-      required this.email,
-      required this.tel,
-      required this.password});
-
+  Users({
+    required this.id,
+    required this.ssn,
+    required this.firstname,
+    required this.lastname,
+    required this.role,
+    required this.email,
+    required this.tel,
+  });
+  factory Users.fromMap(Map<String, dynamic> map) {
+    return Users(
+      id: map['uid'] ?? '',
+      ssn: map['ssn'] ?? 0,
+      firstname: map['firstName'] ?? '',
+      lastname: map['lastName'] ?? '',
+      role: map['role'] ?? '',
+      tel: map['tel'] ?? '',
+      email: map['email'] ?? '',
+    );
+  }
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'ssn': ssn,
-      'firstname': firstname,
-      'lastname': lastname,
-      'roles': roles,
-      'requests': requests,
+      'firstName': firstname,
+      'lastName': lastname,
+      'role': role,
       'email': email,
       'tel': tel,
-      'password': password
     };
   }
 }

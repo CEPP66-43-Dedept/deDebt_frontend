@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/models/requestModel.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
+import 'package:dedebt_application/services/authService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AdvisorLayout extends StatefulWidget {
   int currentPage = 0;
@@ -266,6 +268,13 @@ class _AdvisorLayoutState extends State<AdvisorLayout> {
   @override
   void initState() {
     super.initState();
+  }
+
+  String? errorMessage = '';
+  Future<void> signOut() async {
+    try {
+      await Auth().signOut();
+    } on FirebaseAuthException {}
   }
 
   Widget build(BuildContext context) {

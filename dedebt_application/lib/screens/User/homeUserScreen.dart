@@ -1,3 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dedebt_application/repositories/userRepository.dart';
+import 'package:dedebt_application/services/userService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dedebt_application/routes/route.dart';
@@ -5,220 +9,189 @@ import 'package:dedebt_application/models/userModel.dart';
 import 'package:dedebt_application/models/requestModel.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
+import 'dart:async';
 
-class homeUserScreen extends StatefulWidget {
-  const homeUserScreen({super.key});
+class HomeUserScreen extends StatefulWidget {
+  const HomeUserScreen({Key? key}) : super(key: key);
 
   @override
-  State<homeUserScreen> createState() => _homeUserScreenState();
+  State<HomeUserScreen> createState() => _HomeUserScreenState();
 }
 
-class _homeUserScreenState extends State<homeUserScreen> {
-  late Future<dynamic> _userFuture;
+class _HomeUserScreenState extends State<HomeUserScreen> {
+  late final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late final UserRepository userRepository =
+      UserRepository(firestore: firestore);
+  late final UserService userService =
+      UserService(userRepository: userRepository);
+  User? user = FirebaseAuth.instance.currentUser;
 
-//Mockup Data
-  Users thisuser = Users(
-    id: 0,
-    ssn: 0,
-    firstname: "สมชาย",
-    lastname: "ชายมาก",
-    roles: "ลูกหนี้",
-    requests: [0],
-    email: "somchai@mail.com",
-    tel: "0123456789",
-    password: "SecureP@ssw0rd",
-  );
-  request userrequest = request(
-      id: 0,
-      title: "การแก้หนี้กับธนาคารกสิกรไทย",
-      detail:
-          "123456แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890",
-      userId: 0,
-      advisorId: 0,
-      requestStatus: "เสร็จสิ้น",
-      type: [
-        "หนี้บัตรเครติด",
-        "สินเชื่อส่วนบุคคล",
-      ], //[หนี้บัตรเครติด,สินเชื่อส่วนบุคคล,หนี้บ้าน,หนี้จำนำรถ,หนี้เช่าซื้อรถ]
-      debtStatus: ["Normal"],
-      provider: ["กสิกร"],
-      revenue: [10000],
-      expense: [1000000],
-      burden:
-          "1/3ของรายได้", //ผ่อนหนี้ [1/3ของรายได้,1/3-1/2ของรายได้,1/2-2/3ของรายได้,มากกว่า 2/3 ของรายได้ ]
-      propoty: 25000,
-      assignmentId: [],
-      appointmentDate: [DateTime(2024, 2, 17)],
-      appointmentStatus: [
-        "เสร็จสิ้น",
-      ]);
-  Assignment userAppointment = Assignment(
-      id: 0,
-      type: "การนัดหมาย",
-      title: "การนัดคุยทางโทรศัพท์",
-      detail: "โทรทางมือถือเบอร์ 123-456-7890",
-      status: "ยกเลิก",
-      tid: null,
-      advisorTimeslot: [],
-      userTimeslot: DateTime(2024, 2, 21));
-  Assignment userAssignment = Assignment(
-      id: 1,
-      type: "งาน'",
-      title: "กรอกเอกสาร",
-      detail: "กรอกเอกสารหักเงินของกสิกร",
-      status: "ดำเนินการ",
-      tid: 0,
-      advisorTimeslot: [],
-      userTimeslot: DateTime(2024, 2, 22));
-  Assignment userAssignment_2 = Assignment(
-      id: 1,
-      type: "งาน'",
-      title: "กรอกเอกสาร",
-      detail: "กรอกเอกสารหักเงินของกสิกร",
-      status: "เสร็จสิ้น",
-      tid: 0,
-      advisorTimeslot: [],
-      userTimeslot: DateTime(2024, 2, 22));
+  late StreamController<Map<String, dynamic>?> _userDataController;
+  late StreamController<Map<String, dynamic>?> _userRequestController;
+
   @override
   void initState() {
     super.initState();
-    _userFuture = getDataHome();
+    _userDataController = StreamController<Map<String, dynamic>?>();
+    _userRequestController = StreamController<Map<String, dynamic>?>();
+
+    _getUserData(user!.uid).then((userData) {
+      _userDataController.add(userData);
+    }).catchError((error) {
+      _userDataController.addError(error);
+    });
+
+    _getUserActiveRequest(user!.uid).then((requestData) {
+      _userRequestController.add(requestData);
+    }).catchError((error) {
+      _userRequestController.addError(error);
+    });
   }
 
-  Future<List<dynamic>> getDataHome() async {
-    final results =
-        await Future.wait([getUser(), getUserRequest(), getUserAssignment()]);
-    return results;
+  Future<Map<String, dynamic>?> _getUserData(String userId) async {
+    return userService.getUserData(userId);
   }
 
-  Future<Users?> getUser() async {
-    //ไม่มี User ใน DB
-    //return null;
-
-    //Mockup Data
-    return thisuser;
+  Future<Map<String, dynamic>?> _getUserActiveRequest(String userId) async {
+    return userService.getUserActiveRequest(userId);
   }
 
-  Future<request?> getUserRequest() async {
-    //ไม่มี user request ใน db
-    //return null;
-
-    //Mockup data
-    return userrequest;
+  Future<List<Assignment>> _getActiveAssignments(String taskId) async {
+    return userService.getActiveAssignments(taskId);
   }
 
-  Future<List<Assignment>> getUserAssignment() async {
-    return [userAppointment, userAssignment, userAssignment_2];
+  @override
+  void dispose() {
+    _userDataController.close();
+    _userRequestController.close();
+    super.dispose();
   }
 
-  void createAppointmentContainer(request uRequest) {
-    //leave ทิ้งว่างเพราะว่ายังไม่มี Appointment model
-    var list = uRequest.appointmentDate;
-    for (int i = 0; i <= list.length; i++) {}
-    return;
+  Widget _buildActiveRequest(Request request) {
+    return Card(
+      child: ListTile(
+        title: Text(request.title),
+        subtitle: Text(request.detail),
+        trailing: Icon(Icons.arrow_forward),
+        onTap: () {
+          // Handle tap on the active request
+        },
+      ),
+    );
   }
 
-  FutureBuilder getBody() {
-    return FutureBuilder(
-        future: _userFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return const Center(child: Text('Error fetching request'));
-          } else if (snapshot.data == null) {
-            // ไม่มีข้อมูลใน db
-            return const Center(child: Text('No User'));
-          } else {
-            var thisuser = snapshot.data[0] as Users;
-            var _request = snapshot.data[1] as request;
-            var u_assignment = snapshot.data[2] as List<Assignment>;
-            List<Widget> AssignmentStatusContainerList = [
-              const SizedBox(height: 5),
-            ];
-            for (Assignment assignment_item in u_assignment) {
-              Widget container =
-                  UserLayout.createAssignmentContainer(assignment_item);
+  Widget getBody() {
+    return StreamBuilder<Map<String, dynamic>?>(
+      stream: _userDataController.stream,
+      builder: (context, userDataSnapshot) {
+        return StreamBuilder<Map<String, dynamic>?>(
+          stream: _userRequestController.stream,
+          builder: (context, requestSnapshot) {
+            if (userDataSnapshot.connectionState == ConnectionState.waiting ||
+                requestSnapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (userDataSnapshot.hasError || requestSnapshot.hasError) {
+              return const Center(child: Text('Error fetching data'));
+            } else if (!userDataSnapshot.hasData || !requestSnapshot.hasData) {
+              return const Center(child: Text('No Data'));
+            } else {
+              print(userDataSnapshot.data);
+              print(requestSnapshot.data);
 
-              AssignmentStatusContainerList.add(container);
-              AssignmentStatusContainerList.add(const SizedBox(height: 5));
-            }
+              Users _thisuser = Users.fromMap(userDataSnapshot.data!);
+              Request _request = Request.fromMap(requestSnapshot.data!);
 
-            return Scaffold(
-              body: Align(
-                alignment: Alignment.center,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 25, 10, 0),
-                      child: Text(
-                        "สวัสดี ${thisuser.firstname}",
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text(
-                          "คำร้องของคุณ",
-                          style: TextStyle(fontSize: 24),
-                        )),
-                    DefaultTextStyle(
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.white,
-                              fontSize: 15.0,
-                            ),
-                        child: GestureDetector(
-                          onTap: () => {context.go(AppRoutes.REQUEST_USER)},
-                          child: UserLayout.createRequestBox(_request),
-                        )),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        "การนัดหมาย",
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 14),
-                      child: RawScrollbar(
-                        thumbColor: const Color(0xFFBBB9F4),
-                        thumbVisibility: true,
-                        radius: const Radius.circular(20),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6.0, vertical: 10),
-                        thickness: 5,
-                        child: Container(
-                          height: 309,
-                          width: 324,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFFFFFF),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: DefaultTextStyle(
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(
-                                  color: const Color(0xFF36338C),
-                                  fontSize: 15.0,
+              return FutureBuilder<List<Assignment>>(
+                future: _getActiveAssignments(_request.id),
+                builder: (context, assignmentSnapshot) {
+                  if (assignmentSnapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (assignmentSnapshot.hasError) {
+                    return const Center(
+                        child: Text('Error fetching assignments'));
+                  } else {
+                    List<Assignment> assignments = assignmentSnapshot.data!;
+
+                    return Scaffold(
+                      body: Align(
+                        alignment: Alignment.center,
+                        child: Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 25, 10, 0),
+                                child: Text(
+                                  "คำร้องของคุณ",
+                                  style: TextStyle(fontSize: 24),
                                 ),
-                            child: ListView.builder(
-                              itemCount: AssignmentStatusContainerList.length,
-                              itemBuilder: (context, index) {
-                                return AssignmentStatusContainerList[index];
-                              },
-                            ),
+                              ),
+                              DefaultTextStyle(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                      color: Colors.white,
+                                      fontSize: 15.0,
+                                    ),
+                                child: GestureDetector(
+                                  onTap: () =>
+                                      {context.go(AppRoutes.REQUEST_USER)},
+                                  child: UserLayout.createRequestBox(_request),
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 15),
+                                child: Text(
+                                  "การนัดหมาย",
+                                  style: TextStyle(fontSize: 24),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 14),
+                                child: RawScrollbar(
+                                  thumbColor: const Color(0xFFBBB9F4),
+                                  radius: const Radius.circular(20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 6.0, vertical: 10),
+                                  thickness: 5,
+                                  child: Container(
+                                    height: 309,
+                                    width: 324,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFFFFFFF),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    // Your assignment list widget here
+                                    child: ListView.builder(
+                                      itemCount: assignments.length,
+                                      itemBuilder: (context, index) {
+                                        Assignment assignment =
+                                            assignments[index];
+                                        // Build UI for each assignment
+                                        return UserLayout
+                                            .createAssignmentContainer(
+                                                context, assignment);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }
-        });
+                    );
+                  }
+                },
+              );
+            }
+          },
+        );
+      },
+    );
   }
 
   @override
