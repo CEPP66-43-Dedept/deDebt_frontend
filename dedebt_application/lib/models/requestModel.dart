@@ -1,22 +1,22 @@
-class request {
-  final int id;
+class Request {
+  final String id;
   final String title;
   final String detail;
-  final int userId;
-  final int advisorId;
+  final String userId;
+  final String advisorId;
   final String advisorFullName;
-  final String requestStatus;
-  final List<String> type; //ประเภทของหนี้
+  final int requestStatus;
+  final List<String> type;
   final List<String> debtStatus;
   final List<String> provider;
   final List<int> revenue;
   final List<int> expense;
-  final String burden; //ภาระของหนี้ต่อรายรับ
+  final String burden;
   final int propoty;
-  final List<int> assignmentId;
-  final List<DateTime> appointmentDate;
-  final List<String> appointmentStatus;
-  request({
+  final List<int> appointmentDate;
+  final int appointmentStatus;
+
+  Request({
     required this.id,
     required this.title,
     required this.detail,
@@ -31,10 +31,30 @@ class request {
     required this.expense,
     required this.burden,
     required this.propoty,
-    required this.assignmentId,
     required this.appointmentDate,
     required this.appointmentStatus,
   });
+
+  factory Request.fromMap(Map<String, dynamic> map) {
+    return Request(
+      id: map['id'] ?? '',
+      title: map['title'] ?? '',
+      detail: map['detail'] ?? '',
+      userId: map['userId'] ?? '',
+      advisorId: map['advisorId'] ?? '',
+      advisorFullName: map['advisorFullName'] ?? '',
+      requestStatus: map['requestStatus'] ?? 0,
+      type: List<String>.from(map['type'] ?? []),
+      debtStatus: List<String>.from(map['debtStatus'] ?? []),
+      provider: List<String>.from(map['provider'] ?? []),
+      revenue: List<int>.from(map['revenue'] ?? []),
+      expense: List<int>.from(map['expense'] ?? []),
+      burden: map['burden'] ?? '',
+      propoty: map['propoty'] ?? 0,
+      appointmentDate: List<int>.from(map['appointmentDate'] ?? []),
+      appointmentStatus: map['appointmentStatus'] ?? 0,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -44,7 +64,7 @@ class request {
       'userId': userId,
       'advisorId': advisorId,
       'advisorFullName': advisorFullName,
-      'reqeustStatus': requestStatus,
+      'requestStatus': requestStatus,
       'type': type,
       'debtStatus': debtStatus,
       'provider': provider,
@@ -52,9 +72,8 @@ class request {
       'expense': expense,
       'burden': burden,
       'propoty': propoty,
-      'assignmentId': assignmentId,
       'appointmentDate': appointmentDate,
-      'appointmentStatus': appointmentStatus
+      'appointmentStatus': appointmentStatus,
     };
   }
 }

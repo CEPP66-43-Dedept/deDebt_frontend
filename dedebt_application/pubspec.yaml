@@ -1,9 +1,9 @@
 name: dedebt_application
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 
 environment:
-  sdk: '>=3.2.3 <4.0.0'
+  sdk: ">=3.2.3 <4.0.0"
 
 dependencies:
   flutter:
@@ -13,6 +13,12 @@ dependencies:
   go_router: ^13.0.1
   google_fonts: ^6.1.0
   firebase_core: ^2.25.1
+  firebase_auth: ^4.17.4
+  sign_in_button: ^3.2.0
+  google_sign_in: ^6.0.2
+  firebase_core_dart: ^1.0.1
+  cloud_firestore: ^4.15.4
+  toggle_switch: ^2.1.0
   dropdown_textfield: 1.0.8
 
 dev_dependencies:
@@ -26,7 +32,8 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
+    - assets/images/Logo.png
+    - assets/images/googleLogo.png
+
     - assets/images/
   uses-material-design: true
-
- 
