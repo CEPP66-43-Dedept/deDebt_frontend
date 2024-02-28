@@ -17,6 +17,7 @@ class AppRoutes {
   static const REQUEST_LIST_ADVISOR = '/request-list-advisor';
   static const REQUEST_ADVISOR = '/request-advisor';
   static const ASSIGNMENT_ADVISOR = '/assignment-advisor';
+  static const ADD_ASSIGNMENT_ADVISOR = '/add-assignment-advisor';
   static const HISTORY_ADVISOR = '/history-advisor';
   static const PROFILE_ADVISOR = '/profile-advisor';
   static const SIGN_IN = '/sign_in';

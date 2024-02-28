@@ -17,6 +17,7 @@ import 'package:dedebt_application/screens/Advisor/homeAdvisorScreen.dart';
 import 'package:dedebt_application/screens/Advisor/requesListAdvisorScreen.dart';
 import 'package:dedebt_application/screens/Advisor/requestAdvisorScreen.dart';
 import 'package:dedebt_application/screens/Advisor/assignmentAdvisorScreen.dart';
+import 'package:dedebt_application/screens/Advisor/addAssignmentAdvisorScreen.dart';
 import 'package:dedebt_application/screens/Advisor/historyAdvisorScreen.dart';
 import 'package:dedebt_application/screens/Advisor/profileAdvisorScreen.dart';
 import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
@@ -145,6 +146,13 @@ class ROUTE {
         path: AppRoutes.ASSIGNMENT_ADVISOR,
         builder: (context, state) => TransitionRoutePage(
           child: assignmentAdvisorScreen(),
+        ),
+      ),
+      GoRoute(
+        name: '/add-assignment-advisor',
+        path: AppRoutes.ADD_ASSIGNMENT_ADVISOR,
+        builder: (context, state) => TransitionRoutePage(
+          child: addAssignmentAdvisorScreen(),
         ),
       ),
       GoRoute(
