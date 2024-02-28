@@ -6,7 +6,7 @@ class Assignment {
   final String title;
   final String detail;
   final int status;
-  final String taskID;
+  final String taskId;
   final Timestamp startTime;
   final Timestamp endTime;
 
@@ -16,7 +16,7 @@ class Assignment {
       required this.title,
       required this.detail,
       required this.status,
-      required this.taskID,
+      required this.taskId,
       required this.startTime,
       required this.endTime});
 
@@ -27,7 +27,7 @@ class Assignment {
       title: map['title'],
       detail: map['detail'],
       status: map['status'],
-      taskID: map['taskID'],
+      taskId: map['taskId'],
       startTime: map['startTime'],
       endTime: map['endTime'],
     );
@@ -39,7 +39,7 @@ class Assignment {
       'title': title,
       'detail': detail,
       'status': status,
-      'taskID': taskID,
+      'taskId': taskId,
       'endTime': endTime,
       'startTime': startTime
     };
