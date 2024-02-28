@@ -3,6 +3,7 @@ class Request {
   final String title;
   final String detail;
   final String userId;
+  final String userFullName;
   final String advisorId;
   final String advisorFullName;
   final int requestStatus;
@@ -22,6 +23,7 @@ class Request {
     required this.detail,
     required this.userId,
     required this.advisorId,
+    required this.userFullName,
     required this.advisorFullName,
     required this.requestStatus,
     required this.type,
@@ -42,6 +44,7 @@ class Request {
       detail: map['detail'] ?? '',
       userId: map['userId'] ?? '',
       advisorId: map['advisorId'] ?? '',
+      userFullName: map['userFullName'] ?? '',
       advisorFullName: map['advisorFullName'] ?? '',
       requestStatus: map['requestStatus'] ?? 0,
       type: List<String>.from(map['type'] ?? []),
