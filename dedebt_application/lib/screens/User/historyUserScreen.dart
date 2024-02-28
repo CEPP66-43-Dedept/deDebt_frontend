@@ -17,6 +17,7 @@ class HistoryUserScreen extends StatefulWidget {
 }
 
 class _HistoryUserScreenState extends State<HistoryUserScreen> {
+  static Color primaryColor = const Color(0xFFF3F5FE);
   late final FirebaseFirestore firestore = FirebaseFirestore.instance;
   late final UserRepository userRepository =
       UserRepository(firestore: firestore);
@@ -80,6 +81,7 @@ class _HistoryUserScreenState extends State<HistoryUserScreen> {
           List<Request> requests = snapshot.data!;
           return Scaffold(
             appBar: AppBar(
+              backgroundColor: primaryColor,
               title: const Text('ประวัติคำร้อง'),
             ),
             body: RawScrollbar(

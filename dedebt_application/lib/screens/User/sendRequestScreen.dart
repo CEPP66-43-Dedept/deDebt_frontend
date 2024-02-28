@@ -23,6 +23,7 @@ final MonthlyExpenseController = TextEditingController();
 final DebtExpenseController = TextEditingController();
 final SavingContoller = TextEditingController();
 final DetailController = TextEditingController();
+final BurdenController = SingleValueDropDownController();
 
 Container createTextField(
     String TextBanner, bool isNumberOnly, TextEditingController controller) {
@@ -66,6 +67,13 @@ class _sendRequestScreen extends State<sendRequestScreen> {
     "เลขประจำตัวประชาชน",
     "เลขที่หนังสือเดินทาง"
   ].map((value) => DropDownValueModel(name: value, value: value)).toList();
+  static List<DropDownValueModel> burdenTypeList = [
+    "ผ่อนหนี้ 1/3 ของรายได้ต่อเดือน",
+    "ผ่อนหนี้มากกว่า 1/3 แต่ยังน้อยกว่า 1/2 ของรายได้ต่อเดือน",
+    "ผ่อนหนี้มากกว่า 1/2 รายได้ต่อเดือนแต่น้อยกว่า 2/3 ต่อเดือน",
+    "	ผ่อนหนี้ 2/3 ของรายได้ต่อเดือน"
+  ].map((value) => DropDownValueModel(name: value, value: value)).toList();
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -155,6 +163,25 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                         "ภาระหนี้ต่อเดือน", true, DebtExpenseController),
                     createTextField("เงินออมหรือทรัพย์สินส่วนตัวรวม", true,
                         SavingContoller),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Text("ภาระหนี้"),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: DropDownTextField(
+                        controller: BurdenController,
+                        dropDownItemCount: 4,
+                        dropDownList: burdenTypeList,
+                      ),
+                    ),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Text(

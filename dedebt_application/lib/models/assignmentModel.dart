@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Assignment {
   final String id;
-  final String type;
+  final int type;
   final String title;
   final String detail;
   final int status;
-  final String tid;
+  final String taskId;
   final Timestamp startTime;
   final Timestamp endTime;
 
@@ -16,7 +16,7 @@ class Assignment {
       required this.title,
       required this.detail,
       required this.status,
-      required this.tid,
+      required this.taskId,
       required this.startTime,
       required this.endTime});
 
@@ -27,7 +27,7 @@ class Assignment {
       title: map['title'],
       detail: map['detail'],
       status: map['status'],
-      tid: map['tid'],
+      taskId: map['taskId'],
       startTime: map['startTime'],
       endTime: map['endTime'],
     );
@@ -39,7 +39,7 @@ class Assignment {
       'title': title,
       'detail': detail,
       'status': status,
-      'tid': tid,
+      'taskId': taskId,
       'endTime': endTime,
       'startTime': startTime
     };
