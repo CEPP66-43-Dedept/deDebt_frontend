@@ -20,6 +20,7 @@ dependencies:
   cloud_firestore: ^4.15.4
   toggle_switch: ^2.1.0
   dropdown_textfield: 1.0.8
+  easy_date_timeline: ^1.0.5
 
 dev_dependencies:
   flutter_test:
