@@ -1,6 +1,6 @@
 class Users {
   final String id;
-  final int ssn;
+  final String ssn;
   final String firstname;
   final String lastname;
   final int role;
@@ -18,7 +18,7 @@ class Users {
   factory Users.fromMap(Map<String, dynamic> map) {
     return Users(
       id: map['uid'] ?? '',
-      ssn: map['ssn'] ?? 0,
+      ssn: map['ssn'] ?? '',
       firstname: map['firstName'] ?? '',
       lastname: map['lastName'] ?? '',
       role: map['role'] ?? '',
