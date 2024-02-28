@@ -19,7 +19,7 @@ class _homeAdvisorScreen extends State<homeAdvisorScreen> {
   //Mockup Data
   Users thisAdvisor = Users(
     id: "0",
-    ssn: 0,
+    ssn: "000000000000",
     firstname: "สมปรึกษา",
     lastname: "ปรึกษาทุกอย่าง",
     role: 1,

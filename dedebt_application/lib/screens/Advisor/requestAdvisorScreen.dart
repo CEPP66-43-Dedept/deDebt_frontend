@@ -19,7 +19,7 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
   //Mockup Data
   Users thisAdvisor = Users(
     id: "0",
-    ssn: 0,
+    ssn: "000000000000",
     firstname: "สมปรึกษา",
     lastname: "ปรึกษาทุกอย่าง",
     role: 1,
@@ -29,11 +29,11 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
   Request userrequest = Request(
     id: "0",
     title: "การแก้หนี้กับธนาคารกสิกรไทย",
-
     detail:
         "123456แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890",
     userId: "0",
     advisorId: "1",
+    userFullName: "นายเป็นหนี้ หนี่เป็นกอง",
     advisorFullName: "นายสมปอง งอปมส",
     requestStatus: 0,
     type: [
