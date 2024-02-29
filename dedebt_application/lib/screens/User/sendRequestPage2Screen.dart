@@ -21,6 +21,12 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
     "หนี้จำนำทะเบียนรถ(Car for cash)",
     "หนี้เช่าซื้อรถ (Hire purchase)"
   ].map((value) => DropDownValueModel(name: value, value: value)).toList();
+  static List<DropDownValueModel> debtStatusList = [
+    "ปกติ หรือ ค้างชำระไม่เกิน 90 วัน",
+    "Non-performing Loan (NPL) (ค้างชำระเกิน 90 วัน)",
+    "อยู่ระหว่างกระบวนการกฎหมาย หรือ ศาลพิพากษาแล้ว",
+  ].map((value) => DropDownValueModel(name: value, value: value)).toList();
+
   static List<DropDownValueModel> financialServiceProviderList = [
     "ธนาคารกรุงเทพ",
     "ธนาคารกรุงไทย",
@@ -62,6 +68,7 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
     "บัตรเทาโก้ โลตัส วีซ่า",
     "เมืองไทย แคปปิตอล"
   ].map((name) => DropDownValueModel(name: name, value: name)).toList();
+
   static List<DropDownValueModel> incomeList = [
     "รายได้เสริม เช่นโบนัส ค่าโอที รายได้พิเศษ งานเสริม"
         "ผลตอบแทนการลงทุน",
@@ -77,6 +84,7 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
   List<SingleValueDropDownController> financialServiceProviderControllersList =
       [];
   List<SingleValueDropDownController> debtTypeControllersList = [];
+  List<SingleValueDropDownController> debtStatusControllersList = [];
   List<TextEditingController> BranchControllersList = [];
   List<Container> RowOfFinancial = [];
   int index = 0;
@@ -89,11 +97,13 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
     financialServiceProviderControllersList
         .add(SingleValueDropDownController());
     debtTypeControllersList.add(SingleValueDropDownController());
+    debtStatusControllersList.add(SingleValueDropDownController());
     BranchControllersList.add(TextEditingController());
 
     RowOfFinancial.add(createProviderContainer(
         financialServiceProviderControllersList[0],
         debtTypeControllersList[0],
+        debtStatusControllersList[0],
         BranchControllersList[0]));
     index += 1;
   }
@@ -142,8 +152,11 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
   Container createProviderContainer(
       SingleValueDropDownController financialServiceProviderController,
       SingleValueDropDownController debtTypeController,
+      SingleValueDropDownController debtStatusController,
       TextEditingController BranchController) {
     return Container(
+      width: 330,
+      height: 411,
       padding: const EdgeInsets.all(5),
       margin: const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
@@ -200,6 +213,30 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
               controller: debtTypeController,
               dropDownItemCount: 5,
               dropDownList: debtTypeList,
+              onChanged: (value) {
+                // Handle data when user select from drop down
+              },
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Text("สภานะของหนี้"),
+          ),
+          Container(
+            width: 330,
+            height: 52,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.black,
+                width: 2.0,
+              ),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: DropDownTextField(
+              controller: debtStatusController,
+              dropDownItemCount: 3,
+              dropDownList: debtStatusList,
               onChanged: (value) {
                 // Handle data when user select from drop down
               },
@@ -296,11 +333,14 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
                         .add(SingleValueDropDownController());
                     debtTypeControllersList
                         .add(SingleValueDropDownController());
+                    debtStatusControllersList
+                        .add(SingleValueDropDownController());
                     BranchControllersList.add(TextEditingController());
 
                     RowOfFinancial.add(createProviderContainer(
                         financialServiceProviderControllersList[index],
                         debtTypeControllersList[index],
+                        debtStatusControllersList[index],
                         BranchControllersList[index]));
                     index += 1;
                     setState(() {}); // Trigger a rebuild to update the ListView

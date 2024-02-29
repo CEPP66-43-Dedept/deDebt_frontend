@@ -12,7 +12,7 @@ class Request {
   final List<String> provider;
   final List<int> revenue;
   final List<int> expense;
-  final String burden;
+  final int burden;
   final int propoty;
   final List<int> appointmentDate;
   final int appointmentStatus;
