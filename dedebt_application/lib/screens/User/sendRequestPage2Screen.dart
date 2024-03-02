@@ -358,13 +358,6 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        //Debug for get value from container
-                        print(financialServiceProviderControllersList[0]
-                            .dropDownValue
-                            ?.value);
-                        print(financialServiceProviderControllersList[1]
-                            .dropDownValue
-                            ?.value);
                         context.go(AppRoutes.SEND_REQUESt_SUCCESS_USER);
                       },
                       style: ElevatedButton.styleFrom(
