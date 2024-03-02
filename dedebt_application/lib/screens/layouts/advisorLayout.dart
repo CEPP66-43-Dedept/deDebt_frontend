@@ -103,7 +103,7 @@ class AdvisorLayout extends StatefulWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Text(
                         //แก้ดึงข้อมูลชื่อ User
-                        "${_request.userId} ชื่อของ USER",
+                        _request.userFullName,
                         style: const TextStyle(color: Color(0xFF2DC09C)),
                         softWrap: true,
                       ),
@@ -145,10 +145,10 @@ class AdvisorLayout extends StatefulWidget {
   }
 
   static GestureDetector createAssignmentContainer(
-      BuildContext context, Assignment _assignment) {
+      BuildContext context, Assignment _assignment, String destination) {
     return GestureDetector(
       onTap: () => {
-        context.go(AppRoutes.ASSIGNMENT_ADVISOR)
+        context.go(destination)
         //handle redirect ไปหน้าassignment
       },
       child: Container(
@@ -234,10 +234,10 @@ class AdvisorLayout extends StatefulWidget {
   }
 
   static GestureDetector createMonthAssignmentContainer(
-      BuildContext context, Assignment _assignment) {
+      BuildContext context, Assignment _assignment, String destination) {
     return GestureDetector(
       onTap: () => {
-        context.go(AppRoutes.ASSIGNMENT_ADVISOR)
+        context.go(destination)
         //handle redirect ไปหน้าassignment
       },
       child: Container(

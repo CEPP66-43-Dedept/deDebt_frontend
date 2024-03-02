@@ -3,8 +3,10 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dedebt_application/screens/Admin/adminHomeScreen.dart';
+import 'package:dedebt_application/screens/Advisor/addAssignmentAdvisorScreen.dart';
 import 'package:dedebt_application/screens/Matcher/homeMatcher.dart';
 import 'package:dedebt_application/screens/User/homeUserScreen.dart';
+import 'package:dedebt_application/screens/Advisor/homeAdvisorScreen.dart';
 import 'package:dedebt_application/screens/layouts/adminLayout.dart';
 import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
 import 'package:dedebt_application/screens/layouts/matcherLayout.dart';
@@ -51,7 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
           final User? currentUser = snapshot.data;
           return _handleUserNavigation(currentUser);
         } else {
-          return const LoginScreen();
+          //return addAssignmentAdvisorScreen();
+          //return UserLayout(Body: HomeUserScreen(), currentPage: 0);
+          return AdvisorLayout(body: homeAdvisorScreen(),currentPage: 0,);
+          //return const LoginScreen();
         }
       },
     );
@@ -77,7 +82,10 @@ class _HomeScreenState extends State<HomeScreen> {
             print(userData);
             print(currentUser.email);
             if (collection == 'advisors') {
-              return const AdvisorLayout();
+              return AdvisorLayout(
+                body: homeAdvisorScreen(),
+                currentPage: 0,
+              );
             } else if (collection == 'matcher') {
               return MatcherLayout(
                 Body: HomeMatcher(),
