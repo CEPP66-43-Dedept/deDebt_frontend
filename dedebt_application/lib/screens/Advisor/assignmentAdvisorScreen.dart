@@ -28,31 +28,31 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
   //Mockup Data
   Assignment userAppointment = Assignment(
     id: "0",
-    type: "การนัดหมาย",
+    type: 1,
     title: "การนัดคุยทางโทรศัพท์",
     detail: "โทรทางมือถือเบอร์ 123-456-7890",
     status: 0,
-    tid: "เอกสารหักเงินกสิกร",
+    taskId: "TSETTaskID",
     startTime: Timestamp.fromDate(DateTime(2023, 2, 27, 13, 0)),
     endTime: Timestamp.fromDate(DateTime(2023, 2, 27, 17, 0)),
   );
   Assignment userAssignment = Assignment(
     id: "1",
-    type: "งาน'",
+    type: 0,
     title: "กรอกเอกสาร",
     detail: "กรอกเอกสารหักเงินของกสิกร",
     status: 0,
-    tid: "0",
+    taskId: "TSETTaskID",
     startTime: Timestamp.fromDate(DateTime(2023, 2, 26, 13, 0)),
     endTime: Timestamp.fromDate(DateTime(2023, 2, 26, 17, 0)),
   );
   Assignment userAssignment_2 = Assignment(
     id: "1",
-    type: "งาน'",
+    type: 0,
     title: "กรอกเอกสาร",
     detail: "กรอกเอกสารหักเงินของกสิกร",
     status: 0,
-    tid: "0",
+    taskId: "TSETTaskID",
     startTime: Timestamp.fromDate(DateTime(2023, 2, 26, 13, 0)),
     endTime: Timestamp.fromDate(DateTime(2023, 2, 26, 17, 0)),
   );

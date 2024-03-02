@@ -28,11 +28,11 @@ class _homeAdvisorScreen extends State<homeAdvisorScreen> {
   );
   Assignment userAppointment = Assignment(
     id: "0",
-    type: "การนัดหมาย",
+    type: 1,
     title: "การนัดคุยทางโทรศัพท์",
     detail: "โทรทางมือถือเบอร์ 123-456-7890",
     status: 0,
-    tid: "เอกสารหักเงินกสิกร",
+    taskId: "TSETTaskID",
     startTime: Timestamp.fromDate(DateTime(2023, 2, 27, 13, 0)),
     endTime: Timestamp.fromDate(DateTime(2023, 2, 27, 17, 0)),
   );
