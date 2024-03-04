@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dedebt_application/routes/route.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/models/userModel.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
@@ -19,7 +20,7 @@ class _homeAdvisorScreen extends State<homeAdvisorScreen> {
   //Mockup Data
   Users thisAdvisor = Users(
     id: "0",
-    ssn: 0,
+    ssn: "000000000000",
     firstname: "สมปรึกษา",
     lastname: "ปรึกษาทุกอย่าง",
     role: 1,
@@ -28,11 +29,11 @@ class _homeAdvisorScreen extends State<homeAdvisorScreen> {
   );
   Assignment userAppointment = Assignment(
     id: "0",
-    type: "การนัดหมาย",
+    type: 1,
     title: "การนัดคุยทางโทรศัพท์",
     detail: "โทรทางมือถือเบอร์ 123-456-7890",
     status: 0,
-    tid: "เอกสารหักเงินกสิกร",
+    taskId: "TSETTaskID",
     startTime: Timestamp.fromDate(DateTime(2023, 2, 27, 13, 0)),
     endTime: Timestamp.fromDate(DateTime(2023, 2, 27, 17, 0)),
   );
@@ -49,14 +50,14 @@ class _homeAdvisorScreen extends State<homeAdvisorScreen> {
     ];
 
     for (Assignment assign in u_assignment) {
-      Widget container =
-          AdvisorLayout.createAssignmentContainer(context, assign);
+      Widget container = AdvisorLayout.createAssignmentContainer(
+          context, assign, AppRoutes.REQUEST_ADVISOR);
       todayAssignmentContainerList.add(container);
       todayAssignmentContainerList.add(const SizedBox(height: 10));
     }
     for (Assignment assign in u_assignment) {
-      Widget container =
-          AdvisorLayout.createMonthAssignmentContainer(context, assign);
+      Widget container = AdvisorLayout.createMonthAssignmentContainer(
+          context, assign, AppRoutes.REQUEST_ADVISOR);
       AssignmentMonthContainerList.add(container);
       AssignmentMonthContainerList.add(const SizedBox(height: 10));
     }

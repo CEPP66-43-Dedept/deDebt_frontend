@@ -19,7 +19,7 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
   //Mockup Data
   Users thisAdvisor = Users(
     id: "0",
-    ssn: 0,
+    ssn: "000000000000",
     firstname: "สมปรึกษา",
     lastname: "ปรึกษาทุกอย่าง",
     role: 1,
@@ -29,11 +29,11 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
   Request userrequest = Request(
     id: "0",
     title: "การแก้หนี้กับธนาคารกสิกรไทย",
-
     detail:
         "123456แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890",
     userId: "0",
     advisorId: "1",
+    userFullName: "นายเป็นหนี้ หนี่เป็นกอง",
     advisorFullName: "นายสมปอง งอปมส",
     requestStatus: 0,
     type: [
@@ -45,38 +45,38 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
     revenue: [10000],
     expense: [1000000],
     burden:
-        "1/3ของรายได้", //ผ่อนหนี้ [1/3ของรายได้,1/3-1/2ของรายได้,1/2-2/3ของรายได้,มากกว่า 2/3 ของรายได้ ]
+        0, //ผ่อนหนี้ [1/3ของรายได้,1/3-1/2ของรายได้,1/2-2/3ของรายได้,มากกว่า 2/3 ของรายได้ ]
     propoty: 25000,
     appointmentDate: [0],
     appointmentStatus: 0,
   );
   Assignment userAppointment = Assignment(
     id: "0",
-    type: "การนัดหมาย",
+    type: 0,
     title: "การนัดคุยทางโทรศัพท์",
     detail: "โทรทางมือถือเบอร์ 123-456-7890",
     status: 0,
-    tid: "เอกสารหักเงินกสิกร",
+    taskId: "TSETTaskID",
     startTime: Timestamp.fromDate(DateTime(2023, 2, 27, 13, 0)),
     endTime: Timestamp.fromDate(DateTime(2023, 2, 27, 17, 0)),
   );
   Assignment userAssignment = Assignment(
     id: "1",
-    type: "งาน'",
+    type: 1,
     title: "กรอกเอกสาร",
     detail: "กรอกเอกสารหักเงินของกสิกร",
     status: 0,
-    tid: "0",
+    taskId: "TSETTaskID",
     startTime: Timestamp.fromDate(DateTime(2023, 2, 26, 13, 0)),
     endTime: Timestamp.fromDate(DateTime(2023, 2, 26, 17, 0)),
   );
   Assignment userAssignment_2 = Assignment(
     id: "1",
-    type: "งาน'",
+    type: 1,
     title: "กรอกเอกสาร",
     detail: "กรอกเอกสารหักเงินของกสิกร",
     status: 0,
-    tid: "0",
+    taskId: "TSETTaskID",
     startTime: Timestamp.fromDate(DateTime(2023, 2, 26, 13, 0)),
     endTime: Timestamp.fromDate(DateTime(2023, 2, 26, 17, 0)),
   );
@@ -90,8 +90,8 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
       const SizedBox(height: 5),
     ];
     for (Assignment assignment_item in u_assignment) {
-      Widget container =
-          AdvisorLayout.createAssignmentContainer(context, assignment_item);
+      Widget container = AdvisorLayout.createAssignmentContainer(
+          context, assignment_item, AppRoutes.ASSIGNMENT_ADVISOR);
 
       AssignmentStatusContainerList.add(container);
       AssignmentStatusContainerList.add(const SizedBox(height: 5));
@@ -296,7 +296,7 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(20),
                     onTap: () {
-                      //แก้เพิ่ม route ไปหน้าเพิ่ม assignment ของ advisor
+                      context.go(AppRoutes.ADD_ASSIGNMENT_ADVISOR);
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(16),
