@@ -111,4 +111,16 @@ class UserRepository {
       return [];
     }
   }
+
+  Future<void> createRequest(Request userRequest) async {
+    try {
+      Map<String, dynamic> requestData = userRequest.toMap();
+      CollectionReference requests =
+          FirebaseFirestore.instance.collection('Requests');
+      await requests.add(requestData);
+      print('Request created successfully.');
+    } catch (e) {
+      print('Error creating request: $e');
+    }
+  }
 }
