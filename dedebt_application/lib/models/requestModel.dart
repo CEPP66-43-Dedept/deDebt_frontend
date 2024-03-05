@@ -66,10 +66,7 @@ class Request {
       'detail': detail,
       'userId': userId,
       'advisorId': advisorId,
-<<<<<<< HEAD
-=======
       'advisorFullName': advisorFullName,
->>>>>>> 7dbdad57d31af4ea763b7b4236c9372b769abd5a
       'requestStatus': requestStatus,
       'type': type,
       'debtStatus': debtStatus,
