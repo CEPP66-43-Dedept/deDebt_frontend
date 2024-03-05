@@ -11,14 +11,26 @@ class sendRequestScreen extends StatefulWidget {
 }
 
 //Controller ในการเข้าถึงข้อมูล
+// controll เก็บข้อมูลของรายรับ
+// เก็บข้อมูลในตัวแปร revenue โดยเก็บเป็น list โดยเรียงลำดับดังนี้
+// [MonthlyIncomeController,ExtraworkIncomeController,InvesmentIncomeComtroller,PrivateBussnessIncomeController]
 final MonthlyIncomeController = TextEditingController();
 final ExtraworkIncomeController = TextEditingController();
 final InvesmentIncomeComtroller = TextEditingController();
 final PrivateBussnessIncomeController = TextEditingController();
+
+//เก็บในตัวแปร expense เป็น list โดยเรียงลำดับดังนี้
+//[MonthlyExpenseController,DebtExpenseController]
 final MonthlyExpenseController = TextEditingController();
 final DebtExpenseController = TextEditingController();
-final SavingContoller = TextEditingController();
+
+//เก็บในตัวแปร propoty
+final PropotyContoller = TextEditingController();
+
+//เก็บในตัวแปร detail
 final DetailController = TextEditingController();
+
+//เก็บในตัวแปร burden
 final BurdenController = SingleValueDropDownController();
 
 Container createTextField(
@@ -130,7 +142,7 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                     createTextField(
                         "ภาระหนี้ต่อเดือน", true, DebtExpenseController),
                     createTextField("เงินออมหรือทรัพย์สินส่วนตัวรวม", true,
-                        SavingContoller),
+                        PropotyContoller),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Text("ภาระหนี้"),

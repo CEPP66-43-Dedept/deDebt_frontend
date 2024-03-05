@@ -81,28 +81,28 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
     "ผ่อนหนี้มากกว่า 1/2 รายได้ต่อเดือนแต่น้อยกว่า 2/3 ต่อเดือน",
     "ผ่อนหนี้ 2/3 ของรายได้ต่อเดือน"
   ].map((value) => DropDownValueModel(name: value, value: value)).toList();
-  List<SingleValueDropDownController> financialServiceProviderControllersList =
-      [];
-  List<SingleValueDropDownController> debtTypeControllersList = [];
+  List<SingleValueDropDownController> ProviderControllerList = [];
+  List<SingleValueDropDownController> TypeControllerList = [];
   List<SingleValueDropDownController> debtStatusControllersList = [];
   List<TextEditingController> BranchControllersList = [];
+
+  //ตัวแปรเก็บ container
   List<Container> RowOfFinancial = [];
   int index = 0;
   @override
   void initState() {
     super.initState();
     RowOfFinancial = [];
-    debtTypeControllersList = [];
+    TypeControllerList = [];
     RowOfFinancial = [];
-    financialServiceProviderControllersList
-        .add(SingleValueDropDownController());
-    debtTypeControllersList.add(SingleValueDropDownController());
+    ProviderControllerList.add(SingleValueDropDownController());
+    TypeControllerList.add(SingleValueDropDownController());
     debtStatusControllersList.add(SingleValueDropDownController());
     BranchControllersList.add(TextEditingController());
 
     RowOfFinancial.add(createProviderContainer(
-        financialServiceProviderControllersList[0],
-        debtTypeControllersList[0],
+        ProviderControllerList[0],
+        TypeControllerList[0],
         debtStatusControllersList[0],
         BranchControllersList[0]));
     index += 1;
@@ -248,6 +248,38 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
     );
   }
 
+  List<String> getProviderList() {
+    List<String> tempList = [];
+    for (var i = 0; i < ProviderControllerList.length; i++) {
+      tempList.add(ProviderControllerList[i].dropDownValue.toString());
+    }
+    return tempList;
+  }
+
+  List<String> getTypeList() {
+    List<String> tempList = [];
+    for (var i = 0; i < TypeControllerList.length; i++) {
+      tempList.add(ProviderControllerList[i].dropDownValue.toString());
+    }
+    return tempList;
+  }
+
+  List<String> getDebtStatusList() {
+    List<String> tempList = [];
+    for (var i = 0; i < debtStatusControllersList.length; i++) {
+      tempList.add(ProviderControllerList[i].dropDownValue.toString());
+    }
+    return tempList;
+  }
+
+  List<String> getBranchList() {
+    List<String> tempList = [];
+    for (var i = 0; i < BranchControllersList.length; i++) {
+      tempList.add(ProviderControllerList[i].dropDownValue.toString());
+    }
+    return tempList;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -329,17 +361,15 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
                       duration: Duration(milliseconds: 100),
                       curve: Curves.easeInOut,
                     );
-                    financialServiceProviderControllersList
-                        .add(SingleValueDropDownController());
-                    debtTypeControllersList
-                        .add(SingleValueDropDownController());
+                    ProviderControllerList.add(SingleValueDropDownController());
+                    TypeControllerList.add(SingleValueDropDownController());
                     debtStatusControllersList
                         .add(SingleValueDropDownController());
                     BranchControllersList.add(TextEditingController());
 
                     RowOfFinancial.add(createProviderContainer(
-                        financialServiceProviderControllersList[index],
-                        debtTypeControllersList[index],
+                        ProviderControllerList[index],
+                        TypeControllerList[index],
                         debtStatusControllersList[index],
                         BranchControllersList[index]));
                     index += 1;
@@ -358,6 +388,11 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
+                        //function เรียกข้อมูลจาก list
+                        getBranchList();
+                        getProviderList();
+                        getTypeList();
+                        getDebtStatusList();
                         context.go(AppRoutes.SEND_REQUESt_SUCCESS_USER);
                       },
                       style: ElevatedButton.styleFrom(
