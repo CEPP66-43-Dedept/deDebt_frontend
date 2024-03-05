@@ -11,10 +11,6 @@ class sendRequestScreen extends StatefulWidget {
 }
 
 //Controller ในการเข้าถึงข้อมูล
-final NameController = TextEditingController();
-final SSiDtypeController = SingleValueDropDownController();
-final SSIDController = TextEditingController();
-final PhoneNoContoller = TextEditingController();
 final MonthlyIncomeController = TextEditingController();
 final ExtraworkIncomeController = TextEditingController();
 final InvesmentIncomeComtroller = TextEditingController();
@@ -63,10 +59,6 @@ Container createTextField(
 class _sendRequestScreen extends State<sendRequestScreen> {
   static Color appBarColor = const Color(0xFF444371);
   static Color navBarColor = const Color(0xFF2DC09C);
-  static List<DropDownValueModel> ssnTypeList = [
-    "เลขประจำตัวประชาชน",
-    "เลขที่หนังสือเดินทาง"
-  ].map((value) => DropDownValueModel(name: value, value: value)).toList();
   static List<DropDownValueModel> burdenTypeList = [
     "ผ่อนหนี้ 1/3 ของรายได้ต่อเดือน",
     "ผ่อนหนี้มากกว่า 1/3 แต่ยังน้อยกว่า 1/2 ของรายได้ต่อเดือน",
@@ -125,30 +117,6 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                         fontSize: 18.0,
                       ),
                   child: ListView(children: [
-                    createTextField("ชื่อ - นามสกุล / ชื่อนิติบุคคล", false,
-                        NameController),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text("ประเภทรหัสอ้างอิงบุคคล/นิติบุคคล"),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: DropDownTextField(
-                        controller: SSiDtypeController,
-                        dropDownItemCount: 2,
-                        dropDownList: ssnTypeList,
-                      ),
-                    ),
-                    createTextField(
-                        "เลขประจำตัวบุคคลและนิติบุคคล", true, SSIDController),
-                    createTextField("โทรศัพท์มือถือ", true, PhoneNoContoller),
                     createTextField(
                         "รายได้หลักต่อเดือน", true, MonthlyIncomeController),
                     createTextField("รายได้เสริม เช่นโบนัส ค่าโอที งานเสริม",
@@ -223,7 +191,6 @@ class _sendRequestScreen extends State<sendRequestScreen> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    print(SSiDtypeController.dropDownValue?.value);
                     context.go(AppRoutes.SEND_REQUEST_PAGE2_USER);
                   },
                   style: ElevatedButton.styleFrom(
