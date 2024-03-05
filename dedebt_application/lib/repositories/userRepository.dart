@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dedebt_application/models/assignmentModel.dart';
+import 'package:dedebt_application/models/requestModel.dart';
 
 class UserRepository {
   final FirebaseFirestore _firestore;
@@ -28,7 +30,7 @@ class UserRepository {
           FirebaseFirestore.instance.collection("requests");
       QuerySnapshot<Object?> querySnapshot = await collection
           .where('userId', isEqualTo: userId)
-          .where('requestStatus', isEqualTo: 1)
+          .where('requestStatus', whereIn: [0, 1])
           .limit(1)
           .get();
 
@@ -38,8 +40,73 @@ class UserRepository {
         return null;
       }
     } catch (e) {
-      print('Error getting user data: $e');
+      print('Error getting user active request: $e');
       return null;
+    }
+  }
+
+  Future<List<Request>?> getUserAllRequests(String userId) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection("requests");
+      QuerySnapshot<Object?> querySnapshot =
+          await collection.where('userId', isEqualTo: userId).get();
+      List<Map<String, dynamic>> requestsData = [];
+      if (querySnapshot.docs.isNotEmpty) {
+        requestsData = querySnapshot.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList();
+      }
+      List<Request> requests =
+          requestsData.map((data) => Request.fromMap(data)).toList();
+      return requests;
+    } catch (e) {
+      print('Error getting user active request: $e');
+      return null;
+    }
+  }
+
+  Future<List<Assignment>> getActiveAssignments(String taskId) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection("assignments");
+      QuerySnapshot<Object?> querySnapshot = await collection
+          .where('taskId', isEqualTo: taskId)
+          .where('status', isEqualTo: 1)
+          .get();
+      List<Map<String, dynamic>> assignmentsData = [];
+      if (querySnapshot.docs.isNotEmpty) {
+        assignmentsData = querySnapshot.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList();
+      }
+      List<Assignment> assignments =
+          assignmentsData.map((data) => Assignment.fromMap(data)).toList();
+      return assignments;
+    } catch (e) {
+      print('Error getting active assignments: $e');
+      return [];
+    }
+  }
+
+  Future<List<Assignment>> getAllAssignments(String taskId) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection("assignments");
+      QuerySnapshot<Object?> querySnapshot =
+          await collection.where('taskId', isEqualTo: taskId).get();
+      List<Map<String, dynamic>> assignmentsData = [];
+      if (querySnapshot.docs.isNotEmpty) {
+        assignmentsData = querySnapshot.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList();
+      }
+      List<Assignment> assignments =
+          assignmentsData.map((data) => Assignment.fromMap(data)).toList();
+      return assignments;
+    } catch (e) {
+      print('Error getting active assignments: $e');
+      return [];
     }
   }
 }

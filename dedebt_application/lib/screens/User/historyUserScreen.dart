@@ -1,121 +1,119 @@
-// ignore_for_file: unused_import, prefer_const_constructors, prefer_const_literals_to_create_immutables
+import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dedebt_application/models/assignmentModel.dart';
+import 'package:dedebt_application/repositories/userRepository.dart';
+import 'package:dedebt_application/services/userService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
 import 'package:dedebt_application/models/requestModel.dart';
 
-class historyUserScreen extends StatefulWidget {
-  const historyUserScreen({super.key});
+class HistoryUserScreen extends StatefulWidget {
+  const HistoryUserScreen({Key? key});
 
   @override
-  State<historyUserScreen> createState() => _historyUserScreen();
+  State<HistoryUserScreen> createState() => _HistoryUserScreenState();
 }
 
-class _historyUserScreen extends State<historyUserScreen> {
-  late Future<dynamic> _historyFuture;
-  //Mockup Data
+class _HistoryUserScreenState extends State<HistoryUserScreen> {
+  static Color primaryColor = const Color(0xFFF3F5FE);
+  late final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late final UserRepository userRepository =
+      UserRepository(firestore: firestore);
+  late final UserService userService =
+      UserService(userRepository: userRepository);
+  late StreamController<List<Request>> _userRequestController;
+  late User? user = FirebaseAuth.instance.currentUser;
+  bool isExpanded = false;
 
   @override
   void initState() {
     super.initState();
+    _userRequestController = StreamController<List<Request>>();
+    _getUserAllRequests(user!.uid).then((requestData) {
+      _userRequestController.add(requestData!);
+    }).catchError((error) {
+      print('Error fetching user requests: $error');
+      _userRequestController.addError(error);
+    });
   }
 
-  FutureBuilder getBody() {
-    return FutureBuilder(
-        future: _historyFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return const Center(child: Text('Error fetching request'));
-          } else if (snapshot.data == null) {
-            // ไม่มีข้อมูลใน db
-            return Stack(
-              children: [
-                const Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: Text(
-                      "ประวัติคำร้อง",
-                      style: TextStyle(fontSize: 24),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                  child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset("assets/images/Nothing.png"),
-                        const Text("ไม่มีคำร้องที่ดำเนินการอยู่ในขณะนี้ "),
-                        const Text("สามารถกดลงทะเบียนคำร้องได้ที่ปุ่ม \‘+\’")
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            );
-          } else {
-            List<Widget> containerList = [
-              const SizedBox(height: 10),
-            ];
-            var _request = snapshot.data as List<Request>;
-            //สร้าง Listview ที่จะมีคำร้องต่างๆ ของ User
-            for (Request requestItem in _request) {
-              Widget container = UserLayout.createRequestBox(requestItem);
-              containerList.add(container);
-              containerList.add(const SizedBox(height: 10));
-            }
-            return Scaffold(
-              body: Center(
-                  child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(10, 25, 10, 20),
-                    child: Text(
-                      "ประวัติคำร้อง",
-                      style: TextStyle(fontSize: 24),
-                    ),
-                  ),
-                  RawScrollbar(
-                    thumbColor: const Color(0xFFBBB9F4),
-                    thumbVisibility: true,
-                    radius: const Radius.circular(20),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 20),
-                    thickness: 5,
-                    child: DefaultTextStyle(
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Colors.white,
-                            fontSize: 15.0,
-                          ),
-                      child: SizedBox(
-                        height: 552,
-                        width: 344,
-                        child: ListView.builder(
-                          itemCount: containerList.length,
-                          itemBuilder: (context, index) {
-                            return containerList[index];
-                          },
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              )),
-            );
-          }
-        });
+  @override
+  void dispose() {
+    _userRequestController.close();
+    super.dispose();
+  }
+
+  Future<List<Request>?> _getUserAllRequests(String userId) async {
+    // Call the service method to get all user requests
+    return userService.getUserAllRequests(userId);
   }
 
   @override
   Widget build(BuildContext context) {
-    return getBody();
+    return StreamBuilder<List<Request>>(
+      stream: _userRequestController.stream,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Show loading indicator while waiting for data
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          // Show error message if there's an error
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData) {
+          // Show empty state if there's no data
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('ประวัติคำร้อง'),
+            ),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Image(image: AssetImage('assets/images/Nothing.png')),
+                  Text('ไม่มีคำร้อง'),
+                ],
+              ),
+            ),
+          );
+        } else {
+          List<Request> requests = snapshot.data!;
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: primaryColor,
+              title: const Text('ประวัติคำร้อง'),
+            ),
+            body: RawScrollbar(
+              thumbColor: const Color(0xFFBBB9F4),
+              thumbVisibility: true,
+              radius: const Radius.circular(20),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
+              thickness: 5,
+              child: DefaultTextStyle(
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Colors.white,
+                      fontSize: 15.0,
+                    ),
+                child: ListView.builder(
+                  itemCount: requests.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        UserLayout.createRequestBox(requests[index]),
+                        SizedBox(
+                          height: 10,
+                        )
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+        }
+      },
+    );
   }
 }

@@ -1,0 +1,100 @@
+import 'package:flutter/material.dart';
+import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
+import 'package:dedebt_application/models/requestModel.dart';
+
+class requestListAdvisorScreen extends StatefulWidget {
+  const requestListAdvisorScreen({super.key});
+  @override
+  State<requestListAdvisorScreen> createState() => _requestListAdvisorScreen();
+}
+
+class _requestListAdvisorScreen extends State<requestListAdvisorScreen> {
+  //Mockup Data
+  Request userrequest = Request(
+    id: "0",
+    title: "การแก้หนี้กับธนาคารกสิกรไทย",
+    detail:
+        "123456แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890",
+    userId: "0",
+    advisorId: "1",
+    userFullName: "นายเป็นหนี้ หนี่เป็นกอง",
+    advisorFullName: "นายสมปอง งอปมส",
+    requestStatus: 0,
+    type: [
+      "หนี้บัตรเครติด",
+      "สินเชื่อส่วนบุคคล",
+    ], //[หนี้บัตรเครติด,สินเชื่อส่วนบุคคล,หนี้บ้าน,หนี้จำนำรถ,หนี้เช่าซื้อรถ]
+    debtStatus: ["Normal"],
+    provider: ["กสิกร"],
+    revenue: [10000],
+    expense: [1000000],
+    burden:
+        0, //ผ่อนหนี้ [1/3ของรายได้,1/3-1/2ของรายได้,1/2-2/3ของรายได้,มากกว่า 2/3 ของรายได้ ]
+    propoty: 25000,
+    appointmentDate: [0],
+    appointmentStatus: 0,
+  );
+  dynamic getBody() {
+    bool isHavedata = false;
+    List<Widget> containerList = [
+      const SizedBox(height: 10),
+    ];
+
+    List<Request> _request = [
+      userrequest,
+      userrequest,
+      userrequest,
+      userrequest
+    ];
+    //สร้าง Listview ที่จะมีคำร้องต่างๆ ของ User
+    for (Request requestItem in _request) {
+      Widget container = AdvisorLayout.createRequestBox(context, requestItem);
+      containerList.add(container);
+      containerList.add(const SizedBox(height: 10));
+    }
+    return Scaffold(
+      body: Center(
+          child: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(10, 25, 10, 20),
+            child: Text(
+              "คำร้องปัจจุบัน",
+              style: TextStyle(fontSize: 24),
+            ),
+          ),
+          RawScrollbar(
+            thumbColor: const Color(0xFFBBB9F4),
+            thumbVisibility: true,
+            radius: const Radius.circular(20),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
+            thickness: 5,
+            child: DefaultTextStyle(
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Colors.white,
+                    fontSize: 15.0,
+                  ),
+              child: SizedBox(
+                height: 552,
+                width: 344,
+                child: ListView.builder(
+                  itemCount: containerList.length,
+                  itemBuilder: (context, index) {
+                    return containerList[index];
+                  },
+                ),
+              ),
+            ),
+          )
+        ],
+      )),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: getBody(),
+    );
+  }
+}

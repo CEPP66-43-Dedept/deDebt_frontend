@@ -4,8 +4,10 @@ import 'package:dedebt_application/services/authService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/models/userModel.dart';
 import 'package:dedebt_application/models/requestModel.dart';
+import 'package:dedebt_application/models/assignmentModel.dart';
 
 import 'package:dedebt_application/routes/route.dart';
 
@@ -58,7 +60,7 @@ class UserLayout extends StatefulWidget {
 
   static Container createRequestBox(Request _request) {
     return Container(
-      width: 314,
+      width: 324,
       decoration: BoxDecoration(
         color: const Color(0xFF36338C),
         borderRadius: BorderRadius.circular(20),
@@ -95,9 +97,9 @@ class UserLayout extends StatefulWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: const Text(
-                      "นางสมหญิง หญิงมาก",
-                      style: TextStyle(color: Color(0xFF2DC09C)),
+                    child: Text(
+                      _request.advisorFullName,
+                      style: const TextStyle(color: Color(0xFF2DC09C)),
                       softWrap: true,
                     ),
                   ),
@@ -133,6 +135,87 @@ class UserLayout extends StatefulWidget {
           ],
         ),
       ]),
+    );
+  }
+
+  static Container getAssignmentStatusContainer(Assignment _assignment) {
+    var containerColor;
+    var textColor;
+
+    switch (_assignment.status) {
+      case 0:
+        containerColor = const Color(0xFF2DC09C);
+        textColor = const Color(0xFFFAFEFF);
+        break;
+      case 1:
+        containerColor = const Color(0xFFE1E4F8);
+        textColor = const Color(0xFF7673D3);
+        break;
+      case 2:
+        containerColor = const Color(0xFFF18F80);
+        textColor = const Color(0xFFF0E6EC);
+        break;
+    }
+    return Container(
+      decoration: BoxDecoration(
+        color: containerColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      child: Text(
+        _assignment.status == 0
+            ? "เสร็จสิ้น"
+            : _assignment.status == 1
+                ? "ดำเนินการ"
+                : "ยกเลิก",
+        style: TextStyle(color: textColor),
+      ),
+    );
+  }
+
+  static GestureDetector createAssignmentContainer(
+      BuildContext context, Assignment _assignment) {
+    return GestureDetector(
+      onTap: () => {
+        //handle redirect ไปหน้าassignment
+        context.go(
+          AppRoutes.ASSIGNMENT_USER,
+        )
+      },
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(19, 10, 19, 0),
+        decoration: BoxDecoration(
+          color: const Color(0xFFDAEAFA),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _assignment.title,
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                  Text(_assignment.type == "การนัดหมาย"
+                      ? "${_assignment.detail} วันที่ ${_assignment.endTime.toDate().day}/${_assignment.endTime.toDate().month}/${_assignment.endTime.toDate().year}"
+                      : _assignment.detail),
+                  Row(
+                    children: [
+                      const Text(
+                        "สถานะ : ",
+                      ),
+                      getAssignmentStatusContainer(_assignment)
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

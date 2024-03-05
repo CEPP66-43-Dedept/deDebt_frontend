@@ -47,7 +47,7 @@ class Auth {
   }
 
   Future<void> createUserWithEmailAndPassword({
-    required int ssn,
+    required String ssn,
     required String email,
     required String password,
     required String firstName,

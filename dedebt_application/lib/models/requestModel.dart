@@ -1,27 +1,30 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Request {
   final String id;
   final String title;
   final String detail;
   final String userId;
+  final String userFullName;
   final String advisorId;
+  final String advisorFullName;
   final int requestStatus;
-  final List<String> type; //ประเภทของหนี้
+  final List<String> type;
   final List<String> debtStatus;
   final List<String> provider;
   final List<int> revenue;
   final List<int> expense;
-  final String burden; //ภาระของหนี้ต่อรายรับ
+  final int burden;
   final int propoty;
   final List<int> appointmentDate;
   final int appointmentStatus;
+
   Request({
     required this.id,
     required this.title,
     required this.detail,
     required this.userId,
     required this.advisorId,
+    required this.userFullName,
+    required this.advisorFullName,
     required this.requestStatus,
     required this.type,
     required this.debtStatus,
@@ -33,25 +36,29 @@ class Request {
     required this.appointmentDate,
     required this.appointmentStatus,
   });
+
   factory Request.fromMap(Map<String, dynamic> map) {
     return Request(
       id: map['id'] ?? '',
       title: map['title'] ?? '',
       detail: map['detail'] ?? '',
       userId: map['userId'] ?? '',
-      advisorId: map['advisorId'],
-      requestStatus: map['requestStatus'] ?? 0, // fixed typo here
+      advisorId: map['advisorId'] ?? '',
+      userFullName: map['userFullName'] ?? '',
+      advisorFullName: map['advisorFullName'] ?? '',
+      requestStatus: map['requestStatus'] ?? 0,
       type: List<String>.from(map['type'] ?? []),
       debtStatus: List<String>.from(map['debtStatus'] ?? []),
       provider: List<String>.from(map['provider'] ?? []),
       revenue: List<int>.from(map['revenue'] ?? []),
       expense: List<int>.from(map['expense'] ?? []),
       burden: map['burden'] ?? '',
-      propoty: map['propoty'] ?? '',
+      propoty: map['propoty'] ?? 0,
       appointmentDate: List<int>.from(map['appointmentDate'] ?? []),
       appointmentStatus: map['appointmentStatus'] ?? 0,
     );
   }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -59,6 +66,10 @@ class Request {
       'detail': detail,
       'userId': userId,
       'advisorId': advisorId,
+<<<<<<< HEAD
+=======
+      'advisorFullName': advisorFullName,
+>>>>>>> 7dbdad57d31af4ea763b7b4236c9372b769abd5a
       'requestStatus': requestStatus,
       'type': type,
       'debtStatus': debtStatus,
@@ -68,7 +79,7 @@ class Request {
       'burden': burden,
       'propoty': propoty,
       'appointmentDate': appointmentDate,
-      'appointmentStatus': appointmentStatus
+      'appointmentStatus': appointmentStatus,
     };
   }
 }
