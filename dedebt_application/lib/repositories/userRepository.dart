@@ -52,6 +52,7 @@ class UserRepository {
       QuerySnapshot<Object?> querySnapshot =
           await collection.where('userId', isEqualTo: userId).get();
       List<Map<String, dynamic>> requestsData = [];
+      print(querySnapshot.docs.map((doc) => doc.data()));
       if (querySnapshot.docs.isNotEmpty) {
         requestsData = querySnapshot.docs
             .map((doc) => doc.data() as Map<String, dynamic>)
@@ -61,7 +62,7 @@ class UserRepository {
           requestsData.map((data) => Request.fromMap(data)).toList();
       return requests;
     } catch (e) {
-      print('Error getting user active request: $e');
+      print('Error getting user  request: $e');
       return null;
     }
   }
@@ -82,6 +83,7 @@ class UserRepository {
       }
       List<Assignment> assignments =
           assignmentsData.map((data) => Assignment.fromMap(data)).toList();
+
       return assignments;
     } catch (e) {
       print('Error getting active assignments: $e');
@@ -105,7 +107,7 @@ class UserRepository {
           assignmentsData.map((data) => Assignment.fromMap(data)).toList();
       return assignments;
     } catch (e) {
-      print('Error getting active assignments: $e');
+      print('Error getting all assignments: $e');
       return [];
     }
   }

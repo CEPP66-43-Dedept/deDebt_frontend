@@ -52,7 +52,7 @@ class Request {
       provider: List<String>.from(map['provider'] ?? []),
       revenue: List<int>.from(map['revenue'] ?? []),
       expense: List<int>.from(map['expense'] ?? []),
-      burden: map['burden'] ?? '',
+      burden: map['burden'] ?? 0,
       propoty: map['propoty'] ?? 0,
       appointmentDate: List<int>.from(map['appointmentDate'] ?? []),
       appointmentStatus: map['appointmentStatus'] ?? 0,
