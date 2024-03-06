@@ -4,6 +4,7 @@ import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/screens/Admin/adminHomeScreen.dart';
 import 'package:dedebt_application/screens/HomeScreen.dart';
 import 'package:dedebt_application/screens/Matcher/homeMatcher.dart';
+import 'package:dedebt_application/screens/Matcher/requestDetailMatcherScreen.dart';
 import 'package:dedebt_application/screens/User/assignmentUserScreen.dart';
 import 'package:dedebt_application/screens/User/historyUserScreen.dart';
 import 'package:dedebt_application/screens/User/homeUserScreen.dart';
@@ -187,6 +188,13 @@ class ROUTE {
         path: AppRoutes.MAIN_MATCHER,
         builder: (context, state) => MatcherLayout(
           Body: HomeMatcher(),
+        ),
+      ),
+      GoRoute(
+        name: 'request-matcher',
+        path: AppRoutes.MATCHER_REQUEST,
+        builder: (context, state) => MatcherLayout(
+          Body: RequestMatcherScreen(),
         ),
       ),
     ],

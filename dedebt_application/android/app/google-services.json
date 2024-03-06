@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "690628174020",
+    "firebase_url": "https://dedebt-app-default-rtdb.firebaseio.com",
     "project_id": "dedebt-app",
     "storage_bucket": "dedebt-app.appspot.com"
   },
@@ -14,11 +15,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "690628174020-003dlnfucg50mj7ohtgn14grv6p0d86s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dedebt_application",
+            "certificate_hash": "1ad425acb721324825e5a3abc9ed7378b94d8aae"
+          }
+        },
+        {
           "client_id": "690628174020-1l4j19512i4aflpkm41oth2ph586l8g4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.dedebt_application",
             "certificate_hash": "625bcf1897bd81182c5b9f56be3343c125f04751"
+          }
+        },
+        {
+          "client_id": "690628174020-rjce01chpcdjidfilka6fp6nvdn73coc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dedebt_application",
+            "certificate_hash": "654b5763cfca01192add8a06baf34dd8ebd59ad2"
           }
         },
         {
@@ -37,6 +54,13 @@
             {
               "client_id": "690628174020-1qslnofmj2h4bsrfhlm2f9pvhjpagdf0.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "690628174020-7bou3udelr42ereo7d7k1qjpoclmmii3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.dedebtApplication.RunnerTests"
+              }
             }
           ]
         }
