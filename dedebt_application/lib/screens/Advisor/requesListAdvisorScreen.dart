@@ -10,42 +10,14 @@ class requestListAdvisorScreen extends StatefulWidget {
 
 class _requestListAdvisorScreen extends State<requestListAdvisorScreen> {
   //Mockup Data
-  Request userrequest = Request(
-    id: "0",
-    title: "การแก้หนี้กับธนาคารกสิกรไทย",
-    detail:
-        "123456แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890",
-    userId: "0",
-    advisorId: "1",
-    userFullName: "นายเป็นหนี้ หนี่เป็นกอง",
-    advisorFullName: "นายสมปอง งอปมส",
-    requestStatus: 0,
-    type: [
-      "หนี้บัตรเครติด",
-      "สินเชื่อส่วนบุคคล",
-    ], //[หนี้บัตรเครติด,สินเชื่อส่วนบุคคล,หนี้บ้าน,หนี้จำนำรถ,หนี้เช่าซื้อรถ]
-    debtStatus: ["Normal"],
-    provider: ["กสิกร"],
-    revenue: [10000],
-    expense: [1000000],
-    burden:
-        0, //ผ่อนหนี้ [1/3ของรายได้,1/3-1/2ของรายได้,1/2-2/3ของรายได้,มากกว่า 2/3 ของรายได้ ]
-    propoty: 25000,
-    appointmentDate: [0],
-    appointmentStatus: 0,
-  );
+
   dynamic getBody() {
     bool isHavedata = false;
     List<Widget> containerList = [
       const SizedBox(height: 10),
     ];
 
-    List<Request> _request = [
-      userrequest,
-      userrequest,
-      userrequest,
-      userrequest
-    ];
+    List<Request> _request = [];
     //สร้าง Listview ที่จะมีคำร้องต่างๆ ของ User
     for (Request requestItem in _request) {
       Widget container = AdvisorLayout.createRequestBox(context, requestItem);
