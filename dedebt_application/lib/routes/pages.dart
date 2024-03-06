@@ -192,10 +192,14 @@ class ROUTE {
       ),
       GoRoute(
         name: 'request-matcher',
-        path: AppRoutes.MATCHER_REQUEST,
-        builder: (context, state) => MatcherLayout(
-          Body: RequestMatcherScreen(),
-        ),
+        path: AppRoutes.MATCHER_REQUEST + '/:requestID',
+        builder: (context, state) {
+          final requestID = state.pathParameters['requestID'] as String?;
+          return MatcherLayout(
+              Body: RequestMatcherScreen(
+            requestID: requestID ?? '',
+          ));
+        },
       ),
     ],
   );

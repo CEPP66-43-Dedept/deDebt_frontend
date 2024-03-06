@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 class RequestMatcherScreen extends StatefulWidget {
   // Declare userRequest as final
-  const RequestMatcherScreen({Key? key})
+  final String requestID;
+  const RequestMatcherScreen({required this.requestID, Key? key})
       : super(key: key); // Correct constructor syntax
 
   @override
@@ -15,7 +16,7 @@ class _RequestMatcherScreenState extends State<RequestMatcherScreen> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text("test"),
+      child: Text("${widget.requestID}"),
     );
   }
 }

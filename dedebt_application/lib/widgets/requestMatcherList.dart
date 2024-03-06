@@ -100,7 +100,9 @@ class _RequestMatcherListState extends State<RequestMatcherList> {
       children: [
         GestureDetector(
           onTap: () {
-            context.go(AppRoutes.REQUEST_USER);
+            // context.go(AppRoutes.MATCHER_REQUEST);
+
+            context.go("${AppRoutes.MATCHER_REQUEST}/${_request.id}");
           },
           child: Container(
             width: 314,
