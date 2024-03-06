@@ -10,12 +10,12 @@ class Request {
   final List<String> type;
   final List<String> debtStatus;
   final List<String> provider;
+  final List<String> branch;
   final List<int> revenue;
   final List<int> expense;
   final int burden;
   final int propoty;
   final List<int> appointmentDate;
-  final int appointmentStatus;
 
   Request({
     required this.id,
@@ -29,12 +29,12 @@ class Request {
     required this.type,
     required this.debtStatus,
     required this.provider,
+    required this.branch,
     required this.revenue,
     required this.expense,
     required this.burden,
     required this.propoty,
     required this.appointmentDate,
-    required this.appointmentStatus,
   });
 
   factory Request.fromMap(Map<String, dynamic> map) {
@@ -50,12 +50,12 @@ class Request {
       type: List<String>.from(map['type'] ?? []),
       debtStatus: List<String>.from(map['debtStatus'] ?? []),
       provider: List<String>.from(map['provider'] ?? []),
+      branch: List<String>.from(map['branch'] ?? []),
       revenue: List<int>.from(map['revenue'] ?? []),
       expense: List<int>.from(map['expense'] ?? []),
       burden: map['burden'] ?? 0,
       propoty: map['propoty'] ?? 0,
       appointmentDate: List<int>.from(map['appointmentDate'] ?? []),
-      appointmentStatus: map['appointmentStatus'] ?? 0,
     );
   }
 
@@ -76,7 +76,6 @@ class Request {
       'burden': burden,
       'propoty': propoty,
       'appointmentDate': appointmentDate,
-      'appointmentStatus': appointmentStatus,
     };
   }
 }
