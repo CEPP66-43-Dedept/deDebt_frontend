@@ -55,8 +55,8 @@ class _HomeScreenState extends State<HomeScreen> {
         } else {
           //return addAssignmentAdvisorScreen();
           //return UserLayout(Body: HomeUserScreen(), currentPage: 0);
-          return AdvisorLayout(body: homeAdvisorScreen(),currentPage: 0,);
-          //return const LoginScreen();
+          //sreturn AdvisorLayout(body: homeAdvisorScreen(),currentPage: 0,);
+          return const LoginScreen();
         }
       },
     );

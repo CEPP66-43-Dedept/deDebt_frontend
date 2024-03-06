@@ -51,7 +51,7 @@ class UserService {
     try {
       return await _userRepository.getUserAllRequests(userId);
     } catch (e) {
-      print('Error getting user active request: $e');
+      print('Error getting user all request: $e');
       return [];
     }
   }
