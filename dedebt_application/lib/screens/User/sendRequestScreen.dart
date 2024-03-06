@@ -87,14 +87,15 @@ class _sendRequestScreen extends State<sendRequestScreen> {
       ),
     );
   }
+
   //function ดึงช้อมูลขาก appointmenDate
   List<int> getAppointmentDatefromUser() {
     List<int> returnList = [];
     List<DropDownValueModel>? rawDataList =
         appointmentDateController.dropDownValueList;
     if (rawDataList != null) {
-      for (var i = 0; i <= rawDataList.length; i++) {
-        returnList.add(appointmentDateList[i].value);
+      for (var i = 0; i < rawDataList.length; i++) {
+        returnList.add(rawDataList[i].value);
       }
     }
     return returnList;
