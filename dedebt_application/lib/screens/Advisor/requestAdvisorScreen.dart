@@ -40,13 +40,13 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
         "หนี้บัตรเครติด",
         "สินเชื่อส่วนบุคคล",
       ], //[หนี้บัตรเครติด,สินเชื่อส่วนบุคคล,หนี้บ้าน,หนี้จำนำรถ,หนี้เช่าซื้อรถ]
-      debtStatus: ["Normal"],
+      debtStatus: [0],
       provider: ["กสิกร"],
       revenue: [10000],
       expense: [1000000],
       burden:
           0, //ผ่อนหนี้ [1/3ของรายได้,1/3-1/2ของรายได้,1/2-2/3ของรายได้,มากกว่า 2/3 ของรายได้ ]
-      propoty: 25000,
+      property: 25000,
       appointmentDate: [0],
       branch: []);
   Assignment userAppointment = Assignment(

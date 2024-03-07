@@ -19,4 +19,13 @@ class MatcherService {
       throw e;
     }
   }
+
+  Future<Request?> getRequestByrequestID(String userId) async {
+    try {
+      return await _matcherRepository.getRequestByrequestID(userId);
+    } catch (e) {
+      print('Error getting user data: $e');
+      return null;
+    }
+  }
 }

@@ -24,4 +24,22 @@ class MatcherRepository {
       return Stream.error('Error getting user data: $e');
     }
   }
+
+  Future<Request?> getRequestByrequestID(String requestID) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection("requests");
+      QuerySnapshot<Object?> querySnapshot =
+          await collection.where('id', isEqualTo: requestID).limit(1).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return Request.fromMap(
+            querySnapshot.docs.first.data() as Map<String, dynamic>);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error getting request By requestID: $e');
+      return null;
+    }
+  }
 }
