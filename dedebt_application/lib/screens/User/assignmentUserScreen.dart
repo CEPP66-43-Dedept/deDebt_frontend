@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dedebt_application/routes/route.dart';
+import 'package:dedebt_application/models/assignmentModel.dart';
 
 class assignmentUserScreen extends StatefulWidget {
   const assignmentUserScreen({super.key});
@@ -11,6 +13,20 @@ class assignmentUserScreen extends StatefulWidget {
 }
 
 class _assignmentUserScreen extends State<assignmentUserScreen> {
+  //mockup data
+  final _assignment = Assignment(
+    id: "abc123",
+    type:
+        1, // Replace with the actual assignment type (e.g., 1 for homework, 2 for project)
+    title: "Complete Chapter 5 Reading",
+    detail: "Read and summarize the main points of Chapter 5 in your textbook.",
+    status:
+        0, // Replace with the actual assignment status (e.g., 0 for pending, 1 for completed)
+    taskId: "def456", // Replace with the actual task ID (optional)
+    startTime: Timestamp.now(), // Current timestamp
+    endTime: Timestamp.fromDate(
+        DateTime.now().add(Duration(days: 3))), // Due date 3 days from now
+  );
   static Color navbarColor = const Color(0xFF444371);
   int currentPage = 0;
   final List<IconData> _normalIcon = [
@@ -162,10 +178,10 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Text(
-                                        "ทำเอกสารหักเงินกับธนาคาร",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
+                                      Text(
+                                        _assignment.title,
+                                        overflow: TextOverflow.visible,
+                                        style: const TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -181,11 +197,11 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
                                               "ดำเนินการ"),
                                         ],
                                       ),
-                                      const Row(
+                                      Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
+                                          const Text(
                                             "รายละเอียด: ",
                                             style: TextStyle(
                                                 color: Color(0xFF5A55CA)),
@@ -196,8 +212,7 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    //Add Detail
-                                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
+                                                    _assignment.detail,
                                                     overflow:
                                                         TextOverflow.visible,
                                                   )
@@ -205,11 +220,14 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
                                           )
                                         ],
                                       ),
-                                      const Row(
+                                      Row(
                                         children: [
-                                          Text("วันสิ้นสุดการดำเนินการ: "),
+                                          const Text(
+                                              "วันสิ้นสุดการดำเนินการ: "),
                                           //วันดำเนินการ
-                                          Text("-")
+
+                                          Text(
+                                              "${_assignment.startTime.toDate().day}/${_assignment.startTime.toDate().month}/${_assignment.startTime.toDate().year}")
                                         ],
                                       )
                                     ],
@@ -235,7 +253,6 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   // แจ้งหมายเหตุ function
-                                  print('Next button pressed');
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFFF18F80),
@@ -243,8 +260,7 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
                                 child: const Text(
                                   'แจ้งหมายเหตุ',
                                   style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.white), // Set text color
+                                      fontSize: 18.0, color: Colors.white),
                                 ),
                               ),
                             ),
@@ -252,14 +268,12 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
                         ),
                         const SizedBox(height: 15),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment
-                              .center, // Center Row horizontally
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () {
                                   // Handle button press
-                                  print('Next button pressed');
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF2DC09C),
