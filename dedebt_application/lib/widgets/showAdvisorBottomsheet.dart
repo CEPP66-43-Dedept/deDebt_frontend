@@ -1,28 +1,18 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, prefer_final_fields
-
 import 'package:dedebt_application/models/advisorModel.dart';
-import 'package:dedebt_application/repositories/adminRepository.dart';
-import 'package:dedebt_application/services/adminService.dart';
+import 'package:dedebt_application/models/requestModel.dart';
 import 'package:dedebt_application/variables/color.dart';
+import 'package:dedebt_application/widgets/advisorDetailBottomsheet.dart';
 import 'package:flutter/material.dart';
 
-class AdvisorlistBottomSheet extends StatefulWidget {
+class AdvisorlistBottomSheet extends StatelessWidget {
+  final List<Advisors> advisors;
+  final Request currentRequest;
+
   const AdvisorlistBottomSheet({
+    required this.currentRequest,
+    required this.advisors,
     Key? key,
   }) : super(key: key);
-
-  @override
-  _AdvisorlistBottomSheetState createState() => _AdvisorlistBottomSheetState();
-}
-
-class _AdvisorlistBottomSheetState extends State<AdvisorlistBottomSheet> {
-  final TextEditingController _controllerFirstName = TextEditingController();
-  final TextEditingController _controllerLastName = TextEditingController();
-  final TextEditingController _controllerEmail = TextEditingController();
-  final TextEditingController _controllerPassword = TextEditingController();
-  final TextEditingController _controllerSpecialist = TextEditingController();
-  final TextEditingController _controllerTel = TextEditingController();
-  final TextEditingController _controllerSSN = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -51,181 +41,66 @@ class _AdvisorlistBottomSheetState extends State<AdvisorlistBottomSheet> {
                   ),
                 ),
                 SizedBox(
-                  width: 50,
+                  width: 30,
                 ),
                 Padding(
                   padding: EdgeInsets.all(20.0),
                   child: Text(
-                    "เพิ่มที่ปรึกษา",
+                    "เลือกดูที่ปรึกษา",
                     style: TextStyle(fontSize: 24),
                   ),
                 ),
               ],
             ),
-            Scrollbar(
-              child: Container(
-                margin: EdgeInsets.all(30),
-                child: Column(children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: _controllerSSN,
-                      keyboardType: TextInputType.number,
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                      decoration: InputDecoration(
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        hintText: "เลขประจำตัวประชาชน",
-                        hintStyle: const TextStyle(
-                          color: ColorGuide.blueAccent,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: _controllerFirstName,
-                      keyboardType: TextInputType.text,
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                      decoration: InputDecoration(
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        hintText: "ชื่อจริง",
-                        hintStyle: const TextStyle(
-                          color: ColorGuide.blueAccent,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: _controllerLastName,
-                      keyboardType: TextInputType.text,
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                      decoration: InputDecoration(
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        hintText: "นามสกุล",
-                        hintStyle: const TextStyle(
-                          color: ColorGuide.blueAccent,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: _controllerEmail,
-                      keyboardType: TextInputType.text,
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                      decoration: InputDecoration(
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        hintText: "อีเมลล์",
-                        hintStyle: const TextStyle(
-                          color: ColorGuide.blueAccent,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: _controllerPassword,
-                      keyboardType: TextInputType.text,
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                      decoration: InputDecoration(
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        hintText: "รหัสผ่าน",
-                        hintStyle: const TextStyle(
-                          color: ColorGuide.blueAccent,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: _controllerTel,
-                      keyboardType: TextInputType.phone,
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                      decoration: InputDecoration(
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        hintText: "เบอร์โทรศัพท์",
-                        hintStyle: const TextStyle(
-                          color: ColorGuide.blueAccent,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: _controllerSpecialist,
-                      keyboardType: TextInputType.text,
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                      decoration: InputDecoration(
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        hintText: "ความถนัด",
-                        hintStyle: const TextStyle(
-                          color: ColorGuide.blueAccent,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                ]),
-              ),
-            ),
             SizedBox(
-              height: 30,
+              width: 350,
+              child: ListView.builder(
+                shrinkWrap:
+                    true, // คำสั่งนี้จะช่วยให้ ListView มีขนาดตามเนื้อหาภายในเท่าที่จำเป็น
+                itemCount: advisors.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        try {
+                          showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (context) => AdvisorDetailBotomsheet(
+                                  advisor: advisors[index],
+                                  currentRequest: currentRequest));
+                        } catch (e) {
+                          print('Error fetching advisors data: $e');
+                          // Handle error gracefully, e.g., show a snackbar or error message
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(100, 60),
+                        backgroundColor: ColorGuide.blueLight,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "${advisors[index].firstname} ${advisors[index].lastname}",
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: ColorGuide.blueAccent,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateColor.resolveWith(
-                  (states) => ColorGuide.greenAccent,
-                ),
-                fixedSize: MaterialStateProperty.all(Size(350, 60)),
-              ),
-              onPressed: () {},
-              child: Text(
-                "เพิ่มผู้ใช้งาน",
-                style: TextStyle(color: ColorGuide.white, fontSize: 20),
-              ),
-            )
+            SizedBox(height: 30),
           ],
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _controllerFirstName.dispose();
-    _controllerLastName.dispose();
-    _controllerEmail.dispose();
-    _controllerPassword.dispose();
-    _controllerSpecialist.dispose();
-    _controllerTel.dispose();
-    _controllerSSN.dispose();
-    super.dispose();
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dedebt_application/models/advisorModel.dart';
 import 'package:dedebt_application/models/requestModel.dart';
 import 'package:dedebt_application/repositories/matcherRepository.dart';
 import 'package:dedebt_application/services/matcherService.dart';
@@ -46,6 +47,16 @@ class _RequestMatcherScreenState extends State<RequestMatcherScreen> {
 
   Future<Request?> _getRequestByrequestID(String requestId) async {
     return _matcherService.getRequestByrequestID(requestId);
+  }
+
+  Future<List<Advisors>> _getAllAdvisorsData() async {
+    try {
+      List<Advisors> advisors = await _matcherService.getAllAdvisorsData();
+      return advisors;
+    } catch (e) {
+      print('Error fetching advisors data: $e');
+      return [];
+    }
   }
 
   @override
@@ -408,14 +419,22 @@ class _RequestMatcherScreenState extends State<RequestMatcherScreen> {
                           ),
                           fixedSize: MaterialStateProperty.all(Size(325, 50)),
                         ),
-                        onPressed: () {
-                          showModalBottomSheet(
-                            isScrollControlled: true,
-                            context: context,
-                            builder: (context) {
-                              return AdvisorlistBottomSheet();
-                            },
-                          );
+                        onPressed: () async {
+                          try {
+                            List<Advisors> advisors =
+                                await _getAllAdvisorsData();
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (context) => AdvisorlistBottomSheet(
+                                advisors: advisors,
+                                currentRequest: request,
+                              ),
+                            );
+                          } catch (e) {
+                            print('Error fetching advisors data: $e');
+                            // Handle error gracefully, e.g., show a snackbar or error message
+                          }
                         },
                         child: Text(
                           "จับคู่ที่ปรึกษา",

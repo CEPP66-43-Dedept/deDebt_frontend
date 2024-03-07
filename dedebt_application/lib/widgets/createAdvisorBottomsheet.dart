@@ -28,7 +28,7 @@ class _CreateAdvisorBottomSheetState extends State<CreateAdvisorBottomSheet> {
   Future<void> _createAdvisor() async {
     try {
       final Advisors newAdvisor = Advisors(
-          ssn: int.tryParse(_controllerSSN.text) ?? 0,
+          ssn: _controllerSSN.text,
           firstname: _controllerFirstName.text,
           lastname: _controllerLastName.text,
           email: _controllerEmail.text,
