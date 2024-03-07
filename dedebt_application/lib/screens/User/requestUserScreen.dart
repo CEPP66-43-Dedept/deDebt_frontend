@@ -61,47 +61,41 @@ class _requestUserScreen extends State<requestUserScreen> {
           break;
       }
       returnString =
-          "$returnString${_request.provider[i]}ที่สาขา${_request.branch[i]}สถานะหนี้ ณ ตอนนี้ $debtStatus, ";
+          "$returnString${_request.provider[i]}ที่สาขา${_request.branch[i]}สถานะหนี้ ณ ตอนนี้ $debtStatus,\n";
     }
     returnString += "\n";
     for (int i = 0; i < _request.revenue.length; i++) {
       String revenue = "";
-      if (_request.revenue[i] != 0) {
-        switch (i) {
-          case 0:
-            revenue = "รายได้หลักต่อเดือน";
-            break;
-          case 1:
-            revenue = "รายได้เสริม";
-            break;
-          case 2:
-            revenue = "ผลตอบแทนการลงทุน";
-            break;
-          case 3:
-            revenue = "รายได้จากธุรกิจส่วนตัว";
-            break;
-        }
-        returnString = "$returnString $revenue ${_request.revenue[i]} บาท, ";
-      } else {
-        continue;
+
+      switch (i) {
+        case 0:
+          revenue = "รายได้หลักต่อเดือน";
+          break;
+        case 1:
+          revenue = "รายได้เสริม";
+          break;
+        case 2:
+          revenue = "ผลตอบแทนการลงทุน";
+          break;
+        case 3:
+          revenue = "รายได้จากธุรกิจส่วนตัว";
+          break;
       }
+      returnString = "$returnString $revenue ${_request.revenue[i]} บาท,\n";
     }
     returnString += "\n";
     for (int i = 0; i < _request.expense.length; i++) {
       String expense = "";
-      if (_request.revenue[i] != 0) {
-        switch (i) {
-          case 0:
-            expense = "ค่าใช้จ่ายในชีวิตประจำวันต่อเดือน";
-            break;
-          case 1:
-            expense = "ภาระหนี้";
-            break;
-        }
-        returnString = "$returnString $expense ${_request.expense[i]} บาท, ";
-      } else {
-        continue;
+
+      switch (i) {
+        case 0:
+          expense = "ค่าใช้จ่ายในชีวิตประจำวันต่อเดือน";
+          break;
+        case 1:
+          expense = "ภาระหนี้";
+          break;
       }
+      returnString = "$returnString $expense ${_request.expense[i]} บาท,\n";
     }
     returnString += "\nสัดส่วนการผ่อนหนี้ต่อรายได้";
     switch (_request.burden) {
