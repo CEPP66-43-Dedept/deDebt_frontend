@@ -259,7 +259,7 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
   List<String> getTypeList() {
     List<String> tempList = [];
     for (var i = 0; i < TypeControllerList.length; i++) {
-      tempList.add(ProviderControllerList[i].dropDownValue.toString());
+      tempList.add(TypeControllerList[i].dropDownValue.toString());
     }
     return tempList;
   }
@@ -267,7 +267,7 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
   List<String> getDebtStatusList() {
     List<String> tempList = [];
     for (var i = 0; i < debtStatusControllersList.length; i++) {
-      tempList.add(ProviderControllerList[i].dropDownValue.toString());
+      tempList.add(debtStatusControllersList[i].dropDownValue.toString());
     }
     return tempList;
   }
@@ -275,7 +275,7 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
   List<String> getBranchList() {
     List<String> tempList = [];
     for (var i = 0; i < BranchControllersList.length; i++) {
-      tempList.add(ProviderControllerList[i].dropDownValue.toString());
+      tempList.add(BranchControllersList[i].text);
     }
     return tempList;
   }
