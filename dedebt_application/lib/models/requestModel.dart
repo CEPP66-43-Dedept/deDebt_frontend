@@ -8,7 +8,7 @@ class Request {
   final String advisorFullName;
   final int requestStatus;
   final List<String> type;
-  final List<String> debtStatus;
+  final List<int> debtStatus;
   final List<String> provider;
   final List<String> branch;
   final List<int> revenue;
@@ -48,7 +48,7 @@ class Request {
       advisorFullName: map['advisorFullName'] ?? '',
       requestStatus: map['requestStatus'] ?? 0,
       type: List<String>.from(map['type'] ?? []),
-      debtStatus: List<String>.from(map['debtStatus'] ?? []),
+      debtStatus: List<int>.from(map['debtStatus'] ?? []),
       provider: List<String>.from(map['provider'] ?? []),
       branch: List<String>.from(map['branch'] ?? []),
       revenue: List<int>.from(map['revenue'] ?? []),
