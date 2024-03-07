@@ -28,8 +28,6 @@ class _requestUserScreen extends State<requestUserScreen> {
   late User? user = FirebaseAuth.instance.currentUser;
   bool isExpanded = false;
 
-  //Mockup Data
-
   @override
   void initState() {
     super.initState();
@@ -74,9 +72,12 @@ class _requestUserScreen extends State<requestUserScreen> {
             revenue = "รายได้หลักต่อเดือน";
             break;
           case 1:
-            revenue = "ผลตอบแทนการลงทุน";
+            revenue = "รายได้เสริม";
             break;
           case 2:
+            revenue = "ผลตอบแทนการลงทุน";
+            break;
+          case 3:
             revenue = "รายได้จากธุรกิจส่วนตัว";
             break;
         }
@@ -102,8 +103,25 @@ class _requestUserScreen extends State<requestUserScreen> {
         continue;
       }
     }
+    returnString += "\nสัดส่วนการผ่อนหนี้ต่อรายได้";
+    switch (_request.burden) {
+      case 0:
+        returnString += " : ผ่อนหนี้ 1/3 ของรายได้ต่อเดือน";
+        break;
+      case 1:
+        returnString +=
+            " : ผ่อนหนี้มากกว่า 1/3 แต่ยังน้อยกว่า 1/2 ของรายได้ต่อเดือน";
+        break;
+      case 2:
+        returnString +=
+            " : ผ่อนหนี้มากกว่า 1/2 รายได้ต่อเดือนแต่น้อยกว่า 2/3 ต่อเดือน";
+        break;
+      case 3:
+        returnString += " : ผ่อนหนี้ 2/3 ของรายได้ต่อเดือน";
+        break;
+    }
     returnString +=
-        "\nทรัพย์สินส่วนตัว ${_request.propoty} บาท\nรายละเอียดเพิ่มเติม : ${_request.detail}";
+        "\nทรัพย์สินส่วนตัว ${_request.property} บาท\nรายละเอียดเพิ่มเติม : ${_request.detail}";
     return returnString;
   }
 
