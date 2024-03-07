@@ -14,7 +14,7 @@ class Request {
   final List<int> revenue;
   final List<int> expense;
   final int burden;
-  final int propoty;
+  final int property;
   final List<int> appointmentDate;
 
   Request({
@@ -33,7 +33,7 @@ class Request {
     required this.revenue,
     required this.expense,
     required this.burden,
-    required this.propoty,
+    required this.property,
     required this.appointmentDate,
   });
 
@@ -54,7 +54,7 @@ class Request {
       revenue: List<int>.from(map['revenue'] ?? []),
       expense: List<int>.from(map['expense'] ?? []),
       burden: map['burden'] ?? '',
-      propoty: map['propoty'] ?? 0,
+      property: map['property'] ?? 0,
       appointmentDate: List<int>.from(map['appointmentDate'] ?? []),
     );
   }
@@ -74,7 +74,7 @@ class Request {
       'revenue': revenue,
       'expense': expense,
       'burden': burden,
-      'propoty': propoty,
+      'property': property,
       'appointmentDate': appointmentDate,
     };
   }
