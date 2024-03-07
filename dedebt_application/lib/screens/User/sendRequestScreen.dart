@@ -94,6 +94,7 @@ class _sendRequestScreen extends State<sendRequestScreen> {
       ),
     );
   }
+
 //function เก็บตัวแปรต่างๆ
   List<int> getRevenuefromUser() {
     List<int> returnlist = [];
@@ -136,12 +137,19 @@ class _sendRequestScreen extends State<sendRequestScreen> {
   }
 
   int getBurdenfromUser() {
-    //อาจจะมี error ได้ถ้าหาอ user ไม่ได้เลือกจาก dropdown list
-    return BurdenController.dropDownValue!.value;
+    try {
+      return BurdenController.dropDownValue!.value;
+    } catch (e) {
+      return 0;
+    }
   }
 
   int getPropertylistfromUser() {
-    return int.parse(PropertyController.text);
+    try {
+      return int.parse(PropertyController.text);
+    } catch (e) {
+      return 0;
+    }
   }
 
   //function ดึงช้อมูลขาก appointmenDate
@@ -302,7 +310,7 @@ class _sendRequestScreen extends State<sendRequestScreen> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    print(getPropertylistfromUser());
+                    print(getRevenuefromUser());
                     context.go(AppRoutes.SEND_REQUEST_PAGE2_USER);
                   },
                   style: ElevatedButton.styleFrom(
