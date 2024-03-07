@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dedebt_application/models/requestModel.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dedebt_application/routes/route.dart';
@@ -11,14 +12,20 @@ class sendRequestScreen extends StatefulWidget {
 }
 
 class _sendRequestScreen extends State<sendRequestScreen> {
+  late Request newUserRequest;
   static Color appBarColor = const Color(0xFF444371);
   static Color navBarColor = const Color(0xFF2DC09C);
-  static List<DropDownValueModel> burdenTypeList = [
-    "ผ่อนหนี้ 1/3 ของรายได้ต่อเดือน",
-    "ผ่อนหนี้มากกว่า 1/3 แต่ยังน้อยกว่า 1/2 ของรายได้ต่อเดือน",
-    "ผ่อนหนี้มากกว่า 1/2 รายได้ต่อเดือนแต่น้อยกว่า 2/3 ต่อเดือน",
-    "ผ่อนหนี้ 2/3 ของรายได้ต่อเดือน"
-  ].map((value) => DropDownValueModel(name: value, value: value)).toList();
+  static const List<DropDownValueModel> burdenTypeList = [
+    DropDownValueModel(name: "ผ่อนหนี้ 1/3 ของรายได้ต่อเดือน", value: 0),
+    DropDownValueModel(
+        name: "ผ่อนหนี้มากกว่า 1/3 แต่ยังน้อยกว่า 1/2 ของรายได้ต่อเดือน",
+        value: 1),
+    DropDownValueModel(
+        name: "ผ่อนหนี้มากกว่า 1/2 รายได้ต่อเดือนแต่น้อยกว่า 2/3 ต่อเดือน",
+        value: 2),
+    DropDownValueModel(name: "ผ่อนหนี้ 2/3 ของรายได้ต่อเดือน", value: 3),
+  ];
+
   static const List<DropDownValueModel> appointmentDateList = [
     DropDownValueModel(name: "วันจันทร์", value: 0),
     DropDownValueModel(name: "วันอังคาร", value: 1),
@@ -41,8 +48,8 @@ class _sendRequestScreen extends State<sendRequestScreen> {
   final MonthlyExpenseController = TextEditingController();
   final DebtExpenseController = TextEditingController();
 
-//เก็บในตัวแปร propoty
-  final PropotyContoller = TextEditingController();
+//เก็บในตัวแปร property
+  final PropertyController = TextEditingController();
 
 //เก็บในตัวแปร detail
   final DetailController = TextEditingController();
@@ -86,6 +93,55 @@ class _sendRequestScreen extends State<sendRequestScreen> {
         ],
       ),
     );
+  }
+//function เก็บตัวแปรต่างๆ
+  List<int> getRevenuefromUser() {
+    List<int> returnlist = [];
+    try {
+      returnlist.add(int.parse(MonthlyIncomeController.text));
+    } catch (e) {
+      returnlist.add(0);
+    }
+    try {
+      returnlist.add(int.parse(ExtraworkIncomeController.text));
+    } catch (e) {
+      returnlist.add(0);
+    }
+    try {
+      returnlist.add(int.parse(InvesmentIncomeComtroller.text));
+    } catch (e) {
+      returnlist.add(0);
+    }
+    try {
+      returnlist.add(int.parse(PrivateBussnessIncomeController.text));
+    } catch (e) {
+      returnlist.add(0);
+    }
+    return returnlist;
+  }
+
+  List<int> getExpensefromUser() {
+    List<int> returnlist = [];
+    try {
+      returnlist.add(int.parse(MonthlyExpenseController.text));
+    } catch (e) {
+      returnlist.add(0);
+    }
+    try {
+      returnlist.add(int.parse(DebtExpenseController.text));
+    } catch (e) {
+      returnlist.add(0);
+    }
+    return returnlist;
+  }
+
+  int getBurdenfromUser() {
+    //อาจจะมี error ได้ถ้าหาอ user ไม่ได้เลือกจาก dropdown list
+    return BurdenController.dropDownValue!.value;
+  }
+
+  int getPropertylistfromUser() {
+    return int.parse(PropertyController.text);
   }
 
   //function ดึงช้อมูลขาก appointmenDate
@@ -164,11 +220,9 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                         MonthlyExpenseController),
                     createTextField(
                         "ภาระหนี้ต่อเดือน", true, DebtExpenseController),
-                    createTextField("เงินออมหรือทรัพย์สินส่วนตัวรวม", true,
-                        PropotyContoller),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text("ภาระหนี้"),
+                      child: Text("สัดส่วนการผ่อนหนี้ต่อรายได้"),
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -185,6 +239,8 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                         dropDownList: burdenTypeList,
                       ),
                     ),
+                    createTextField("เงินออมหรือทรัพย์สินส่วนตัวรวม", true,
+                        PropertyController),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Text("วันที่ผู้ใช้สะดวก"),
@@ -246,6 +302,7 @@ class _sendRequestScreen extends State<sendRequestScreen> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
+                    print(getPropertylistfromUser());
                     context.go(AppRoutes.SEND_REQUEST_PAGE2_USER);
                   },
                   style: ElevatedButton.styleFrom(
