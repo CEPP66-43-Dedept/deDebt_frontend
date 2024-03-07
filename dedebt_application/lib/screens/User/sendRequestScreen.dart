@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dedebt_application/models/requestModel.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dedebt_application/routes/route.dart';
@@ -10,61 +11,159 @@ class sendRequestScreen extends StatefulWidget {
   State<sendRequestScreen> createState() => _sendRequestScreen();
 }
 
-//Controller ในการเข้าถึงข้อมูล
-final MonthlyIncomeController = TextEditingController();
-final ExtraworkIncomeController = TextEditingController();
-final InvesmentIncomeComtroller = TextEditingController();
-final PrivateBussnessIncomeController = TextEditingController();
-final MonthlyExpenseController = TextEditingController();
-final DebtExpenseController = TextEditingController();
-final SavingContoller = TextEditingController();
-final DetailController = TextEditingController();
-final BurdenController = SingleValueDropDownController();
-
-Container createTextField(
-    String TextBanner, bool isNumberOnly, TextEditingController controller) {
-  return Container(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Text(TextBanner),
-        ),
-        Container(
-          width: 330,
-          height: 52,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.black,
-              width: 2.0,
-            ),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: TextFormField(
-            controller: controller,
-            keyboardType:
-                isNumberOnly ? TextInputType.number : TextInputType.text,
-            decoration: const InputDecoration(
-              hintText: "Type your info Here",
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
 class _sendRequestScreen extends State<sendRequestScreen> {
+  late Request newUserRequest;
   static Color appBarColor = const Color(0xFF444371);
   static Color navBarColor = const Color(0xFF2DC09C);
-  static List<DropDownValueModel> burdenTypeList = [
-    "ผ่อนหนี้ 1/3 ของรายได้ต่อเดือน",
-    "ผ่อนหนี้มากกว่า 1/3 แต่ยังน้อยกว่า 1/2 ของรายได้ต่อเดือน",
-    "ผ่อนหนี้มากกว่า 1/2 รายได้ต่อเดือนแต่น้อยกว่า 2/3 ต่อเดือน",
-    "	ผ่อนหนี้ 2/3 ของรายได้ต่อเดือน"
-  ].map((value) => DropDownValueModel(name: value, value: value)).toList();
+  static const List<DropDownValueModel> burdenTypeList = [
+    DropDownValueModel(name: "ผ่อนหนี้ 1/3 ของรายได้ต่อเดือน", value: 0),
+    DropDownValueModel(
+        name: "ผ่อนหนี้มากกว่า 1/3 แต่ยังน้อยกว่า 1/2 ของรายได้ต่อเดือน",
+        value: 1),
+    DropDownValueModel(
+        name: "ผ่อนหนี้มากกว่า 1/2 รายได้ต่อเดือนแต่น้อยกว่า 2/3 ต่อเดือน",
+        value: 2),
+    DropDownValueModel(name: "ผ่อนหนี้ 2/3 ของรายได้ต่อเดือน", value: 3),
+  ];
+
+  static const List<DropDownValueModel> appointmentDateList = [
+    DropDownValueModel(name: "วันจันทร์", value: 0),
+    DropDownValueModel(name: "วันอังคาร", value: 1),
+    DropDownValueModel(name: "วันพุธ", value: 2),
+    DropDownValueModel(name: "วันพฤหัสบดี", value: 3),
+    DropDownValueModel(name: "วันศุกร์", value: 4),
+  ];
+
+  //Controller ในการเข้าถึงข้อมูล
+// controll เก็บข้อมูลของรายรับ
+// เก็บข้อมูลในตัวแปร revenue โดยเก็บเป็น list โดยเรียงลำดับดังนี้
+// [MonthlyIncomeController,ExtraworkIncomeController,InvesmentIncomeComtroller,PrivateBussnessIncomeController]
+  final MonthlyIncomeController = TextEditingController();
+  final ExtraworkIncomeController = TextEditingController();
+  final InvesmentIncomeComtroller = TextEditingController();
+  final PrivateBussnessIncomeController = TextEditingController();
+
+//เก็บในตัวแปร expense เป็น list โดยเรียงลำดับดังนี้
+//[MonthlyExpenseController,DebtExpenseController]
+  final MonthlyExpenseController = TextEditingController();
+  final DebtExpenseController = TextEditingController();
+
+//เก็บในตัวแปร property
+  final PropertyController = TextEditingController();
+
+//เก็บในตัวแปร detail
+  final DetailController = TextEditingController();
+
+//เก็บในตัวแปร burden
+  final BurdenController = SingleValueDropDownController();
+
+// เก็บในตัวแปร appointmentDate
+  final appointmentDateController = MultiValueDropDownController();
+
+  Container createTextField(
+      String TextBanner, bool isNumberOnly, TextEditingController controller) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Text(TextBanner),
+          ),
+          Container(
+            width: 330,
+            height: 52,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.black,
+                width: 2.0,
+              ),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: TextFormField(
+              controller: controller,
+              keyboardType:
+                  isNumberOnly ? TextInputType.number : TextInputType.text,
+              decoration: const InputDecoration(
+                hintText: "Type your info Here",
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+//function เก็บตัวแปรต่างๆ
+  List<int> getRevenuefromUser() {
+    List<int> returnlist = [];
+    try {
+      returnlist.add(int.parse(MonthlyIncomeController.text));
+    } catch (e) {
+      returnlist.add(0);
+    }
+    try {
+      returnlist.add(int.parse(ExtraworkIncomeController.text));
+    } catch (e) {
+      returnlist.add(0);
+    }
+    try {
+      returnlist.add(int.parse(InvesmentIncomeComtroller.text));
+    } catch (e) {
+      returnlist.add(0);
+    }
+    try {
+      returnlist.add(int.parse(PrivateBussnessIncomeController.text));
+    } catch (e) {
+      returnlist.add(0);
+    }
+    return returnlist;
+  }
+
+  List<int> getExpensefromUser() {
+    List<int> returnlist = [];
+    try {
+      returnlist.add(int.parse(MonthlyExpenseController.text));
+    } catch (e) {
+      returnlist.add(0);
+    }
+    try {
+      returnlist.add(int.parse(DebtExpenseController.text));
+    } catch (e) {
+      returnlist.add(0);
+    }
+    return returnlist;
+  }
+
+  int getBurdenfromUser() {
+    try {
+      return BurdenController.dropDownValue!.value;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  int getPropertylistfromUser() {
+    try {
+      return int.parse(PropertyController.text);
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  //function ดึงช้อมูลขาก appointmenDate
+  List<int> getAppointmentDatefromUser() {
+    List<int> returnList = [];
+    List<DropDownValueModel>? rawDataList =
+        appointmentDateController.dropDownValueList;
+    if (rawDataList != null) {
+      for (var i = 0; i < rawDataList.length; i++) {
+        returnList.add(rawDataList[i].value);
+      }
+    }
+    return returnList;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,11 +228,9 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                         MonthlyExpenseController),
                     createTextField(
                         "ภาระหนี้ต่อเดือน", true, DebtExpenseController),
-                    createTextField("เงินออมหรือทรัพย์สินส่วนตัวรวม", true,
-                        SavingContoller),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text("ภาระหนี้"),
+                      child: Text("สัดส่วนการผ่อนหนี้ต่อรายได้"),
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -148,6 +245,28 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                         controller: BurdenController,
                         dropDownItemCount: 4,
                         dropDownList: burdenTypeList,
+                      ),
+                    ),
+                    createTextField("เงินออมหรือทรัพย์สินส่วนตัวรวม", true,
+                        PropertyController),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Text("วันที่ผู้ใช้สะดวก"),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: DropDownTextField.multiSelection(
+                        displayCompleteItem: true,
+                        controller: appointmentDateController,
+                        dropDownItemCount: 5,
+                        dropDownList: appointmentDateList,
                       ),
                     ),
                     const Padding(
@@ -191,6 +310,7 @@ class _sendRequestScreen extends State<sendRequestScreen> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
+                    print(getRevenuefromUser());
                     context.go(AppRoutes.SEND_REQUEST_PAGE2_USER);
                   },
                   style: ElevatedButton.styleFrom(

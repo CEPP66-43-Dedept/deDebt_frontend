@@ -28,8 +28,6 @@ class _requestUserScreen extends State<requestUserScreen> {
   late User? user = FirebaseAuth.instance.currentUser;
   bool isExpanded = false;
 
-  //Mockup Data
-
   @override
   void initState() {
     super.initState();
@@ -45,6 +43,80 @@ class _requestUserScreen extends State<requestUserScreen> {
   void dispose() {
     _userRequestController.close();
     super.dispose();
+  }
+
+  String getRequestDetailString(Request _request) {
+    String returnString = "ขณะนี้เป็นหนี้กับผู้ให้บริการ";
+    for (int i = 0; i < _request.provider.length; i++) {
+      String debtStatus = "";
+      switch (_request.debtStatus[i]) {
+        case 0:
+          debtStatus = "ปกติหรือค้างชำระไม่เกิน 90 วัน";
+          break;
+        case 1:
+          debtStatus = "Non-performing Loan(NPL)(ค้างชำระไม่เกิน 90 วัน)";
+          break;
+        case 2:
+          debtStatus = "อยู่ระหว่างกระบวนการกฎหมายหรือศาลพิพากษาแล้ว";
+          break;
+      }
+      returnString =
+          "$returnString${_request.provider[i]}ที่สาขา${_request.branch[i]}สถานะหนี้ ณ ตอนนี้ $debtStatus,\n";
+    }
+    returnString += "\n";
+    for (int i = 0; i < _request.revenue.length; i++) {
+      String revenue = "";
+
+      switch (i) {
+        case 0:
+          revenue = "รายได้หลักต่อเดือน";
+          break;
+        case 1:
+          revenue = "รายได้เสริม";
+          break;
+        case 2:
+          revenue = "ผลตอบแทนการลงทุน";
+          break;
+        case 3:
+          revenue = "รายได้จากธุรกิจส่วนตัว";
+          break;
+      }
+      returnString = "$returnString $revenue ${_request.revenue[i]} บาท,\n";
+    }
+    returnString += "\n";
+    for (int i = 0; i < _request.expense.length; i++) {
+      String expense = "";
+
+      switch (i) {
+        case 0:
+          expense = "ค่าใช้จ่ายในชีวิตประจำวันต่อเดือน";
+          break;
+        case 1:
+          expense = "ภาระหนี้";
+          break;
+      }
+      returnString = "$returnString $expense ${_request.expense[i]} บาท,\n";
+    }
+    returnString += "\nสัดส่วนการผ่อนหนี้ต่อรายได้";
+    switch (_request.burden) {
+      case 0:
+        returnString += " : ผ่อนหนี้ 1/3 ของรายได้ต่อเดือน";
+        break;
+      case 1:
+        returnString +=
+            " : ผ่อนหนี้มากกว่า 1/3 แต่ยังน้อยกว่า 1/2 ของรายได้ต่อเดือน";
+        break;
+      case 2:
+        returnString +=
+            " : ผ่อนหนี้มากกว่า 1/2 รายได้ต่อเดือนแต่น้อยกว่า 2/3 ต่อเดือน";
+        break;
+      case 3:
+        returnString += " : ผ่อนหนี้ 2/3 ของรายได้ต่อเดือน";
+        break;
+    }
+    returnString +=
+        "\nทรัพย์สินส่วนตัว ${_request.property} บาท\nรายละเอียดเพิ่มเติม : ${_request.detail}";
+    return returnString;
   }
 
   Future<Map<String, dynamic>?> _getUserActiveRequest(String userId) async {
@@ -192,10 +264,13 @@ class _requestUserScreen extends State<requestUserScreen> {
                                           const EdgeInsets.only(bottom: 10),
                                       child: SizedBox(
                                         width: 310,
-                                        child: Text(userrequest.title,
-                                            overflow: TextOverflow.ellipsis,
-                                            style:
-                                                const TextStyle(fontSize: 24)),
+                                        child: Text(
+                                          userrequest.title,
+                                          style: const TextStyle(fontSize: 24),
+                                          overflow: isExpanded
+                                              ? TextOverflow.visible
+                                              : TextOverflow.ellipsis,
+                                        ),
                                       ),
                                     ),
                                     Column(
@@ -267,7 +342,8 @@ class _requestUserScreen extends State<requestUserScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    userrequest.detail,
+                                                    getRequestDetailString(
+                                                        userrequest),
                                                     overflow: isExpanded
                                                         ? TextOverflow.visible
                                                         : TextOverflow.ellipsis,
@@ -288,6 +364,8 @@ class _requestUserScreen extends State<requestUserScreen> {
                                             color: Colors.white,
                                           ),
                                           onPressed: () {
+                                            print(getRequestDetailString(
+                                                userrequest));
                                             setState(() {
                                               isExpanded = !isExpanded;
                                             });
