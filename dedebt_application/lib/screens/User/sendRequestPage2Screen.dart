@@ -1,11 +1,13 @@
+import 'package:dedebt_application/models/requestModel.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dedebt_application/routes/route.dart';
 
 class sendRequestPage2Screen extends StatefulWidget {
-  const sendRequestPage2Screen({super.key});
-
+  final Request request;
+  const sendRequestPage2Screen({required this.request, Key? key})
+      : super(key: key);
   @override
   State<sendRequestPage2Screen> createState() => _sendRequestPage2Screen();
 }

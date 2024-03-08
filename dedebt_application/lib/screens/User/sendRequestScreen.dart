@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:dedebt_application/routes/route.dart';
 
 class sendRequestScreen extends StatefulWidget {
-  const sendRequestScreen({super.key});
-
+  final Request request;
+  const sendRequestScreen({required this.request, Key? key}) : super(key: key);
   @override
   State<sendRequestScreen> createState() => _sendRequestScreen();
 }
