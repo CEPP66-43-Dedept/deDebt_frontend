@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dedebt_application/models/advisorModel.dart';
+import 'package:dedebt_application/models/assignmentModel.dart';
 import 'package:dedebt_application/models/requestModel.dart';
 
 class MatcherRepository {
@@ -60,6 +61,30 @@ class MatcherRepository {
     }
   }
 
+  Future<void> createFirstAssignment(Request request) async {
+    try {
+      Assignment assignment = Assignment(
+        // ไม่ต้องกำหนด ID ในนี้
+        type: 0,
+        title: "การนัดหมายครั้งแรก",
+        detail: "การนัดหมายสำหรับพูดคุยครั้งแรก",
+        status: 0,
+        taskId: request.id,
+        startTime: Timestamp.now(),
+        endTime: Timestamp.now(),
+      );
+      CollectionReference assignments =
+          FirebaseFirestore.instance.collection("assignments");
+      DocumentReference docRef = await assignments.add(assignment.toMap());
+
+      String assignmentId = docRef.id;
+
+      print('Assignment created successfully with ID: $assignmentId');
+    } catch (e) {
+      print('Error creating assignment: $e');
+    }
+  }
+
   Future<void> matchRequestWithAdvisor(
       Advisors advisors, Request request) async {
     try {
@@ -71,6 +96,7 @@ class MatcherRepository {
         'advisorFullName': "${advisors.firstname} ${advisors.lastname}",
         'requestStatus': 1
       });
+      await createFirstAssignment(request);
       print('Successfully updated aid in the request document.');
     } catch (e) {
       print('Error updating aid in the request document: $e');
