@@ -74,20 +74,20 @@ class ROUTE {
           ),
         ),
       ),
-      GoRoute(
-        name: '/send-request-page2-users',
-        path: AppRoutes.SEND_REQUEST_PAGE2_USER,
-        builder: (context, state) => TransitionRoutePage(
-          child: sendRequestPage2Screen(),
-        ),
-      ),
-      GoRoute(
-        name: '/send-request-user',
-        path: AppRoutes.SEND_REQUEST_USER,
-        builder: (context, state) => TransitionRoutePage(
-          child: sendRequestScreen(),
-        ),
-      ),
+      // GoRoute(
+      //   name: '/send-request-page2-users',
+      //   path: AppRoutes.SEND_REQUEST_PAGE2_USER,
+      //   builder: (context, state) => TransitionRoutePage(
+      //     child: sendRequestPage2Screen(),
+      //   ),
+      // ),
+      // GoRoute(
+      //   name: '/send-request-user',
+      //   path: AppRoutes.SEND_REQUEST_USER,
+      //   builder: (context, state) => TransitionRoutePage(
+      //     child: sendRequestScreen(),
+      //   ),
+      // ),
       GoRoute(
           name: '/assignment-user',
           path: AppRoutes.ASSIGNMENT_USER,

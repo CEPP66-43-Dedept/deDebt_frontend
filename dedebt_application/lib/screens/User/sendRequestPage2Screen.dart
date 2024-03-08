@@ -15,6 +15,7 @@ class sendRequestPage2Screen extends StatefulWidget {
 class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
   static Color appBarColor = const Color(0xFF444371);
   static Color navBarColor = const Color(0xFF2DC09C);
+  late Request _request;
   final ScrollController _scrollController = ScrollController();
   static List<DropDownValueModel> debtTypeList = [
     "บัตรเครดิต(Credit card)",
@@ -93,6 +94,7 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
   int index = 0;
   @override
   void initState() {
+    _request = widget.request;
     super.initState();
     RowOfFinancial = [];
     TypeControllerList = [];

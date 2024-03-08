@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dedebt_application/repositories/userRepository.dart';
+import 'package:dedebt_application/screens/User/sendRequestScreen.dart';
 import 'package:dedebt_application/services/userService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,6 @@ class _requestUserScreen extends State<requestUserScreen> {
   late StreamController<Map<String, dynamic>?> _userRequestController;
   late User? user = FirebaseAuth.instance.currentUser;
   bool isExpanded = false;
-
   @override
   void initState() {
     super.initState();
@@ -193,7 +193,28 @@ class _requestUserScreen extends State<requestUserScreen> {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(20),
                       onTap: () {
-                        context.go(AppRoutes.SEND_REQUEST_USER);
+                        showModalBottomSheet(
+                            isScrollControlled: true,
+                            context: context,
+                            builder: (context) => sendRequestScreen(
+                                request: Request(
+                                    id: "",
+                                    title: "",
+                                    detail: "",
+                                    userId: "",
+                                    advisorId: "",
+                                    userFullName: "",
+                                    advisorFullName: "",
+                                    requestStatus: 0,
+                                    type: [],
+                                    debtStatus: [],
+                                    provider: [],
+                                    branch: [],
+                                    revenue: [],
+                                    expense: [],
+                                    burden: 0,
+                                    property: 0,
+                                    appointmentDate: [])));
                       },
                       child: const Padding(
                         padding: EdgeInsets.all(16),
