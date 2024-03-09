@@ -116,7 +116,7 @@ class UserRepository {
     try {
       Map<String, dynamic> requestData = userRequest.toMap();
       CollectionReference requests =
-          FirebaseFirestore.instance.collection('Requests');
+          FirebaseFirestore.instance.collection('requests');
       await requests.add(requestData);
       print('Request created successfully.');
     } catch (e) {

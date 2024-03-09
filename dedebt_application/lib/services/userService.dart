@@ -38,6 +38,14 @@ class UserService {
     }
   }
 
+  Future<void> createRequest(Request request) async {
+    try {
+      await _userRepository.createRequest(request);
+    } catch (e) {
+      print('Error create request data: $e');
+    }
+  }
+
   Future<List<Assignment>> getAllAssignments(String taskId) async {
     try {
       return await _userRepository.getAllAssignments(taskId);

@@ -193,28 +193,32 @@ class _requestUserScreen extends State<requestUserScreen> {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(20),
                       onTap: () {
-                        showModalBottomSheet(
-                            isScrollControlled: true,
-                            context: context,
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
                             builder: (context) => sendRequestScreen(
-                                request: Request(
-                                    id: "",
-                                    title: "",
-                                    detail: "",
-                                    userId: "",
-                                    advisorId: "",
-                                    userFullName: "",
-                                    advisorFullName: "",
-                                    requestStatus: 0,
-                                    type: [],
-                                    debtStatus: [],
-                                    provider: [],
-                                    branch: [],
-                                    revenue: [],
-                                    expense: [],
-                                    burden: 0,
-                                    property: 0,
-                                    appointmentDate: [])));
+                              request: Request(
+                                id: "",
+                                title: "",
+                                detail: "",
+                                userId: "",
+                                advisorId: "",
+                                userFullName: "",
+                                advisorFullName: "",
+                                requestStatus: 0,
+                                type: [],
+                                debtStatus: [],
+                                provider: [],
+                                branch: [],
+                                revenue: [],
+                                expense: [],
+                                burden: 0,
+                                property: 0,
+                                appointmentDate: [],
+                              ),
+                            ),
+                          ),
+                        );
                       },
                       child: const Padding(
                         padding: EdgeInsets.all(16),

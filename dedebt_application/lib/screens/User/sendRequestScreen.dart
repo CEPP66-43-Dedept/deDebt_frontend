@@ -318,11 +318,20 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     print(getRevenuefromUser());
-                    showModalBottomSheet(
-                        isScrollControlled: true,
-                        context: context,
+                    _request.burden = getBurdenfromUser();
+                    _request.property = getPropertylistfromUser();
+                    _request.appointmentDate = getAppointmentDatefromUser();
+                    _request.expense = getExpensefromUser();
+                    _request.revenue = getRevenuefromUser();
+                    _request.detail = DetailController.text;
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
                         builder: (context) =>
-                            sendRequestPage2Screen(request: _request));
+                            sendRequestPage2Screen(request: _request),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: navBarColor,

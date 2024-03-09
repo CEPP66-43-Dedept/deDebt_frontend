@@ -1,21 +1,21 @@
 class Request {
-  final String id;
-  final String title;
-  final String detail;
-  final String userId;
-  final String userFullName;
-  final String advisorId;
-  final String advisorFullName;
-  final int requestStatus;
-  final List<String> type;
-  final List<int> debtStatus;
-  final List<String> provider;
-  final List<String> branch;
-  final List<int> revenue;
-  final List<int> expense;
-  final int burden;
-  final int property;
-  final List<int> appointmentDate;
+  String id;
+  String title;
+  String detail;
+  String userId;
+  String userFullName;
+  String advisorId;
+  String advisorFullName;
+  int requestStatus;
+  List<String> type;
+  List<int> debtStatus;
+  List<String> provider;
+  List<String> branch;
+  List<int> revenue;
+  List<int> expense;
+  int burden;
+  int property;
+  List<int> appointmentDate;
 
   Request({
     required this.id,
