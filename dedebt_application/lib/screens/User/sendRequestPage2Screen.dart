@@ -274,7 +274,8 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
   List<String> getProviderList() {
     List<String> tempList = [];
     for (var i = 0; i < ProviderControllerList.length; i++) {
-      tempList.add(ProviderControllerList[i].dropDownValue.toString());
+      tempList.add(ProviderControllerList[i].dropDownValue!.value.toString());
+     
     }
     return tempList;
   }
@@ -282,7 +283,7 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
   List<String> getTypeList() {
     List<String> tempList = [];
     for (var i = 0; i < TypeControllerList.length; i++) {
-      tempList.add(TypeControllerList[i].dropDownValue.toString());
+      tempList.add(ProviderControllerList[i].dropDownValue!.value.toString());
     }
     return tempList;
   }
@@ -316,29 +317,13 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
             backgroundColor: appBarColor,
             surfaceTintColor: Colors.transparent,
             toolbarHeight: 55,
-            title: Row(
+            title: const Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            sendRequestScreen(request: _request),
-                      ),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    size: 35,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(
+                SizedBox(
                   width: 45,
                 ),
-                const Text(
+                Text(
                   "ลงทะเบียนคำร้อง",
                   style: TextStyle(fontSize: 24, color: Colors.white),
                 )
@@ -384,37 +369,44 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
           height: 120,
           child: Column(
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                height: 45,
-                child: ElevatedButton(
-                  onPressed: () {
-                    _scrollController.animateTo(
-                      _scrollController.position.maxScrollExtent,
-                      duration: Duration(milliseconds: 100),
-                      curve: Curves.easeInOut,
-                    );
-                    ProviderControllerList.add(SingleValueDropDownController());
-                    TypeControllerList.add(SingleValueDropDownController());
-                    debtStatusControllersList
-                        .add(SingleValueDropDownController());
-                    BranchControllersList.add(TextEditingController());
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _scrollController.animateTo(
+                            _scrollController.position.maxScrollExtent,
+                            duration: Duration(milliseconds: 100),
+                            curve: Curves.easeInOut,
+                          );
+                          ProviderControllerList.add(
+                              SingleValueDropDownController());
+                          TypeControllerList.add(
+                              SingleValueDropDownController());
+                          debtStatusControllersList
+                              .add(SingleValueDropDownController());
+                          BranchControllersList.add(TextEditingController());
 
-                    RowOfFinancial.add(createProviderContainer(
-                        ProviderControllerList[index],
-                        TypeControllerList[index],
-                        debtStatusControllersList[index],
-                        BranchControllersList[index]));
-                    index += 1;
-                    setState(() {}); // Trigger a rebuild to update the ListView
-                    _scrollController.animateTo(
-                      _scrollController.position.maxScrollExtent,
-                      duration: Duration(milliseconds: 100),
-                      curve: Curves.easeInOut,
-                    );
-                  },
-                  child: const Text('เพิ่มผู้ให้บริการทางการเงิน'),
-                ),
+                          RowOfFinancial.add(createProviderContainer(
+                              ProviderControllerList[index],
+                              TypeControllerList[index],
+                              debtStatusControllersList[index],
+                              BranchControllersList[index]));
+                          index += 1;
+                          setState(
+                              () {}); // Trigger a rebuild to update the ListView
+                          _scrollController.animateTo(
+                            _scrollController.position.maxScrollExtent,
+                            duration: Duration(milliseconds: 100),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        child: const Text('เพิ่มผู้ให้บริการทางการเงิน'),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               Row(
                 children: [
