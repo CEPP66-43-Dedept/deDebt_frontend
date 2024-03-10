@@ -74,6 +74,7 @@ class Request {
       'revenue': revenue,
       'expense': expense,
       'burden': burden,
+      'branch': branch,
       'property': property,
       'appointmentDate': appointmentDate,
     };

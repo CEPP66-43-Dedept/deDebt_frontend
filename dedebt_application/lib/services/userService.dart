@@ -63,4 +63,23 @@ class UserService {
       return [];
     }
   }
+
+  Future<String?> getFullName(String userId) async {
+    try {
+      Map<String, dynamic>? userData =
+          await _userRepository.getUserData(userId);
+      if (userData != null) {
+        String? lastName = userData['lastName'];
+        String? firstName = userData['firstName'];
+        if (lastName != null && firstName != null) {
+          String fullName = '$lastName $firstName';
+          return fullName;
+        }
+      }
+      return null;
+    } catch (e) {
+      print('Error getting user data: $e');
+      return null;
+    }
+  }
 }

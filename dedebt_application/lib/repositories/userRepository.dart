@@ -117,8 +117,12 @@ class UserRepository {
       Map<String, dynamic> requestData = userRequest.toMap();
       CollectionReference requests =
           FirebaseFirestore.instance.collection('requests');
-      await requests.add(requestData);
-      print('Request created successfully.');
+      DocumentReference newRequestRef = await requests.add(requestData);
+      String requestId = newRequestRef.id;
+      await newRequestRef.update({
+        "id": requestId,
+      });
+      print('Request created successfully with ID: $requestId');
     } catch (e) {
       print('Error creating request: $e');
     }

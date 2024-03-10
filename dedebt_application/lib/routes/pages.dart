@@ -191,6 +191,12 @@ class ROUTE {
         ),
       ),
       GoRoute(
+        path: AppRoutes.SEND_REQUESt_SUCCESS_USER,
+        builder: (context, state) {
+          return sendRequestSuccessScreen();
+        },
+      ),
+      GoRoute(
         name: 'request-matcher',
         path: AppRoutes.MATCHER_REQUEST + '/:requestID',
         builder: (context, state) {

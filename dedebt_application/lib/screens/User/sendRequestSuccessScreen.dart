@@ -78,7 +78,7 @@ class _sendRequestSuccessScreen extends State<sendRequestSuccessScreen> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  context.go(AppRoutes.HOME_USER);
+                  Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: navBarColor,

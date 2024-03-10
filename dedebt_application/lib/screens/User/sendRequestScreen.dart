@@ -324,7 +324,7 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                     _request.expense = getExpensefromUser();
                     _request.revenue = getRevenuefromUser();
                     _request.detail = DetailController.text;
-
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
