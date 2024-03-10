@@ -56,7 +56,7 @@ class _appointmentUserScreen extends State<appointmentUserScreen> {
         child: DefaultTextStyle(
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 color: const Color(0xFF000000),
-                fontSize: 20.0,
+                fontSize: 18.0,
               ),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -87,12 +87,21 @@ class _appointmentUserScreen extends State<appointmentUserScreen> {
                   const Text("เวลาที่นัดหมาย"),
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 10),
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 10),
                     width: 304,
                     height: 46,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          offset: Offset(0.0, 4.0),
+                          blurRadius: 4.0,
+                          spreadRadius: 1.0,
+                        ),
+                      ],
                     ),
                     child: Align(
                       alignment: Alignment.centerLeft,
@@ -112,12 +121,21 @@ class _appointmentUserScreen extends State<appointmentUserScreen> {
                   const Text("รายละเอียด"),
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 10),
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 25),
                     width: 304,
-                    height: 180,
-                    decoration: const BoxDecoration(
+                    height: 280,
+                    decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          offset: Offset(0.0, 4.0),
+                          blurRadius: 4.0,
+                          spreadRadius: 1.0,
+                        ),
+                      ],
                     ),
                     child: SingleChildScrollView(
                       child: Text(
