@@ -199,9 +199,9 @@ class UserLayout extends StatefulWidget {
                     _assignment.title,
                     style: TextStyle(fontSize: 20.0),
                   ),
-                  Text(_assignment.type == "การนัดหมาย"
-                      ? "${_assignment.detail} วันที่ ${_assignment.endTime.toDate().day}/${_assignment.endTime.toDate().month}/${_assignment.endTime.toDate().year}"
-                      : _assignment.detail),
+                  Text(_assignment.type == 0
+                      ? "${_assignment.detail} วันที่ ${_assignment.startTime.toDate().day}/${_assignment.startTime.toDate().month}/${_assignment.startTime.toDate().year} เวลา ${_assignment.startTime.toDate().hour}:${_assignment.startTime.toDate().minute}"
+                      : "${_assignment.detail} ภายในวันที่ ${_assignment.startTime.toDate().day}/${_assignment.startTime.toDate().month}/${_assignment.startTime.toDate().year} "),
                   Row(
                     children: [
                       const Text(
@@ -354,7 +354,6 @@ class _UserLayoutState extends State<UserLayout> {
                       icon: Icon(Icons.exit_to_app),
                       onPressed: () {
                         signOut();
-                        context.go(AppRoutes.INITIAL);
                       },
                     )
                   ],

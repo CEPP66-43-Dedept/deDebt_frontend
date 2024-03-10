@@ -23,4 +23,5 @@ class AppRoutes {
   static const SIGN_IN = '/sign_in';
   static const Register = '/register';
   static const Register_Google = '/register-google';
+  static const MATCHER_REQUEST = '/matcher-request';
 }

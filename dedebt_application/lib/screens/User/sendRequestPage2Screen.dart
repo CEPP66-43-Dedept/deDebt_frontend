@@ -1,18 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dedebt_application/models/requestModel.dart';
+import 'package:dedebt_application/repositories/userRepository.dart';
+import 'package:dedebt_application/screens/User/sendRequestScreen.dart';
+import 'package:dedebt_application/screens/User/sendRequestSuccessScreen.dart';
+import 'package:dedebt_application/services/userService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
-import 'package:go_router/go_router.dart';
-import 'package:dedebt_application/routes/route.dart';
 
 class sendRequestPage2Screen extends StatefulWidget {
-  const sendRequestPage2Screen({super.key});
-
+  final Request request;
+  const sendRequestPage2Screen({required this.request, Key? key})
+      : super(key: key);
   @override
   State<sendRequestPage2Screen> createState() => _sendRequestPage2Screen();
 }
 
 class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
   static Color appBarColor = const Color(0xFF444371);
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late final UserRepository userRepository =
+      UserRepository(firestore: firestore);
+  late final UserService userService =
+      UserService(userRepository: userRepository);
   static Color navBarColor = const Color(0xFF2DC09C);
+  late Request _request;
+  User? user = FirebaseAuth.instance.currentUser;
+
   final ScrollController _scrollController = ScrollController();
   static List<DropDownValueModel> debtTypeList = [
     "บัตรเครดิต(Credit card)",
@@ -81,28 +95,29 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
     "ผ่อนหนี้มากกว่า 1/2 รายได้ต่อเดือนแต่น้อยกว่า 2/3 ต่อเดือน",
     "ผ่อนหนี้ 2/3 ของรายได้ต่อเดือน"
   ].map((value) => DropDownValueModel(name: value, value: value)).toList();
-  List<SingleValueDropDownController> financialServiceProviderControllersList =
-      [];
-  List<SingleValueDropDownController> debtTypeControllersList = [];
+  List<SingleValueDropDownController> ProviderControllerList = [];
+  List<SingleValueDropDownController> TypeControllerList = [];
   List<SingleValueDropDownController> debtStatusControllersList = [];
   List<TextEditingController> BranchControllersList = [];
+
+  //ตัวแปรเก็บ container
   List<Container> RowOfFinancial = [];
   int index = 0;
   @override
   void initState() {
+    _request = widget.request;
     super.initState();
     RowOfFinancial = [];
-    debtTypeControllersList = [];
+    TypeControllerList = [];
     RowOfFinancial = [];
-    financialServiceProviderControllersList
-        .add(SingleValueDropDownController());
-    debtTypeControllersList.add(SingleValueDropDownController());
+    ProviderControllerList.add(SingleValueDropDownController());
+    TypeControllerList.add(SingleValueDropDownController());
     debtStatusControllersList.add(SingleValueDropDownController());
     BranchControllersList.add(TextEditingController());
 
     RowOfFinancial.add(createProviderContainer(
-        financialServiceProviderControllersList[0],
-        debtTypeControllersList[0],
+        ProviderControllerList[0],
+        TypeControllerList[0],
         debtStatusControllersList[0],
         BranchControllersList[0]));
     index += 1;
@@ -112,6 +127,14 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
   void dispose() {
     _scrollController.dispose(); // avoid memory leaks
     super.dispose();
+  }
+
+  Future<Map<String, dynamic>?> createRequest(Request request) async {
+    userService.createRequest(request);
+  }
+
+  Future<String?> getUserFullName(String userId) async {
+    return userService.getFullName(userId);
   }
 
   Container createTextField(
@@ -248,8 +271,44 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
     );
   }
 
+  List<String> getProviderList() {
+    List<String> tempList = [];
+    for (var i = 0; i < ProviderControllerList.length; i++) {
+      tempList.add(ProviderControllerList[i].dropDownValue.toString());
+    }
+    return tempList;
+  }
+
+  List<String> getTypeList() {
+    List<String> tempList = [];
+    for (var i = 0; i < TypeControllerList.length; i++) {
+      tempList.add(TypeControllerList[i].dropDownValue.toString());
+    }
+    return tempList;
+  }
+
+  List<int> getDebtStatusList() {
+    List<int> tempList = [];
+    for (var i = 0; i < debtStatusControllersList.length; i++) {
+      int value = int.tryParse(
+              debtStatusControllersList[i].dropDownValue!.toString()) ??
+          0;
+      tempList.add(value);
+    }
+    return tempList;
+  }
+
+  List<String> getBranchList() {
+    List<String> tempList = [];
+    for (var i = 0; i < BranchControllersList.length; i++) {
+      tempList.add(BranchControllersList[i].text);
+    }
+    return tempList;
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(_request);
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -262,7 +321,13 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
               children: [
                 IconButton(
                   onPressed: () {
-                    context.go(AppRoutes.SEND_REQUEST_USER);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            sendRequestScreen(request: _request),
+                      ),
+                    );
                   },
                   icon: const Icon(
                     Icons.arrow_back,
@@ -329,17 +394,15 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
                       duration: Duration(milliseconds: 100),
                       curve: Curves.easeInOut,
                     );
-                    financialServiceProviderControllersList
-                        .add(SingleValueDropDownController());
-                    debtTypeControllersList
-                        .add(SingleValueDropDownController());
+                    ProviderControllerList.add(SingleValueDropDownController());
+                    TypeControllerList.add(SingleValueDropDownController());
                     debtStatusControllersList
                         .add(SingleValueDropDownController());
                     BranchControllersList.add(TextEditingController());
 
                     RowOfFinancial.add(createProviderContainer(
-                        financialServiceProviderControllersList[index],
-                        debtTypeControllersList[index],
+                        ProviderControllerList[index],
+                        TypeControllerList[index],
                         debtStatusControllersList[index],
                         BranchControllersList[index]));
                     index += 1;
@@ -357,8 +420,30 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        context.go(AppRoutes.SEND_REQUESt_SUCCESS_USER);
+                      onPressed: () async {
+                        //function เรียกข้อมูลจาก list
+                        _request.provider = getProviderList();
+                        _request.type = getTypeList();
+                        _request.debtStatus = getDebtStatusList();
+                        _request.userId = user!.uid;
+                        _request.branch.addAll(await getBranchList());
+
+                        String allProvider = "";
+                        for (var i = 0; i < _request.provider.length; i++) {
+                          if (_request.provider[i] != _request.provider.last)
+                            allProvider += _request.provider[i] + ", ";
+                          else
+                            allProvider += _request.provider[i] + " ";
+                        }
+                        _request.title = "แก้หนี้กับธนาคาร " + allProvider;
+                        createRequest(_request);
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => sendRequestSuccessScreen(),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: navBarColor,

@@ -1,21 +1,21 @@
 class Request {
-  final String id;
-  final String title;
-  final String detail;
-  final String userId;
-  final String userFullName;
-  final String advisorId;
-  final String advisorFullName;
-  final int requestStatus;
-  final List<String> type;
-  final List<String> debtStatus;
-  final List<String> provider;
-  final List<int> revenue;
-  final List<int> expense;
-  final int burden;
-  final int propoty;
-  final List<int> appointmentDate;
-  final int appointmentStatus;
+  String id;
+  String title;
+  String detail;
+  String userId;
+  String userFullName;
+  String advisorId;
+  String advisorFullName;
+  int requestStatus;
+  List<String> type;
+  List<int> debtStatus;
+  List<String> provider;
+  List<String> branch;
+  List<int> revenue;
+  List<int> expense;
+  int burden;
+  int property;
+  List<int> appointmentDate;
 
   Request({
     required this.id,
@@ -29,12 +29,12 @@ class Request {
     required this.type,
     required this.debtStatus,
     required this.provider,
+    required this.branch,
     required this.revenue,
     required this.expense,
     required this.burden,
-    required this.propoty,
+    required this.property,
     required this.appointmentDate,
-    required this.appointmentStatus,
   });
 
   factory Request.fromMap(Map<String, dynamic> map) {
@@ -48,14 +48,14 @@ class Request {
       advisorFullName: map['advisorFullName'] ?? '',
       requestStatus: map['requestStatus'] ?? 0,
       type: List<String>.from(map['type'] ?? []),
-      debtStatus: List<String>.from(map['debtStatus'] ?? []),
+      debtStatus: List<int>.from(map['debtStatus'] ?? []),
       provider: List<String>.from(map['provider'] ?? []),
+      branch: List<String>.from(map['branch'] ?? []),
       revenue: List<int>.from(map['revenue'] ?? []),
       expense: List<int>.from(map['expense'] ?? []),
       burden: map['burden'] ?? '',
-      propoty: map['propoty'] ?? 0,
+      property: map['property'] ?? 0,
       appointmentDate: List<int>.from(map['appointmentDate'] ?? []),
-      appointmentStatus: map['appointmentStatus'] ?? 0,
     );
   }
 
@@ -74,9 +74,9 @@ class Request {
       'revenue': revenue,
       'expense': expense,
       'burden': burden,
-      'propoty': propoty,
+      'branch': branch,
+      'property': property,
       'appointmentDate': appointmentDate,
-      'appointmentStatus': appointmentStatus,
     };
   }
 }

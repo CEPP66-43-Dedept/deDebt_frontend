@@ -4,6 +4,7 @@ import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/screens/Admin/adminHomeScreen.dart';
 import 'package:dedebt_application/screens/HomeScreen.dart';
 import 'package:dedebt_application/screens/Matcher/homeMatcher.dart';
+import 'package:dedebt_application/screens/Matcher/requestDetailMatcherScreen.dart';
 import 'package:dedebt_application/screens/User/assignmentUserScreen.dart';
 import 'package:dedebt_application/screens/User/historyUserScreen.dart';
 import 'package:dedebt_application/screens/User/homeUserScreen.dart';
@@ -73,20 +74,20 @@ class ROUTE {
           ),
         ),
       ),
-      GoRoute(
-        name: '/send-request-page2-users',
-        path: AppRoutes.SEND_REQUEST_PAGE2_USER,
-        builder: (context, state) => TransitionRoutePage(
-          child: sendRequestPage2Screen(),
-        ),
-      ),
-      GoRoute(
-        name: '/send-request-user',
-        path: AppRoutes.SEND_REQUEST_USER,
-        builder: (context, state) => TransitionRoutePage(
-          child: sendRequestScreen(),
-        ),
-      ),
+      // GoRoute(
+      //   name: '/send-request-page2-users',
+      //   path: AppRoutes.SEND_REQUEST_PAGE2_USER,
+      //   builder: (context, state) => TransitionRoutePage(
+      //     child: sendRequestPage2Screen(),
+      //   ),
+      // ),
+      // GoRoute(
+      //   name: '/send-request-user',
+      //   path: AppRoutes.SEND_REQUEST_USER,
+      //   builder: (context, state) => TransitionRoutePage(
+      //     child: sendRequestScreen(),
+      //   ),
+      // ),
       GoRoute(
           name: '/assignment-user',
           path: AppRoutes.ASSIGNMENT_USER,
@@ -188,6 +189,23 @@ class ROUTE {
         builder: (context, state) => MatcherLayout(
           Body: HomeMatcher(),
         ),
+      ),
+      GoRoute(
+        path: AppRoutes.SEND_REQUESt_SUCCESS_USER,
+        builder: (context, state) {
+          return sendRequestSuccessScreen();
+        },
+      ),
+      GoRoute(
+        name: 'request-matcher',
+        path: AppRoutes.MATCHER_REQUEST + '/:requestID',
+        builder: (context, state) {
+          final requestID = state.pathParameters['requestID'] as String?;
+          return MatcherLayout(
+              Body: RequestMatcherScreen(
+            requestID: requestID ?? '',
+          ));
+        },
       ),
     ],
   );

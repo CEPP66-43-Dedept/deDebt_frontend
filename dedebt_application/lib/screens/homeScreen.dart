@@ -49,15 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return StreamBuilder<User?>(
       stream: userStateController.stream,
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final User? currentUser = snapshot.data;
-          return _handleUserNavigation(currentUser);
-        } else {
-          //return addAssignmentAdvisorScreen();
-          //return UserLayout(Body: HomeUserScreen(), currentPage: 0);
-          return AdvisorLayout(body: homeAdvisorScreen(),currentPage: 0,);
-          //return const LoginScreen();
-        }
+        final User? currentUser = snapshot.data;
+        return _handleUserNavigation(currentUser);
       },
     );
   }

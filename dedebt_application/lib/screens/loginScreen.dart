@@ -28,13 +28,10 @@ class _LoginScreenState extends State<LoginScreen> {
   String? errorMessage = '';
   Future<void> signInWithEmailAndPassword() async {
     try {
-      Logger('mylog').info('login Now');
-
       await _auth.signInWithEmailAndPassword(
           email: _controllerEmail.text, password: _controllerPassword.text);
     } on FirebaseAuthException catch (e) {
       setState(() {
-        Logger('mylog').warning('failed');
         errorMessage = e.message;
       });
     }

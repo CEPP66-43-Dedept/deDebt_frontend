@@ -1,6 +1,6 @@
 class Advisors {
   String uid;
-  final int ssn;
+  final String ssn;
   final String firstname;
   final String lastname;
   final String email;
@@ -19,6 +19,18 @@ class Advisors {
     required this.specialist,
   });
 
+  factory Advisors.fromMap(Map<String, dynamic> map) {
+    return Advisors(
+      uid: map['uid'] ?? '',
+      ssn: map['ssn'] ?? 0,
+      firstname: map['firstName'] ?? '',
+      lastname: map['lastName'] ?? '',
+      email: map['email'] ?? '',
+      tel: map['tel'] ?? '',
+      password: map['password'] ?? '',
+      specialist: map['specialist'] ?? '',
+    );
+  }
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
