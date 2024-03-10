@@ -73,10 +73,35 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
     switch (_assignment.type) {
       case 0:
         text_btn = "เริ่มทำเอกสาร";
-        break;
+        return ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFBBB9F4),
+          ),
+          onPressed: () {
+            //function ที่เปลี่ยนไปหน้ากรอกเอกสาร
+            //fillDocumentUserScreen.dart
+          },
+          child: Text(
+            text_btn,
+            style: const TextStyle(fontSize: 20, color: Color(0xFF36338C)),
+          ),
+        );
+
       case 1:
         text_btn = "ยืนยันเวลานัดหมาย";
-        break;
+        return ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFBBB9F4),
+          ),
+          onPressed: () {
+            //function ที่เปลี่ยนไปหน้ายืนยันเวลานัดหมาย
+            //appointmentUserScreen.dart
+          },
+          child: Text(
+            text_btn,
+            style: const TextStyle(fontSize: 20, color: Color(0xFF36338C)),
+          ),
+        );
     }
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
