@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dedebt_application/routes/route.dart';
@@ -28,7 +29,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
   //Mockup Data
   Assignment userAppointment = Assignment(
     id: "0",
-    type: 1,
+    type: 0,
     title: "การนัดคุยทางโทรศัพท์",
     detail: "โทรทางมือถือเบอร์ 123-456-7890",
     status: 0,
@@ -86,66 +87,54 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
     }
   }
 
-  Container getAssignmentStatusContainer(String status) {
-    var textColor;
+  Container getAssignmentStatusContainer(Assignment _assignment) {
     var containerColor;
-    switch (status) {
-      case "ดำเนินการ":
-        containerColor = const Color(0xFFE1E4F8);
-        textColor = const Color(0xFF7673D3);
-        break;
-      case "เสร็จสิ้น":
+    var textColor;
+
+    switch (_assignment.status) {
+      case 0:
+        //เสร็จสิ้น
         containerColor = const Color(0xFF2DC09C);
         textColor = const Color(0xFFFAFEFF);
         break;
-      case "ยกเลิก":
+      case 1:
+        //ดำเนินการ
+        containerColor = const Color(0xFFE1E4F8);
+        textColor = const Color(0xFF7673D3);
+        break;
+      case 2:
+        //ยกเลิก
         containerColor = const Color(0xFFF18F80);
         textColor = const Color(0xFFF0E6EC);
         break;
-      default:
-        return Container(
-          child: Text(status),
-        );
     }
     return Container(
-      width: 83,
-      height: 21,
       decoration: BoxDecoration(
-          color: containerColor, borderRadius: BorderRadius.circular(20)),
-      child: Center(
-        child: Text(
-          status,
-          style: TextStyle(color: textColor),
-        ),
+        color: containerColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      child: Text(
+        _assignment.status == 0
+            ? "เสร็จสิ้น"
+            : _assignment.status == 1
+                ? "ดำเนินการ"
+                : _assignment.status == 1
+                    ? "ยกเลิก"
+                    : "",
+        style: TextStyle(color: textColor),
       ),
     );
   }
 
   Container getButton(Assignment assignment) {
-    //แก้ชื่อเงื่อนไขด้วย
-    if (assignment.type == "การนัดหมาย") {
+    if (assignment.type == 0) {
       return Container(
+        width: 392,
         padding: const EdgeInsets.symmetric(vertical: 5),
         child: ElevatedButton(
           onPressed: () {
-            //นัดหมาย function
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFFBBB9F4),
-          ),
-          child: const Text(
-            'เลือกเวลาเพื่อนัดหมาย',
-            style: TextStyle(
-                fontSize: 18.0, color: Colors.white), // Set text color
-          ),
-        ),
-      );
-    } else if (assignment.type == "กรอกเอกสาร") {
-      return Container(
-        padding: const EdgeInsets.symmetric(vertical: 5),
-        child: ElevatedButton(
-          onPressed: () {
-            //redirect ไปหน้าเอกสาร
+            showDocumentDialog();
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFBBB9F4),
@@ -157,9 +146,238 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
           ),
         ),
       );
-      ;
+    } else if (assignment.type == 1) {
+      return Container(
+        width: 392,
+        padding: const EdgeInsets.symmetric(vertical: 5),
+        child: ElevatedButton(
+          onPressed: () {
+            showAppointmentDialog();
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFBBB9F4),
+          ),
+          child: const Text(
+            'รายละเอียดการนัดหมาย',
+            style: TextStyle(
+                fontSize: 18.0, color: Colors.white), // Set text color
+          ),
+        ),
+      );
     }
     return Container();
+  }
+
+  void showAppointmentDialog() {
+    bool isAppointmentconfirmed = true;
+
+    String UsersName = "Areeya Suwannathot";
+    String Action = "";
+    //เป็นการนัดหมาย
+    if (isAppointmentconfirmed) {
+      Action = "ยืนยันการนัดหมาย";
+    } else {
+      Action = "ยังไม่ยืนยันการนัดหมาย";
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DefaultTextStyle(
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: Colors.black,
+                fontSize: 15.0,
+              ),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: 340.0, // Set width
+                    height: 243.0, // Set height
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    child: Stack(
+                      // stack ของ ข้อความและ ปุ่ม"X"
+                      children: [
+                        Positioned(
+                          top: 60,
+                          left: 36,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Text(
+                                  "ผู้ใช้ [\"${UsersName}\"]",
+                                  style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      decorationThickness: 0.0,
+                                      fontSize: 20.0,
+                                      color: Colors.black),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Text(
+                                  //แสดงตัวแปร Action
+                                  Action,
+                                  style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      decorationThickness: 0.0,
+                                      fontSize: 20.0,
+                                      color: Colors.black),
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.access_time,
+                                    size: 55,
+                                    color: Colors.black,
+                                  ),
+                                  Text(
+                                      "วันที่ ${userAppointment.startTime.toDate().day}/${userAppointment.startTime.toDate().month}/${userAppointment.startTime.toDate().year}\nเวลา ${DateFormat("HH:mm").format(userAppointment.startTime.toDate())} : ${DateFormat("HH:mm").format(userAppointment.endTime.toDate())}")
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          top: 5.0,
+                          right: 15.0,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.grey,
+                              size: 40,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void showDocumentDialog() {
+    bool isFillDoc = false;
+
+    String UsersName = "Areeya Suwannathot";
+    String Action = "";
+    var Content;
+    //เป็นการนัดหมาย
+    if (isFillDoc) {
+      Action = "กรอกเอกสารแล้ว";
+    } else {
+      Action = "ยังไม่ได้กรอกเอกสาร";
+      Content = Row(
+        children: [
+          Icon(
+            Icons.account_balance,
+            size: 55,
+            color: Colors.black,
+          ),
+          Text("${userAssignment.title}")
+        ],
+      );
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DefaultTextStyle(
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: Colors.black,
+                fontSize: 15.0,
+              ),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: 340.0, // Set width
+                    height: 243.0, // Set height
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    child: Stack(
+                      // stack ของ ข้อความและ ปุ่ม"X"
+                      children: [
+                        Positioned(
+                          top: 60,
+                          left: 36,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Text(
+                                  "ผู้ใช้ [\"${UsersName}\"]",
+                                  style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      decorationThickness: 0.0,
+                                      fontSize: 20.0,
+                                      color: Colors.black),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Text(
+                                  //แสดงตัวแปร Action
+                                  Action,
+                                  style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      decorationThickness: 0.0,
+                                      fontSize: 20.0,
+                                      color: Colors.black),
+                                ),
+                              ),
+                              //เพิ่มให้สแดงเอกสารรตรงนี้
+                              Content,
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          top: 5.0,
+                          right: 15.0,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.grey,
+                              size: 40,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Widget build(BuildContext context) {
@@ -250,9 +468,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
                                           ),
                                           // create status container
                                           getAssignmentStatusContainer(
-                                              //แก้
-                                              userAppointment.status
-                                                  .toString()),
+                                              userAppointment),
                                         ],
                                       ),
                                       Row(
