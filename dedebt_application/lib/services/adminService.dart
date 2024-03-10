@@ -34,9 +34,13 @@ class AdminService {
     }
   }
 
-  Future<void> createAdvisor({required Advisors advisor}) async {
+  Future<void> createAdvisor(int type, Advisors advisor) async {
     try {
-      await adminRepository.createAdvisor(advisor: advisor);
+      if (type == 1) {
+        await adminRepository.createAdvisor(advisor: advisor);
+      } else {
+        await adminRepository.createMatcher(advisor: advisor);
+      }
     } catch (e) {
       print("fail create");
     }
