@@ -148,7 +148,7 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
                             const SizedBox(height: 5),
                             Row(
                               children: [
-                                const Text("ผู้รับผิดชอบ : "),
+                                const Text("เจ้าของคำร้อง : "),
                                 Flexible(
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -158,7 +158,7 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10.0),
                                     child: Text(
-                                      userrequest.advisorFullName,
+                                      userrequest.userFullName,
                                       style: const TextStyle(
                                           color: Color(0xFF2DC09C)),
                                       softWrap: true,
