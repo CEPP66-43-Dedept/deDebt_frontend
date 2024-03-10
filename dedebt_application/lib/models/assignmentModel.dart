@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Assignment {
-  final String id;
+  String? id;
   final int type;
   final String title;
   final String detail;
@@ -11,7 +11,7 @@ class Assignment {
   final Timestamp endTime;
 
   Assignment(
-      {required this.id,
+      {this.id,
       required this.type,
       required this.title,
       required this.detail,

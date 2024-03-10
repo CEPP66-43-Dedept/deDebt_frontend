@@ -38,6 +38,14 @@ class UserService {
     }
   }
 
+  Future<void> createRequest(Request request) async {
+    try {
+      await _userRepository.createRequest(request);
+    } catch (e) {
+      print('Error create request data: $e');
+    }
+  }
+
   Future<List<Assignment>> getAllAssignments(String taskId) async {
     try {
       return await _userRepository.getAllAssignments(taskId);
@@ -51,8 +59,27 @@ class UserService {
     try {
       return await _userRepository.getUserAllRequests(userId);
     } catch (e) {
-      print('Error getting user active request: $e');
+      print('Error getting user all request: $e');
       return [];
+    }
+  }
+
+  Future<String?> getFullName(String userId) async {
+    try {
+      Map<String, dynamic>? userData =
+          await _userRepository.getUserData(userId);
+      if (userData != null) {
+        String? lastName = userData['lastName'];
+        String? firstName = userData['firstName'];
+        if (lastName != null && firstName != null) {
+          String fullName = '$lastName $firstName';
+          return fullName;
+        }
+      }
+      return null;
+    } catch (e) {
+      print('Error getting user data: $e');
+      return null;
     }
   }
 }

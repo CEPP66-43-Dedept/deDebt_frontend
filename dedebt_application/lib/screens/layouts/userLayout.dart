@@ -354,7 +354,6 @@ class _UserLayoutState extends State<UserLayout> {
                       icon: Icon(Icons.exit_to_app),
                       onPressed: () {
                         signOut();
-                        context.go(AppRoutes.INITIAL);
                       },
                     )
                   ],

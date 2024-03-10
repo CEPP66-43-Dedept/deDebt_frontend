@@ -1,3 +1,4 @@
+import 'package:dedebt_application/screens/User/sendRequestPage2Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/models/requestModel.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
@@ -5,14 +6,15 @@ import 'package:go_router/go_router.dart';
 import 'package:dedebt_application/routes/route.dart';
 
 class sendRequestScreen extends StatefulWidget {
-  const sendRequestScreen({super.key});
-
+  final Request request;
+  const sendRequestScreen({required this.request, Key? key}) : super(key: key);
   @override
   State<sendRequestScreen> createState() => _sendRequestScreen();
 }
 
 class _sendRequestScreen extends State<sendRequestScreen> {
-  late Request newUserRequest;
+  late Request _request;
+
   static Color appBarColor = const Color(0xFF444371);
   static Color navBarColor = const Color(0xFF2DC09C);
   static const List<DropDownValueModel> burdenTypeList = [
@@ -33,6 +35,11 @@ class _sendRequestScreen extends State<sendRequestScreen> {
     DropDownValueModel(name: "วันพฤหัสบดี", value: 3),
     DropDownValueModel(name: "วันศุกร์", value: 4),
   ];
+
+  void initState() {
+    super.initState();
+    _request = widget.request;
+  }
 
   //Controller ในการเข้าถึงข้อมูล
 // controll เก็บข้อมูลของรายรับ
@@ -311,7 +318,20 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     print(getRevenuefromUser());
-                    context.go(AppRoutes.SEND_REQUEST_PAGE2_USER);
+                    _request.burden = getBurdenfromUser();
+                    _request.property = getPropertylistfromUser();
+                    _request.appointmentDate = getAppointmentDatefromUser();
+                    _request.expense = getExpensefromUser();
+                    _request.revenue = getRevenuefromUser();
+                    _request.detail = DetailController.text;
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            sendRequestPage2Screen(request: _request),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: navBarColor,
