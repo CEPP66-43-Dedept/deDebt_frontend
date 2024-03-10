@@ -16,16 +16,13 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
   //mockup data
   final _assignment = Assignment(
     id: "abc123",
-    type:
-        1, // Replace with the actual assignment type (e.g., 1 for homework, 2 for project)
-    title: "Complete Chapter 5 Reading",
-    detail: "Read and summarize the main points of Chapter 5 in your textbook.",
-    status:
-        0, // Replace with the actual assignment status (e.g., 0 for pending, 1 for completed)
-    taskId: "def456", // Replace with the actual task ID (optional)
-    startTime: Timestamp.now(), // Current timestamp
-    endTime: Timestamp.fromDate(
-        DateTime.now().add(Duration(days: 3))), // Due date 3 days from now
+    type: 1,
+    title: "ทำเอกสารหักเงิยของธนาคารกรุงเทพ",
+    detail: "โปรดตรวขสอบข้อมูลก่อนที่จะส่งเอกสาร",
+    status: 1,
+    taskId: "def456",
+    startTime: Timestamp.now(),
+    endTime: Timestamp.fromDate(DateTime.now().add(Duration(days: 3))),
   );
   static Color navbarColor = const Color(0xFF444371);
   int currentPage = 0;
@@ -71,25 +68,51 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
     }
   }
 
-  Container getAssignmentStatusContainer(String status) {
+  Widget getAssignmentButton(Assignment _assignment) {
+    String text_btn = "";
+    switch (_assignment.type) {
+      case 0:
+        text_btn = "เริ่มทำเอกสาร";
+        break;
+      case 1:
+        text_btn = "ยืนยันเวลานัดหมาย";
+        break;
+    }
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFFBBB9F4),
+      ),
+      onPressed: () {},
+      child: Text(
+        text_btn,
+        style: const TextStyle(fontSize: 20, color: Color(0xFF36338C)),
+      ),
+    );
+  }
+
+  Container getAssignmentStatusContainer(Assignment _assignment) {
     var textColor;
     var containerColor;
-    switch (status) {
-      case "ดำเนินการ":
+    String text_status = "";
+    switch (_assignment.status) {
+      case 1:
         containerColor = const Color(0xFFE1E4F8);
         textColor = const Color(0xFF7673D3);
+        text_status = "ดำเนินการ";
         break;
-      case "เสร็จสิ้น":
+      case 0:
         containerColor = const Color(0xFF2DC09C);
         textColor = const Color(0xFFFAFEFF);
+        text_status = "เสร็จสิ้น";
         break;
-      case "ยกเลิก":
+      case 2:
         containerColor = const Color(0xFFF18F80);
         textColor = const Color(0xFFF0E6EC);
+        text_status = "ยกเลิก";
         break;
       default:
         return Container(
-          child: Text(status),
+          child: Text(text_status),
         );
     }
     return Container(
@@ -99,7 +122,7 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
           color: containerColor, borderRadius: BorderRadius.circular(20)),
       child: Center(
         child: Text(
-          status,
+          text_status,
           style: TextStyle(color: textColor),
         ),
       ),
@@ -194,7 +217,7 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
                                           ),
                                           // create status container
                                           getAssignmentStatusContainer(
-                                              "ดำเนินการ"),
+                                              _assignment),
                                         ],
                                       ),
                                       Row(
@@ -229,7 +252,14 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
                                           Text(
                                               "${_assignment.startTime.toDate().day}/${_assignment.startTime.toDate().month}/${_assignment.startTime.toDate().year}")
                                         ],
-                                      )
+                                      ),
+                                      Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 10),
+                                          height: 55,
+                                          width: 258,
+                                          child:
+                                              getAssignmentButton(_assignment)),
                                     ],
                                   ),
                                 )
@@ -242,6 +272,8 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
                 Container(
                   width: 390,
                   height: 165,
+                  color: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
