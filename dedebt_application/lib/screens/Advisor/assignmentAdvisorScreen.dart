@@ -27,7 +27,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
     Icons.person_outline
   ];
   //Mockup Data
-  Assignment userAppointment = Assignment(
+  Assignment _assignment = Assignment(
     id: "0",
     type: 0,
     title: "การนัดคุยทางโทรศัพท์",
@@ -241,7 +241,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
                                     color: Colors.black,
                                   ),
                                   Text(
-                                      "วันที่ ${userAppointment.startTime.toDate().day}/${userAppointment.startTime.toDate().month}/${userAppointment.startTime.toDate().year}\nเวลา ${DateFormat("HH:mm").format(userAppointment.startTime.toDate())} : ${DateFormat("HH:mm").format(userAppointment.endTime.toDate())}")
+                                      "วันที่ ${_assignment.startTime.toDate().day}/${_assignment.startTime.toDate().month}/${_assignment.startTime.toDate().year}\nเวลา ${DateFormat("HH:mm").format(_assignment.startTime.toDate())} : ${DateFormat("HH:mm").format(_assignment.endTime.toDate())}")
                                 ],
                               )
                             ],
@@ -453,7 +453,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        userAppointment.title,
+                                        _assignment.title,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                             fontSize: 20,
@@ -468,7 +468,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
                                           ),
                                           // create status container
                                           getAssignmentStatusContainer(
-                                              userAppointment),
+                                              _assignment),
                                         ],
                                       ),
                                       Row(
@@ -487,7 +487,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
                                                 children: [
                                                   Text(
                                                     //Add Detail
-                                                    userAppointment.detail,
+                                                    _assignment.detail,
                                                     overflow:
                                                         TextOverflow.visible,
                                                   )
@@ -501,14 +501,13 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
                                               "วันสิ้นสุดการดำเนินการ: "),
                                           //วันดำเนินการ
                                           Text(
-                                              //แก้
-                                              "แก้")
+                                              "${_assignment.startTime.toDate().day}/${_assignment.startTime.toDate().month}/${_assignment.startTime.toDate().year}")
                                         ],
                                       )
                                     ],
                                   ),
                                 ),
-                                getButton(userAppointment),
+                                getButton(_assignment),
                               ],
                             ),
                           )
