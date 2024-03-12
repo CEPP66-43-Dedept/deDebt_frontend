@@ -3,14 +3,14 @@ import 'package:dedebt_application/models/assignmentModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
-class fillDocumentUserScreen extends StatefulWidget {
-  const fillDocumentUserScreen({super.key});
+class previewDocumentScreen extends StatefulWidget {
+  const previewDocumentScreen({super.key});
 
   @override
-  State<fillDocumentUserScreen> createState() => _fillDocumentUserScreen();
+  State<previewDocumentScreen> createState() => _previewDocumentScreen();
 }
 
-class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
+class _previewDocumentScreen extends State<previewDocumentScreen> {
   static Color appBarColor = const Color(0xFF444371);
 
   final AccountController = TextEditingController();
@@ -114,30 +114,67 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
               ],
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: RawScrollbar(
-                thumbColor: const Color(0xFFBBB9F4),
-                thumbVisibility: true,
-                radius: const Radius.circular(20),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 6.0, vertical: 10),
-                thickness: 5,
-                child: Container(
-                  width: 360,
-                  height: 490,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, ),
-                  child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 19),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("ตัวอย่างเอกสาร"),
+                  Container(
+                    width: 338,
+                    height: 367,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(28.0)),
+                      color: Color(0xFFDAEAFA),
+                    ),
+                    padding: const EdgeInsets.fromLTRB(19, 11, 18, 35),
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 301,
+                          height: 321,
+                          decoration: const BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                            color: Colors.white,
+                          ),
+                          child: Text("PDF To shown"),
+                        ),
+                        Positioned(
+                          bottom: 1.0,
+                          right: 1.0,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.zoom_out_map,
+                              color: Colors.black,
+                            ),
+                            onPressed: () {
+                              // ปุ่มดู pdf
+                              print('Info button pressed!');
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      createTextField("เลขที่บัญชี", true, AccountController),
-                      createTextField("ประเภทบัญชี", false, AccountTypeContoller),
-                      createTextField("สำนักงาน / สาขา", false, BranchController),
-                      createTextField("ที่อยู่กาาจัดส่ง", false, DeliveryAddressController),
-                      createTextField("รหัสไปรษณีย์", false, PostNoController),
-                      createTextField("โทรศัพท์มือถือ",true, PhoneController),
+                      const Text(
+                        "บันทึก",
+                        style:
+                            TextStyle(color: Color(0xFF36338C), fontSize: 20),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.save_alt,
+                          size: 35,
+                          color: Color(0xFF36338C),
+                        ),
+                      ),
                     ],
                   ),
-                ),
+                ],
               ),
             ),
           ]),
@@ -158,7 +195,7 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        // แจ้งหมายเหตุ function
+                        //ปุ่มยกเลิก
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFF18F80),
@@ -178,13 +215,13 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        // Handle button press
+                        // ปุ่มเสร็จสิ้นงาน
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2DC09C),
                       ),
                       child: const Text(
-                        'สร้างเอกสาร',
+                        'เสร็จสิ้นงานที่ได้รับ',
                         style: TextStyle(
                             fontSize: 18.0,
                             color: Colors.white), // Set text color
