@@ -76,7 +76,7 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                 width: 65,
               ),
               const Text(
-                "นัดหมายเวลา",
+                "กรอกเอกสาร",
                 style: TextStyle(fontSize: 24, color: Colors.white),
               )
             ],
