@@ -140,7 +140,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
             backgroundColor: const Color(0xFFBBB9F4),
           ),
           child: const Text(
-            'เริ่มทำเอกสาร',
+            'รายละเอียดเอกสาร',
             style: TextStyle(
                 fontSize: 18.0, color: Colors.white), // Set text color
           ),
@@ -274,7 +274,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
   }
 
   void showDocumentDialog() {
-    bool isFillDoc = false;
+    bool isFillDoc = true;
 
     String UsersName = "Areeya Suwannathot";
     String Action = "";
@@ -282,6 +282,42 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
     //เป็นการนัดหมาย
     if (isFillDoc) {
       Action = "กรอกเอกสารแล้ว";
+      Content = Container(
+        width: 280,
+        height: 280,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(28.0)),
+          color: Color(0xFFDAEAFA),
+        ),
+        padding: const EdgeInsets.fromLTRB(19, 11, 18, 35),
+        child: Stack(
+          children: [
+            Container(
+              width: 302,
+              height: 328,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                color: Colors.white,
+              ),
+              child: Text("PDF To shown"),
+            ),
+            Positioned(
+              bottom: 1.0,
+              right: 1.0,
+              child: IconButton(
+                icon: Icon(
+                  Icons.zoom_out_map,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  // ปุ่มดู pdf
+                  print('Info button pressed!');
+                },
+              ),
+            ),
+          ],
+        ),
+      );
     } else {
       Action = "ยังไม่ได้กรอกเอกสาร";
       Content = Row(
@@ -311,7 +347,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
                   alignment: Alignment.center,
                   child: Container(
                     width: 340.0, // Set width
-                    height: 243.0, // Set height
+                    height: 443.0, // Set height
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
