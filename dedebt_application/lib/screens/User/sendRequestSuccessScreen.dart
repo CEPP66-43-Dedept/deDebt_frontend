@@ -74,18 +74,18 @@ class _sendRequestSuccessScreen extends State<sendRequestSuccessScreen> {
         color: navBarColor,
         height: 55,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-              child: ElevatedButton(
-                onPressed: () {
+              child: InkWell(
+                onTap: () {
                   Navigator.pop(context);
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: navBarColor,
-                ),
-                child: const Text(
-                  'กลับหน้าหลัก',
-                  style: TextStyle(fontSize: 18.0, color: Colors.white),
+                child: Center(
+                  child: Text(
+                    'กลับหน้าหลัก',
+                    style: const TextStyle(fontSize: 18.0, color: Colors.white),
+                  ),
                 ),
               ),
             ),

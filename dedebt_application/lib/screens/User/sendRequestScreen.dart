@@ -184,16 +184,6 @@ class _sendRequestScreen extends State<sendRequestScreen> {
             title: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                IconButton(
-                  onPressed: () {
-                    context.go(AppRoutes.REQUEST_USER);
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    size: 35,
-                    color: Colors.white,
-                  ),
-                ),
                 const SizedBox(
                   width: 45,
                 ),
@@ -313,10 +303,11 @@ class _sendRequestScreen extends State<sendRequestScreen> {
           color: navBarColor,
           height: 55,
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
+                child: InkWell(
+                  onTap: () {
                     print(getRevenuefromUser());
                     _request.burden = getBurdenfromUser();
                     _request.property = getPropertylistfromUser();
@@ -333,12 +324,11 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                       ),
                     );
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: navBarColor,
-                  ),
-                  child: const Text(
-                    'ถัดไป',
-                    style: TextStyle(fontSize: 18.0, color: Colors.white),
+                  child: const Center(
+                    child: Text(
+                      'ถัดไป',
+                      style: TextStyle(fontSize: 18.0, color: Colors.white),
+                    ),
                   ),
                 ),
               ),

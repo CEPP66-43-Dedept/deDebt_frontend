@@ -28,6 +28,21 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
     "เอกสารหักเงินธนาคารกรุงไทย"
   ].map((value) => DropDownValueModel(name: value, value: value)).toList();
 
+  void _showBottomSheet() {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 200, // Adjust height as needed
+          color: Colors.white,
+          child: Center(
+            child: Text('This is the bottom sheet content'),
+          ),
+        );
+      },
+    );
+  }
+
   Container createTextField(
       String TextBanner, bool isNumberOnly, TextEditingController controller) {
     return Container(
@@ -180,24 +195,30 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
             ),
           ),
         ),
-        bottomNavigationBar: BottomAppBar(
-          color: navBarColor,
-          height: 104,
-          child: Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: navBarColor,
-                  ),
-                  child: const Text(
-                    'เพิ่มสิ้งที่ต้องทำ',
-                    style: TextStyle(fontSize: 18.0, color: Colors.white),
+        bottomNavigationBar: InkWell(
+          onTap: () {
+            _showBottomSheet();
+          },
+          child: BottomAppBar(
+            color: navBarColor,
+            height: 104,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () {
+                    _showBottomSheet();
+                  },
+                  child: Center(
+                    child: Text(
+                      'เพิ่มสิ่งที่ต้องทำ',
+                      style:
+                          const TextStyle(fontSize: 18.0, color: Colors.white),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
