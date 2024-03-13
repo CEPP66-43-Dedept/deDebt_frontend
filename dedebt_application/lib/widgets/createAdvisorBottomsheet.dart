@@ -18,6 +18,7 @@ class CreateAdvisorBottomSheet extends StatefulWidget {
 }
 
 class _CreateAdvisorBottomSheetState extends State<CreateAdvisorBottomSheet> {
+  final List<String> listDropdown = <String>['ที่ปรึกษา', 'ผู้จับคู่'];
   final TextEditingController _controllerFirstName = TextEditingController();
   final TextEditingController _controllerLastName = TextEditingController();
   final TextEditingController _controllerEmail = TextEditingController();
@@ -36,11 +37,24 @@ class _CreateAdvisorBottomSheetState extends State<CreateAdvisorBottomSheet> {
           password: _controllerPassword.text,
           specialist: _controllerSpecialist.text,
           uid: "");
-      await widget.adminService.createAdvisor(advisor: newAdvisor);
+      int type = 1;
+      if (dropdownValue == "ที่ปรึกษา") {
+        type = 1;
+      } else {
+        type = 2;
+      }
+      await widget.adminService.createAdvisor(type, newAdvisor);
       Navigator.of(context).pop();
     } catch (e) {
       print('Error creating advisor: $e');
     }
+  }
+
+  String dropdownValue = "ที่ปรึกษา";
+  @override
+  void initState() {
+    String dropdownValue = listDropdown.first;
+    super.initState();
   }
 
   @override
@@ -77,6 +91,32 @@ class _CreateAdvisorBottomSheetState extends State<CreateAdvisorBottomSheet> {
                   child: Text(
                     "เพิ่มที่ปรึกษา",
                     style: TextStyle(fontSize: 24),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Center(
+                  child: Row(
+                    children: [
+                      Text("ประเภท"),
+                      DropdownButton(
+                          value: dropdownValue,
+                          items: listDropdown
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (String? value) {
+                            print(dropdownValue);
+                            setState(() {
+                              dropdownValue = value!;
+                            });
+                          }),
+                    ],
                   ),
                 ),
               ],

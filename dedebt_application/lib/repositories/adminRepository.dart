@@ -113,39 +113,19 @@ class AdminRepository {
     } on FirebaseAuthException {}
   }
 
-  Future<void> createAdvisor({required Advisors advisor}) async {
-    String? token = '';
+  Future<void> createMatcher({required Advisors advisor}) async {
     try {
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        token = await user.getIdToken();
-        print("nowToken$token");
-      } else {
-        print('No user is currently signed in.');
-      }
+      CollectionReference advisors = firestore.collection('matcher');
+      DocumentReference docRef = await advisors.add(advisor.toMap());
     } catch (e) {
-      print('Error getting Firebase auth token: $e');
+      print('Error creating advisor or user: $e');
     }
+  }
 
+  Future<void> createAdvisor({required Advisors advisor}) async {
     try {
       CollectionReference advisors = firestore.collection('advisors');
       DocumentReference docRef = await advisors.add(advisor.toMap());
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        UserCredential userCredential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: advisor.email,
-          password: advisor.password,
-        );
-        String advisorUid = userCredential.user?.uid ?? '';
-        FirebaseAuth.instance.signOut();
-        FirebaseAuth.instance.signInWithCustomToken(token!);
-
-        advisor.uid = await advisorUid;
-        await docRef.update({'uid': advisorUid});
-      } else {
-        print('User is not signed in.');
-      }
     } catch (e) {
       print('Error creating advisor or user: $e');
     }
