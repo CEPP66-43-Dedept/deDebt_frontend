@@ -181,23 +181,13 @@ class _sendRequestScreen extends State<sendRequestScreen> {
             backgroundColor: appBarColor,
             surfaceTintColor: Colors.transparent,
             toolbarHeight: 55,
-            title: Row(
+            title: const Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                IconButton(
-                  onPressed: () {
-                    context.go(AppRoutes.REQUEST_USER);
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    size: 35,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(
+                SizedBox(
                   width: 45,
                 ),
-                const Text(
+                Text(
                   "ลงทะเบียนคำร้อง",
                   style: TextStyle(fontSize: 24, color: Colors.white),
                 )
@@ -315,8 +305,8 @@ class _sendRequestScreen extends State<sendRequestScreen> {
           child: Row(
             children: [
               Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
+                child: InkWell(
+                  onTap: () {
                     print(getRevenuefromUser());
                     _request.burden = getBurdenfromUser();
                     _request.property = getPropertylistfromUser();
@@ -333,12 +323,11 @@ class _sendRequestScreen extends State<sendRequestScreen> {
                       ),
                     );
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: navBarColor,
-                  ),
-                  child: const Text(
-                    'ถัดไป',
-                    style: TextStyle(fontSize: 18.0, color: Colors.white),
+                  child: const Center(
+                    child: Text(
+                      'ถัดไป',
+                      style: TextStyle(fontSize: 18.0, color: Colors.white),
+                    ),
                   ),
                 ),
               ),
