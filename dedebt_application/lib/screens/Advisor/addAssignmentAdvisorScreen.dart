@@ -12,34 +12,311 @@ class addAssignmentAdvisorScreen extends StatefulWidget {
 class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
   static Color appBarColor = const Color(0xFF444371);
   static Color navBarColor = const Color(0xFF2DC09C);
-
   final assignmentTypeController = SingleValueDropDownController();
   final titleController = TextEditingController();
   final detailController = TextEditingController();
   final templateController = SingleValueDropDownController();
+  List<Widget> containerList = [
+    const Padding(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: Text("ประเภท"),
+    ),
+  ];
 
   static List<DropDownValueModel> assignmentTypeList = [
     "กรอกเอกสาร", //template
     "นัดหมาย"
   ].map((value) => DropDownValueModel(name: value, value: value)).toList();
 
-  static List<DropDownValueModel> templateList = [
-    "เอกสารหักงานธนาคารกสิกร",
-    "เอกสารหักเงินธนาคารกรุงไทย"
-  ].map((value) => DropDownValueModel(name: value, value: value)).toList();
+  void initState() {
+    super.initState();
+    containerList.add(Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black,
+          width: 2.0,
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: DropDownTextField(
+        controller: assignmentTypeController,
+        dropDownItemCount: 2,
+        dropDownList: assignmentTypeList,
+        onChanged: (value) {
+          try {
+            value = value.value;
+          } catch (e) {
+            value = "";
+          }
+          if (value == "นัดหมาย") {
+            if (containerList.length > 5) {
+              containerList.removeLast();
+            }
+            containerList.add(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text("เลือกวันนัดหมาย"),
+                  ),
+                  Container(
+                    width: 330,
+                    height: 52,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: TextFormField(),
+                  ),
+                ],
+              ),
+            );
+
+            setState(() {});
+          } else if (value == "กรอกเอกสาร") {
+            if (containerList.length > 5) {
+              containerList.removeLast();
+            }
+            containerList.add(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text("เลือกเทมเพลต"),
+                  ),
+                  Container(
+                    width: 330,
+                    height: 52,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: InkWell(
+                      onTap: () => _showBottomSheet(),
+                      child: TextFormField(
+                        enabled: false,
+                        decoration: const InputDecoration(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+            setState(() {});
+          } else {
+            containerList.removeLast();
+            setState(() {});
+          }
+        },
+      ),
+    ));
+    containerList.add(
+      createTextField("หัวข้องาน", false, titleController),
+    );
+    containerList.add(const Padding(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: Text("รายการสิ่งที่ต้องทำ"),
+    ));
+    containerList.add(
+      Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.black,
+            width: 2.0,
+          ),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: TextFormField(
+          maxLines: 6,
+          maxLength: 300,
+          controller: detailController,
+          decoration: const InputDecoration(),
+          validator: (value) {
+            if (value!.isEmpty) {
+              return "Please enter Detail";
+            }
+            return null;
+          },
+        ),
+      ),
+    );
+  }
 
   void _showBottomSheet() {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 200, // Adjust height as needed
+          height: MediaQuery.of(context).size.height,
           color: Colors.white,
-          child: Center(
-            child: Text('This is the bottom sheet content'),
+          child: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 22),
+                    child: Text(
+                      "เลือกเทมเพลต",
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ),
+                  getSelectTemplateContainer("เอกสารหักเงินของธนาคารกสิกร"),
+                  getSelectTemplateContainer("เอกสารหักเงินของธนาคารกสิกร"),
+                  getSelectTemplateContainer("เอกสารหักเงินของธนาคารกสิกร"),
+                  getSelectTemplateContainer("เอกสารหักเงินของธนาคารกสิกร"),
+                  getSelectTemplateContainer("เอกสารหักเงินของธนาคารกสิกร"),
+                  getSelectTemplateContainer("เอกสารหักเงินของธนาคารกสิกร"),
+                ],
+              ),
+            ),
           ),
         );
       },
+    );
+  }
+
+  void showPDFViewer() {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height,
+          color: Colors.white,
+          child: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 22),
+                    child: Text(
+                      "เลือกเทมเพลต",
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ),
+                  Container(
+                    width: 331,
+                    height: 71,
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.account_balance,
+                          size: 55,
+                          color: Colors.black,
+                        ),
+                        Flexible(
+                          child: Text(
+                            "ใบหักเงินในบัญชีธนาคารกสิกรไทย",
+                            overflow: TextOverflow.visible,
+                            style: TextStyle(
+                                fontSize: 24, color: Color(0xFF36338C)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: 280,
+                    height: 280,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(28.0)),
+                      color: Color(0xFFDAEAFA),
+                    ),
+                    padding: const EdgeInsets.fromLTRB(19, 11, 18, 35),
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 302,
+                          height: 328,
+                          decoration: const BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                            color: Colors.white,
+                          ),
+                          child: Text("PDF To shown"),
+                        ),
+                        Positioned(
+                          bottom: 1.0,
+                          right: 1.0,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.zoom_out_map,
+                              color: Colors.black,
+                            ),
+                            onPressed: () {
+                              // ปุ่มดู pdf
+                              print('Info button pressed!');
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: 325,
+                    height: 62,
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      color: Color(0xFF2DC09C),
+                    ),
+                    child: InkWell(
+                        onTap: () {
+                          //เพิ่ม template
+                        },
+                        child: Center(
+                          child: Text(
+                            "เพิ่มเทมเพลต",
+                            style: TextStyle(color: Colors.white, fontSize: 24),
+                          ),
+                        )),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  InkWell getSelectTemplateContainer(String t_name) {
+    return InkWell(
+      onTap: () {
+        showPDFViewer();
+      },
+      child: Container(
+        width: 325,
+        height: 62,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          color: Color(0xFFDAEAFA),
+        ),
+        padding: const EdgeInsets.all(10),
+        margin: const EdgeInsets.symmetric(vertical: 5),
+        child: Row(
+          children: [
+            Flexible(
+              child: Text(t_name,
+                  style:
+                      const TextStyle(fontSize: 24, color: Color(0xFF36338C)),
+                  overflow: TextOverflow.ellipsis),
+            ),
+            const Icon(Icons.chevron_right, size: 35, color: Color(0xFF36338C))
+          ],
+        ),
+      ),
     );
   }
 
@@ -123,75 +400,7 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
                   ),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text("ประเภท"),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: DropDownTextField(
-                        controller: assignmentTypeController,
-                        dropDownItemCount: 2,
-                        dropDownList: assignmentTypeList,
-                      ),
-                    ),
-                    createTextField("หัวข้องาน", false, titleController),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text("รายการสิ่งที่ต้องทำ"),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: TextFormField(
-                        maxLines: 6,
-                        maxLength: 300,
-                        controller: detailController,
-                        decoration: const InputDecoration(
-                          hintText: "Type your Detail Here",
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Please enter Detail";
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text("เลือกเทมเพลต"),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: DropDownTextField(
-                        controller: templateController,
-                        dropDownItemCount: 2,
-                        dropDownList: templateList,
-                      ),
-                    ),
-                  ]),
+                  children: containerList),
             ),
           ),
         ),
@@ -205,16 +414,10 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                InkWell(
-                  onTap: () {
-                    _showBottomSheet();
-                  },
-                  child: Center(
-                    child: Text(
-                      'เพิ่มสิ่งที่ต้องทำ',
-                      style:
-                          const TextStyle(fontSize: 18.0, color: Colors.white),
-                    ),
+                Center(
+                  child: Text(
+                    'เพิ่มสิ่งที่ต้องทำ',
+                    style: const TextStyle(fontSize: 18.0, color: Colors.white),
                   ),
                 ),
               ],
