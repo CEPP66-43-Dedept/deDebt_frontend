@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dedebt_application/routes/route.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 class addAssignmentAdvisorScreen extends StatefulWidget {
   const addAssignmentAdvisorScreen({super.key});
@@ -15,7 +18,13 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
   final assignmentTypeController = SingleValueDropDownController();
   final titleController = TextEditingController();
   final detailController = TextEditingController();
-  final templateController = SingleValueDropDownController();
+  final timeSelectController = TextEditingController();
+  final templateSelectorController = TextEditingController();
+  final dateSelectorController = TextEditingController();
+  final timeSelectorController = TextEditingController();
+  final hourSelectorController = SingleValueDropDownController();
+  DateTime? pickedDate;
+  TimeOfDay? pickedTime;
   List<Widget> containerList = [
     const Padding(
       padding: EdgeInsets.symmetric(vertical: 10),
@@ -24,9 +33,9 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
   ];
 
   static List<DropDownValueModel> assignmentTypeList = [
-    "กรอกเอกสาร", //template
-    "นัดหมาย"
-  ].map((value) => DropDownValueModel(name: value, value: value)).toList();
+    DropDownValueModel(name: "กรอกเอกสาร", value: 0),
+    DropDownValueModel(name: "นัดหมาย", value: 1)
+  ];
 
   void initState() {
     super.initState();
@@ -72,7 +81,16 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: TextFormField(),
+                    child: InkWell(
+                      onTap: () {
+                        showSelectAppointmentDate();
+                      },
+                      child: TextFormField(
+                         style: TextStyle(color: Colors.black),
+                        enabled: false,
+                        controller: timeSelectController,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -103,10 +121,11 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: InkWell(
-                      onTap: () => _showBottomSheet(),
+                      onTap: () => showSelectTemplate(),
                       child: TextFormField(
                         enabled: false,
-                        decoration: const InputDecoration(),
+                        style: TextStyle(color: Colors.black),
+                        controller: templateSelectorController,
                       ),
                     ),
                   ),
@@ -142,7 +161,6 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
           maxLines: 6,
           maxLength: 300,
           controller: detailController,
-          decoration: const InputDecoration(),
           validator: (value) {
             if (value!.isEmpty) {
               return "Please enter Detail";
@@ -154,7 +172,7 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
     );
   }
 
-  void _showBottomSheet() {
+  void showSelectTemplate() {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
@@ -274,10 +292,180 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
                     child: InkWell(
                         onTap: () {
                           //เพิ่ม template
+                          templateSelectorController.text =
+                              "ใบหักเงินในบัญชีธนาคารกสิกรไทย";
+                          setState(() {});
+                          context.pop();
+                          context.pop();
                         },
                         child: Center(
                           child: Text(
                             "เพิ่มเทมเพลต",
+                            style: TextStyle(color: Colors.white, fontSize: 24),
+                          ),
+                        )),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void showSelectAppointmentDate() {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height,
+          color: Colors.white,
+          child: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 22),
+                    child: Text(
+                      "เลือกวันเวลาที่สะดวกนัดหมาย",
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 5),
+                    child: Text(
+                      "เลือกวัน",
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ),
+                  Container(
+                    width: 330,
+                    height: 52,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: InkWell(
+                      onTap: () async {
+                        pickedDate = await showDatePicker(
+                            context: context,
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime.now().add(Duration(days: 365)));
+                        if (pickedDate != null) {
+                          dateSelectorController.text =
+                              DateFormat('dd-MM-yyyy').format(pickedDate!);
+                        }
+                      },
+                      child: TextFormField(
+                        enabled: false,
+                        controller: dateSelectorController,
+                        decoration: InputDecoration(
+                          hintText: 'เลือกวัน', // Your hint text
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 5),
+                    child: Text(
+                      "เลือกเวลา",
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ),
+                  Container(
+                    width: 330,
+                    height: 52,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: InkWell(
+                      onTap: () async {
+                        pickedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                          initialEntryMode: TimePickerEntryMode.inputOnly,
+                          builder: (BuildContext context, Widget? child) {
+                            return MediaQuery(
+                              data: MediaQuery.of(context)
+                                  .copyWith(alwaysUse24HourFormat: true),
+                              child: child!,
+                            );
+                          },
+                        );
+                        if (pickedTime != null) {
+                          timeSelectorController.text =
+                              "${pickedTime!.hour}:${pickedTime!.minute}";
+                        }
+                      },
+                      child: TextFormField(
+                        enabled: false,
+                        controller: timeSelectorController,
+                        decoration: InputDecoration(
+                          hintText: 'เลือกวัน', // Your hint text
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 5),
+                    child: Text(
+                      "เลือกจำนวนชั่วโมง",
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ),
+                  Container(
+                    width: 330,
+                    height: 52,
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: DropDownTextField(
+                      dropDownList: [1, 2, 3, 4, 5, 6]
+                          .map((value) => DropDownValueModel(
+                              name: value.toString(), value: value))
+                          .toList(),
+                      controller: hourSelectorController,
+                    ),
+                  ),
+                  Container(
+                    width: 325,
+                    height: 62,
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      color: Color(0xFF2DC09C),
+                    ),
+                    child: InkWell(
+                        onTap: () {
+                          //เพิ่มวันนัดหมาย function
+                          if (pickedDate != null && pickedTime != null) {
+                            timeSelectController.text =
+                                "วันที่ ${DateFormat('dd-MM-yyyy').format(pickedDate!)} เวลา ${pickedTime!.hour}:${pickedTime!.minute}-${pickedTime!.hour + hourSelectorController.dropDownValue!.value}:${pickedTime!.minute}";
+                            print(timeSelectController.text);
+                            setState(() {});
+                            context.pop();
+                          } else {
+                            context.pop();
+                          }
+                        },
+                        child: Center(
+                          child: Text(
+                            "เพิ่มวันนัดหมาย",
                             style: TextStyle(color: Colors.white, fontSize: 24),
                           ),
                         )),
@@ -355,6 +543,33 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
     );
   }
 
+  Timestamp getstartTime() {
+    return Timestamp.fromDate(DateTime(pickedDate!.year, pickedDate!.month,
+        pickedDate!.day, pickedTime!.hour, pickedTime!.minute));
+  }
+
+  Timestamp getendTime() {
+    return Timestamp.fromDate(DateTime(
+        pickedDate!.year,
+        pickedDate!.month,
+        pickedDate!.day,
+        pickedTime!.hour +
+            int.parse(hourSelectorController.dropDownValue!.value),
+        pickedTime!.minute));
+  }
+
+  int getAssignmentType() {
+    return assignmentTypeController.dropDownValue!.value;
+  }
+
+  String getAssignmentTitle() {
+    return titleController.text;
+  }
+
+  String getAssignmentdetail() {
+    return detailController.text;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -406,7 +621,7 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
         ),
         bottomNavigationBar: InkWell(
           onTap: () {
-            _showBottomSheet();
+            // function ในการดึงข้อมูล
           },
           child: BottomAppBar(
             color: navBarColor,
@@ -423,6 +638,37 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DatePickerItem extends StatelessWidget {
+  const _DatePickerItem({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: CupertinoColors.inactiveGray,
+            width: 0.0,
+          ),
+          bottom: BorderSide(
+            color: CupertinoColors.inactiveGray,
+            width: 0.0,
+          ),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: children,
         ),
       ),
     );
