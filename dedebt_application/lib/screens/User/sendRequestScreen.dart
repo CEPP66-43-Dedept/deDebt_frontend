@@ -181,13 +181,14 @@ class _sendRequestScreen extends State<sendRequestScreen> {
             backgroundColor: appBarColor,
             surfaceTintColor: Colors.transparent,
             toolbarHeight: 55,
-            title: Row(
+            title: const Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(
+
                   width: 45,
                 ),
-                const Text(
+                Text(
                   "ลงทะเบียนคำร้อง",
                   style: TextStyle(fontSize: 24, color: Colors.white),
                 )

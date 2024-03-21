@@ -20,21 +20,13 @@ class _sendRequestSuccessScreen extends State<sendRequestSuccessScreen> {
           backgroundColor: appBarColor,
           surfaceTintColor: Colors.transparent,
           toolbarHeight: 55,
-          title: Row(
+          title: const Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.arrow_back,
-                  size: 35,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(
+              SizedBox(
                 width: 45,
               ),
-              const Text(
+              Text(
                 "ลงทะเบียนคำร้อง",
                 style: TextStyle(fontSize: 24, color: Colors.white),
               )
@@ -85,6 +77,7 @@ class _sendRequestSuccessScreen extends State<sendRequestSuccessScreen> {
                   child: Text(
                     'กลับหน้าหลัก',
                     style: const TextStyle(fontSize: 18.0, color: Colors.white),
+
                   ),
                 ),
               ),
