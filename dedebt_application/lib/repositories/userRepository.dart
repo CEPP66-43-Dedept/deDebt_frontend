@@ -129,6 +129,18 @@ class UserRepository {
     });
   }
 
+  Future<void> updateAssignmentByID(String assignmentID) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection("assignments");
+      await collection.doc(assignmentID).update({'status': 0});
+      print('Assignment with ID $assignmentID updated successfully.');
+    } catch (error) {
+      print('Error updating assignment: $error');
+      throw error;
+    }
+  }
+
   Future<void> createRequest(Request userRequest) async {
     try {
       Map<String, dynamic> requestData = userRequest.toMap();

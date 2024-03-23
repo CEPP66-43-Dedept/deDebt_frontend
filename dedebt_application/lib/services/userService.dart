@@ -20,6 +20,14 @@ class UserService {
     }
   }
 
+  Future<void> updateAssignmentStatus(String assignmentID) async {
+    try {
+      await _userRepository.updateAssignmentByID(assignmentID);
+    } catch (e) {
+      print('Error getting user data: $e');
+    }
+  }
+
   Future<Map<String, dynamic>?> getUserActiveRequest(String userId) async {
     try {
       return await _userRepository.getUserActiveRequest(userId);

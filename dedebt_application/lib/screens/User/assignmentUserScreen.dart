@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dedebt_application/repositories/userRepository.dart';
+import 'package:dedebt_application/screens/User/assignmentSuccessScreen.dart';
 import 'package:dedebt_application/services/userService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,10 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
 
   Future<Assignment?> _getAssignmentByID(String assignmentId) async {
     return userService.getAssignmentByID(assignmentId);
+  }
+
+  Future<void> _updateAssignmentStatus(String assignmentId) async {
+    return userService.updateAssignmentStatus(assignmentId);
   }
 
   @override
@@ -204,7 +209,6 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
   @override
   Widget _buildAssignmentScreen(Assignment? assignment) {
     return GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(
             backgroundColor: navbarColor,
@@ -366,6 +370,16 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
                             child: ElevatedButton(
                               onPressed: () {
                                 // Handle button press
+                                _updateAssignmentStatus(_assignment!.id!);
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        assignmentSuccessScreen(
+                                            successType: _assignment!.type),
+                                  ),
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF2DC09C),
