@@ -184,7 +184,8 @@ class _sendRequestScreen extends State<sendRequestScreen> {
             title: const Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
+
                   width: 45,
                 ),
                 Text(
@@ -303,6 +304,7 @@ class _sendRequestScreen extends State<sendRequestScreen> {
           color: navBarColor,
           height: 55,
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
                 child: InkWell(

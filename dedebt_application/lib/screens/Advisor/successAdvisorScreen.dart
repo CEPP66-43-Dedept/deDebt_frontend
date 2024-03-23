@@ -2,14 +2,14 @@ import 'package:dedebt_application/routes/route.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class sendRequestSuccessScreen extends StatefulWidget {
-  const sendRequestSuccessScreen({super.key});
+class successAdvisorScreen extends StatefulWidget {
+  const successAdvisorScreen({super.key});
 
   @override
-  State<sendRequestSuccessScreen> createState() => _sendRequestSuccessScreen();
+  State<successAdvisorScreen> createState() => _successAdvisorScreen();
 }
 
-class _sendRequestSuccessScreen extends State<sendRequestSuccessScreen> {
+class _successAdvisorScreen extends State<successAdvisorScreen> {
   static Color appBarColor = const Color(0xFF444371);
   static Color textColor = const Color(0xFF36338C);
   static Color navBarColor = const Color(0xFF2DC09C);
@@ -20,14 +20,22 @@ class _sendRequestSuccessScreen extends State<sendRequestSuccessScreen> {
           backgroundColor: appBarColor,
           surfaceTintColor: Colors.transparent,
           toolbarHeight: 55,
-          title: const Row(
+          title: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.arrow_back,
+                  size: 35,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(
                 width: 45,
               ),
-              Text(
-                "ลงทะเบียนคำร้อง",
+              const Text(
+                "เพิ่มสิ่งที่ต้องทำ",
                 style: TextStyle(fontSize: 24, color: Colors.white),
               )
             ],
@@ -49,13 +57,9 @@ class _sendRequestSuccessScreen extends State<sendRequestSuccessScreen> {
                     color: textColor,
                   ),
                   Text(
-                    "ลงทะเบียนคำร้องเสร็จสิ้น",
+                    "เพิ่มสิ่งที่ต้องทำเสร็จสิ้น",
                     style: TextStyle(fontSize: 24, color: textColor),
                   ),
-                  Text(
-                    "กรุณารอระบบดำเนินการหาที่ปรึกษา",
-                    style: TextStyle(fontSize: 16, color: textColor),
-                  )
                 ],
               ),
             ),
@@ -77,7 +81,6 @@ class _sendRequestSuccessScreen extends State<sendRequestSuccessScreen> {
                   child: Text(
                     'กลับหน้าหลัก',
                     style: const TextStyle(fontSize: 18.0, color: Colors.white),
-
                   ),
                 ),
               ),
