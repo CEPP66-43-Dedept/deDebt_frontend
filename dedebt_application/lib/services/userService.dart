@@ -46,6 +46,14 @@ class UserService {
     }
   }
 
+  Future<void> getAssignmentById(String taskId) async {
+    try {
+      await _userRepository.getAssignmentByID(taskId);
+    } catch (e) {
+      print('Error getting user data: $e');
+    }
+  }
+
   Future<List<Assignment>> getAllAssignments(String taskId) async {
     try {
       return await _userRepository.getAllAssignments(taskId);
@@ -79,6 +87,15 @@ class UserService {
       return null;
     } catch (e) {
       print('Error getting user data: $e');
+      return null;
+    }
+  }
+
+  Future<Assignment?> getAssignmentByID(String assignmentID) async {
+    try {
+      return await _userRepository.getAssignmentByID(assignmentID);
+    } catch (e) {
+      print('Error getting user all request: $e');
       return null;
     }
   }

@@ -88,12 +88,15 @@ class ROUTE {
       //     child: sendRequestScreen(),
       //   ),
       // ),
+
       GoRoute(
           name: '/assignment-user',
-          path: AppRoutes.ASSIGNMENT_USER,
-          builder: (context, state) => TransitionRoutePage(
-                child: assignmentUserScreen(),
-              )),
+          path: AppRoutes.ASSIGNMENT_USER + '/:assignmentID',
+          builder: (context, state) {
+            final assignmentID =
+                state.pathParameters['assignmentID'] as String?;
+            return assignmentUserScreen(assignmentId: assignmentID ?? '');
+          }),
       GoRoute(
           name: '/send-request-success-user',
           path: AppRoutes.SEND_REQUESt_SUCCESS_USER,

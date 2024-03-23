@@ -129,6 +129,8 @@ class _requestUserScreen extends State<requestUserScreen> {
 
   List<Widget> createAssignmentStatusContainerList(
       BuildContext context, List<Assignment> u_assignment) {
+    print(u_assignment);
+    print(u_assignment);
     List<Widget> AssignmentStatusContainerList = [
       const SizedBox(height: 5),
     ];
@@ -324,7 +326,11 @@ class _requestUserScreen extends State<requestUserScreen> {
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 10.0),
                                                 child: Text(
-                                                  userrequest.advisorFullName,
+                                                  userrequest.advisorFullName ==
+                                                          ""
+                                                      ? "ยังไม่มีผู้รับผิดชอบ"
+                                                      : userrequest
+                                                          .advisorFullName,
                                                   style: const TextStyle(
                                                       color: Color(0xFF2DC09C)),
                                                   softWrap: true,

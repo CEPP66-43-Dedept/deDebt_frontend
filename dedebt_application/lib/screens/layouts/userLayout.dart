@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, must_be_immutable
 
+import 'package:dedebt_application/screens/User/assignmentUserScreen.dart';
 import 'package:dedebt_application/services/authService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -98,7 +99,9 @@ class UserLayout extends StatefulWidget {
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: Text(
-                      _request.advisorFullName,
+                      _request.advisorFullName == ""
+                          ? "ยังไม่มีผู้รับผิดชอบ"
+                          : _request.advisorFullName,
                       style: const TextStyle(color: Color(0xFF2DC09C)),
                       softWrap: true,
                     ),
@@ -177,9 +180,12 @@ class UserLayout extends StatefulWidget {
       BuildContext context, Assignment _assignment) {
     return GestureDetector(
       onTap: () => {
-        //handle redirect ไปหน้าassignment
-        context.go(
-          AppRoutes.ASSIGNMENT_USER,
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                assignmentUserScreen(assignmentId: _assignment.id!),
+          ),
         )
       },
       child: Container(
@@ -285,6 +291,7 @@ class _UserLayoutState extends State<UserLayout> {
           if (widget.currentPage != 3) {
             context.go(AppRoutes.PROFILE_USER);
           }
+
           break;
       }
       setState(() {
