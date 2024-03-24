@@ -94,6 +94,7 @@ class UserRepository {
 
   Future<List<Assignment>> getAllAssignments(String taskId) async {
     try {
+      print(111111);
       CollectionReference collection =
           FirebaseFirestore.instance.collection("assignments");
       QuerySnapshot<Object?> querySnapshot =

@@ -135,16 +135,18 @@ class ROUTE {
           ),
         ),
       ),
+
       GoRoute(
-        name: '/request-advisor',
-        path: AppRoutes.REQUEST_ADVISOR,
-        builder: (context, state) => TransitionRoutePage(
-          child: AdvisorLayout(
-            body: requestAdvisorScreen(),
-            currentPage: 1,
-          ),
-        ),
-      ),
+          name: '/request-advisor',
+          path: AppRoutes.REQUEST_ADVISOR + '/:requestID',
+          builder: (context, state) {
+            final requestID = state.pathParameters['requestID'] as String?;
+
+            return AdvisorLayout(
+              body: requestAdvisorScreen(requestId: requestID!),
+              currentPage: 1,
+            );
+          }),
       GoRoute(
         name: '/assignment-advisor',
         path: AppRoutes.ASSIGNMENT_ADVISOR,

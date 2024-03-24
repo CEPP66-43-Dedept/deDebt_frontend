@@ -56,12 +56,17 @@ class AdvisorLayout extends StatefulWidget {
     return statusContainer;
   }
 
+  Future<void> signOut() async {
+    try {
+      await Auth().signOut();
+    } on FirebaseAuthException {}
+  }
+
   static GestureDetector createRequestBox(
       BuildContext context, Request _request) {
     return GestureDetector(
       onTap: () {
-        //ไปหน้า request ที่แสดง request เดียวของ advisor
-        context.go(AppRoutes.REQUEST_ADVISOR);
+        context.go(AppRoutes.REQUEST_ADVISOR + '/${_request.id}');
       },
       child: Container(
         width: 324,
@@ -388,11 +393,11 @@ class _AdvisorLayoutState extends State<AdvisorLayout> {
                           'assets/images/Logo.png',
                           fit: BoxFit.contain,
                         ),
-                        Image.asset(
-                          'assets/images/Backicon.png',
-                          fit: BoxFit.contain,
-                          width: 34,
-                          height: 30,
+                        IconButton(
+                          icon: Icon(Icons.exit_to_app),
+                          onPressed: () {
+                            signOut();
+                          },
                         )
                       ],
                     ),

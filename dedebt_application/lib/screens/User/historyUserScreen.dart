@@ -56,13 +56,10 @@ class _HistoryUserScreenState extends State<HistoryUserScreen> {
       stream: _userRequestController.stream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          // Show loading indicator while waiting for data
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          // Show error message if there's an error
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData) {
-          // Show empty state if there's no data
           return Scaffold(
             appBar: AppBar(
               title: const Text('ประวัติคำร้อง'),

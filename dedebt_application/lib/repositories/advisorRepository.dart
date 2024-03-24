@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dedebt_application/models/advisorModel.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
 import 'package:dedebt_application/models/requestModel.dart';
 
@@ -8,12 +9,74 @@ class AdvisorRepository {
   AdvisorRepository({required FirebaseFirestore firestore})
       : _firestore = firestore;
 
+  Future<Advisors?> getAdvisorData(String advisorId) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> advisorSnapshot =
+          await _firestore.collection('advisors').doc(advisorId).get();
+      if (advisorSnapshot.exists) {
+        Map<String, dynamic>? advisorData = advisorSnapshot.data();
+        if (advisorData != null) {
+          return Advisors.fromMap(advisorData);
+        } else {
+          print(2);
+          return null;
+        }
+      } else {
+        print(3);
+        return null;
+      }
+    } catch (e) {
+      print('Error getting advisor data: $e');
+      return null;
+    }
+  }
+
   Future<List<Request>?> getAdvisorAllRequests(String advisorId) async {
     try {
       CollectionReference collection =
           FirebaseFirestore.instance.collection("requests");
       QuerySnapshot<Object?> querySnapshot =
           await collection.where('advisorId', isEqualTo: advisorId).get();
+      List<Map<String, dynamic>> requestsData = [];
+      if (querySnapshot.docs.isNotEmpty) {
+        requestsData = querySnapshot.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList();
+      }
+      List<Request> requests =
+          requestsData.map((data) => Request.fromMap(data)).toList();
+      return requests;
+    } catch (e) {
+      print('Error getting user  request: $e');
+      return null;
+    }
+  }
+
+  Future<Request?> getRequestByrequestID(String requestID) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection("requests");
+      QuerySnapshot<Object?> querySnapshot =
+          await collection.where('id', isEqualTo: requestID).limit(1).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return Request.fromMap(
+            querySnapshot.docs.first.data() as Map<String, dynamic>);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error getting request By requestID: $e');
+      return null;
+    }
+  }
+
+  Future<List<Request>?> getAdvisorActiveRequest(String advisorId) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection("requests");
+      QuerySnapshot<Object?> querySnapshot = await collection
+          .where('advisorId', isEqualTo: advisorId)
+          .where('requestStatus', whereIn: [0, 1]).get();
       List<Map<String, dynamic>> requestsData = [];
       if (querySnapshot.docs.isNotEmpty) {
         requestsData = querySnapshot.docs
