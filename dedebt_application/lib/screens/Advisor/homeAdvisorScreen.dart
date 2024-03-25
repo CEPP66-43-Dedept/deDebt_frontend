@@ -86,8 +86,8 @@ class _homeAdvisorScreen extends State<homeAdvisorScreen> {
     ];
 
     for (Assignment assign in u_assignment) {
-      Widget container = AdvisorLayout.createAssignmentContainer(
-          context, assign, AppRoutes.REQUEST_ADVISOR);
+      Widget container =
+          AdvisorLayout.createAssignmentContainer(context, assign);
       todayAssignmentContainerList.add(container);
       todayAssignmentContainerList.add(const SizedBox(height: 10));
     }

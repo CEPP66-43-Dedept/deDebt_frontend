@@ -148,12 +148,17 @@ class ROUTE {
             );
           }),
       GoRoute(
-        name: '/assignment-advisor',
-        path: AppRoutes.ASSIGNMENT_ADVISOR,
-        builder: (context, state) => TransitionRoutePage(
-          child: assignmentAdvisorScreen(),
-        ),
-      ),
+          name: '/assignment-advisor',
+          path: AppRoutes.ASSIGNMENT_ADVISOR + '/:assignmentID',
+          builder: (context, state) {
+            final assignmentID =
+                state.pathParameters['assignmentID'] as String?;
+
+            return assignmentAdvisorScreen(
+              assignmentID: assignmentID!,
+            );
+          }),
+
       GoRoute(
         name: '/add-assignment-advisor',
         path: AppRoutes.ADD_ASSIGNMENT_ADVISOR,

@@ -173,9 +173,8 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
       const SizedBox(height: 5),
     ];
     for (Assignment assignment_item in u_assignment) {
-      Widget container = AdvisorLayout.createAssignmentContainer(
-          context, assignment_item, AppRoutes.ASSIGNMENT_ADVISOR);
-
+      Widget container =
+          AdvisorLayout.createAssignmentContainer(context, assignment_item);
       AssignmentStatusContainerList.add(container);
       AssignmentStatusContainerList.add(const SizedBox(height: 5));
     }
@@ -389,7 +388,6 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
                                             .createAssignmentContainer(
                                           context,
                                           assignment,
-                                          AppRoutes.ASSIGNMENT_ADVISOR,
                                         );
                                       },
                                     ),
