@@ -75,9 +75,11 @@ class AdvisorService {
     }
   }
 
-  Future<List<Assignment>> getAssignmentByDay(Timestamp day) async {
+  Future<List<Assignment>> getAssignmentByDay(
+      Timestamp day, String advisorId) async {
     try {
-      List<String> requestList = await getAdvisorAllRequestsIds('advisorId');
+      List<String> requestList = await getAdvisorAllRequestsIds(advisorId);
+      print(requestList);
       return await _advisorRepository.getAssignmentByDay(requestList, day);
     } catch (e) {
       print('Error getting user data: $e');

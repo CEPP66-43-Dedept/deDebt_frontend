@@ -63,15 +63,15 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
   ];
   //Mockup Data
   Assignment _assignment = Assignment(
-    id: "0",
-    type: 0,
-    title: "",
-    detail: "",
-    status: 0,
-    taskId: "",
-    startTime: Timestamp.fromDate(DateTime(2023, 2, 27, 13, 0)),
-    endTime: Timestamp.fromDate(DateTime(2023, 2, 27, 17, 0)),
-  );
+      id: "0",
+      type: 0,
+      title: "",
+      detail: "",
+      status: 0,
+      taskId: "",
+      startTime: Timestamp.fromDate(DateTime(2023, 2, 27, 13, 0)),
+      endTime: Timestamp.fromDate(DateTime(2023, 2, 27, 17, 0)),
+      appointmentTime: null);
   IconData getIcon(int index) {
     return _normalIcon[index];
   }

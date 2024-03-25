@@ -64,15 +64,15 @@ class MatcherRepository {
   Future<void> createFirstAssignment(Request request) async {
     try {
       Assignment assignment = Assignment(
-        // ไม่ต้องกำหนด ID ในนี้
-        type: 0,
-        title: "การนัดหมายครั้งแรก",
-        detail: "การนัดหมายสำหรับพูดคุยครั้งแรก",
-        status: 0,
-        taskId: request.id,
-        startTime: Timestamp.now(),
-        endTime: Timestamp.now(),
-      );
+          // ไม่ต้องกำหนด ID ในนี้
+          type: 0,
+          title: "การนัดหมายครั้งแรก",
+          detail: "การนัดหมายสำหรับพูดคุยครั้งแรก",
+          status: 0,
+          taskId: request.id,
+          startTime: Timestamp.now(),
+          endTime: Timestamp.now(),
+          appointmentTime: Timestamp.now());
       CollectionReference assignments =
           FirebaseFirestore.instance.collection("assignments");
       DocumentReference docRef = await assignments.add(assignment.toMap());
