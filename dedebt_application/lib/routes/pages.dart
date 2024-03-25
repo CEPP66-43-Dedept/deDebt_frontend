@@ -88,12 +88,15 @@ class ROUTE {
       //     child: sendRequestScreen(),
       //   ),
       // ),
+
       GoRoute(
           name: '/assignment-user',
-          path: AppRoutes.ASSIGNMENT_USER,
-          builder: (context, state) => TransitionRoutePage(
-                child: assignmentUserScreen(),
-              )),
+          path: AppRoutes.ASSIGNMENT_USER + '/:assignmentID',
+          builder: (context, state) {
+            final assignmentID =
+                state.pathParameters['assignmentID'] as String?;
+            return assignmentUserScreen(assignmentId: assignmentID ?? '');
+          }),
       GoRoute(
           name: '/send-request-success-user',
           path: AppRoutes.SEND_REQUESt_SUCCESS_USER,
@@ -132,16 +135,18 @@ class ROUTE {
           ),
         ),
       ),
+
       GoRoute(
-        name: '/request-advisor',
-        path: AppRoutes.REQUEST_ADVISOR,
-        builder: (context, state) => TransitionRoutePage(
-          child: AdvisorLayout(
-            body: requestAdvisorScreen(),
-            currentPage: 1,
-          ),
-        ),
-      ),
+          name: '/request-advisor',
+          path: AppRoutes.REQUEST_ADVISOR + '/:requestID',
+          builder: (context, state) {
+            final requestID = state.pathParameters['requestID'] as String?;
+
+            return AdvisorLayout(
+              body: requestAdvisorScreen(requestId: requestID!),
+              currentPage: 1,
+            );
+          }),
       GoRoute(
         name: '/assignment-advisor',
         path: AppRoutes.ASSIGNMENT_ADVISOR,

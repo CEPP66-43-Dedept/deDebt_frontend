@@ -115,6 +115,15 @@ class _HomeScreenState extends State<HomeScreen> {
     if (matcherSnapshot.docs.isNotEmpty) {
       return {'collection': 'matcher'};
     }
+    final QuerySnapshot<Map<String, dynamic>> advisorSnapshot =
+        await FirebaseFirestore.instance
+            .collection('advisors')
+            .where('email', isEqualTo: currentUser.email)
+            .get();
+
+    if (advisorSnapshot.docs.isNotEmpty) {
+      return {'collection': 'advisors'};
+    }
     final QuerySnapshot<Map<String, dynamic>> userSnapshot =
         await FirebaseFirestore.instance
             .collection('users')
@@ -122,15 +131,6 @@ class _HomeScreenState extends State<HomeScreen> {
             .get();
     if (userSnapshot.docs.isNotEmpty) {
       return {'collection': 'users'};
-    }
-
-    final QuerySnapshot<Map<String, dynamic>> advisorSnapshot =
-        await FirebaseFirestore.instance
-            .collection('advisors')
-            .where('email', isEqualTo: currentUser.email)
-            .get();
-    if (advisorSnapshot.docs.isNotEmpty) {
-      return {'collection': 'advisors'};
     }
 
     return {'collection': 'none'};

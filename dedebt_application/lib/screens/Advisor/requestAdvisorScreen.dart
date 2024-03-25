@@ -1,3 +1,8 @@
+import 'dart:async';
+
+import 'package:dedebt_application/repositories/advisorRepository.dart';
+import 'package:dedebt_application/services/advisorService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
 import 'package:dedebt_application/models/userModel.dart';
@@ -8,47 +13,52 @@ import 'package:dedebt_application/routes/route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class requestAdvisorScreen extends StatefulWidget {
-  const requestAdvisorScreen({super.key});
+  final String requestId;
+  const requestAdvisorScreen({super.key, required this.requestId});
 
   @override
   State<requestAdvisorScreen> createState() => _requestAdvisorScreen();
 }
 
 class _requestAdvisorScreen extends State<requestAdvisorScreen> {
+  static Color primaryColor = const Color(0xFFF3F5FE);
+  late final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late final AdvisorRepository _advisorRepository =
+      AdvisorRepository(firestore: firestore);
+  late final AdvisorService _advisorService =
+      AdvisorService(advisorRepository: _advisorRepository);
+  late StreamController<Request> _requestController;
+  late StreamController<List<Assignment>> _assignmentController;
   bool isExpanded = false;
+  @override
+  void initState() {
+    super.initState();
+    _assignmentController = StreamController<List<Assignment>>();
+    _getAllAssignment(widget.requestId).then((requestData) {
+      _assignmentController.add(requestData!);
+    }).catchError((error) {
+      _assignmentController.addError(error);
+    });
+    _requestController = StreamController<Request>();
+    _getAdvisorRequestByID(widget.requestId).then((requestData) {
+      _requestController.add(requestData!);
+    }).catchError((error) {
+      _requestController.addError(error);
+    });
+  }
+
+  late User? user = FirebaseAuth.instance.currentUser;
+
+  Future<Request?> _getAdvisorRequestByID(String requestId) async {
+    return _advisorService.getRequestByrequestID(requestId);
+  }
+
+  Future<List<Assignment>?> _getAllAssignment(String requestId) async {
+    return _advisorService.getAllAssignments(requestId);
+  }
+
   //Mockup Data
-  Users thisAdvisor = Users(
-    id: "0",
-    ssn: "000000000000",
-    firstname: "สมปรึกษา",
-    lastname: "ปรึกษาทุกอย่าง",
-    role: 1,
-    email: "prugsa@mail.com",
-    tel: "0123456789",
-  );
-  final Request _request = Request(
-      id: "0",
-      title: "การแก้หนี้กับธนาคารกสิกรไทย",
-      detail:
-          "123456แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890แก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมายแก้หนี้ที่ค้างคามานานมากมาย1234567890",
-      userId: "0",
-      advisorId: "1",
-      userFullName: "นายเป็นหนี้ หนี่เป็นกอง",
-      advisorFullName: "นายสมปอง งอปมส",
-      requestStatus: 0,
-      type: [
-        "หนี้บัตรเครติด",
-        "สินเชื่อส่วนบุคคล",
-      ], //[หนี้บัตรเครติด,สินเชื่อส่วนบุคคล,หนี้บ้าน,หนี้จำนำรถ,หนี้เช่าซื้อรถ]
-      debtStatus: [0],
-      provider: ["กสิกร"],
-      revenue: [10000],
-      expense: [1000000],
-      burden:
-          0, //ผ่อนหนี้ [1/3ของรายได้,1/3-1/2ของรายได้,1/2-2/3ของรายได้,มากกว่า 2/3 ของรายได้ ]
-      property: 25000,
-      appointmentDate: [0],
-      branch: ["เมย่า"]);
+
   Assignment userAppointment = Assignment(
     id: "0",
     type: 0,
@@ -158,7 +168,7 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
 
     ScrollController _scrollController = ScrollController();
 
-    var u_assignment = [userAppointment, userAssignment, userAssignment_2];
+    var u_assignment = [];
     List<Widget> AssignmentStatusContainerList = [
       const SizedBox(height: 5),
     ];
@@ -169,183 +179,232 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
       AssignmentStatusContainerList.add(container);
       AssignmentStatusContainerList.add(const SizedBox(height: 5));
     }
-    return Container(
-      child: SingleChildScrollView(
-        controller: _scrollController,
-        child: Align(
-          alignment: Alignment.center,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.fromLTRB(90, 25, 10, 0),
-                child: Text(
-                  "คำร้องปัจจุบัน",
-                  style: TextStyle(fontSize: 24),
-                ),
-              ),
-              SizedBox(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF36338C),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  width: 324,
-                  padding: const EdgeInsets.all(16.0),
-                  margin: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: DefaultTextStyle(
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Colors.white,
-                          fontSize: 15.0,
-                        ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: SizedBox(
-                            width: 310,
-                            child: Text(_request.title,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 24)),
-                          ),
-                        ),
-                        Column(
+    return StreamBuilder<Request>(
+        stream: _requestController.stream,
+        builder: (context, requestSnapshot) {
+          print(widget.requestId);
+          if (requestSnapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (requestSnapshot.hasError || !requestSnapshot.hasData) {
+            return Center(child: Text('Error fetching data'));
+          } else {
+            final _request = requestSnapshot.data!;
+            return StreamBuilder<List<Assignment>>(
+                stream: _assignmentController.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError || !snapshot.hasData) {
+                    return Center(child: Text('Error fetching data'));
+                  }
+                  List<Assignment> assignments = snapshot.data!;
+                  u_assignment = snapshot.data!;
+                  return Container(
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                const Text("สถานะ : "),
-                                AdvisorLayout.getRequestStatusContainer(
-                                    _request),
-                              ],
-                            ),
-                            const SizedBox(height: 5),
-                            Row(
-                              children: [
-                                const Text("เจ้าของคำร้อง : "),
-                                Flexible(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFF0F4FD),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10.0),
-                                    child: Text(
-                                      _request.userFullName,
-                                      style: const TextStyle(
-                                          color: Color(0xFF2DC09C)),
-                                      softWrap: true,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                            const SizedBox(height: 5),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text("ประเภท : "),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        _request.type.join(","),
-                                        overflow: isExpanded
-                                            ? TextOverflow.visible
-                                            : TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 5),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text("รายละเอียด : "),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        getRequestDetailString(_request),
-                                        overflow: isExpanded
-                                            ? TextOverflow.visible
-                                            : TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            IconButton(
-                              visualDensity:
-                                  VisualDensity(horizontal: -4, vertical: -4),
-                              icon: Icon(
-                                isExpanded
-                                    ? Icons.keyboard_arrow_up
-                                    : Icons.keyboard_arrow_down,
-                                size: 42,
-                                color: Colors.white,
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(90, 25, 10, 0),
+                              child: Text(
+                                "คำร้องปัจจุบัน",
+                                style: TextStyle(fontSize: 24),
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  isExpanded = !isExpanded;
-                                });
-                              },
+                            ),
+                            SizedBox(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF36338C),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                width: 324,
+                                padding: const EdgeInsets.all(16.0),
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 16.0),
+                                child: DefaultTextStyle(
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                        color: Colors.white,
+                                        fontSize: 15.0,
+                                      ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 10),
+                                        child: SizedBox(
+                                          width: 310,
+                                          child: Text(_request.title,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  fontSize: 24)),
+                                        ),
+                                      ),
+                                      Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const Text("สถานะ : "),
+                                              AdvisorLayout
+                                                  .getRequestStatusContainer(
+                                                      _request),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Row(
+                                            children: [
+                                              const Text("เจ้าของคำร้อง : "),
+                                              Flexible(
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        const Color(0xFFF0F4FD),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 10.0),
+                                                  child: Text(
+                                                    _request.userFullName,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            Color(0xFF2DC09C)),
+                                                    softWrap: true,
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const Text("ประเภท : "),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      _request.type.join(","),
+                                                      overflow: isExpanded
+                                                          ? TextOverflow.visible
+                                                          : TextOverflow
+                                                              .ellipsis,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const Text("รายละเอียด : "),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      getRequestDetailString(
+                                                          _request),
+                                                      overflow: isExpanded
+                                                          ? TextOverflow.visible
+                                                          : TextOverflow
+                                                              .ellipsis,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          IconButton(
+                                            visualDensity: VisualDensity(
+                                                horizontal: -4, vertical: -4),
+                                            icon: Icon(
+                                              isExpanded
+                                                  ? Icons.keyboard_arrow_up
+                                                  : Icons.keyboard_arrow_down,
+                                              size: 42,
+                                              color: Colors.white,
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                isExpanded = !isExpanded;
+                                              });
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Text(
+                              "ประวัติการดำเนิน",
+                              style: TextStyle(fontSize: 24),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.symmetric(vertical: 15),
+                              child: RawScrollbar(
+                                thumbColor: const Color(0xFFBBB9F4),
+                                thumbVisibility: true,
+                                radius: const Radius.circular(20),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6.0, vertical: 10),
+                                thickness: 5,
+                                child: Container(
+                                  height: 309,
+                                  width: 324,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFFFFFF),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: DefaultTextStyle(
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          color: const Color(0xFF36338C),
+                                          fontSize: 15.0,
+                                        ),
+                                    child: ListView.builder(
+                                      itemCount: assignments.length,
+                                      itemBuilder: (context, index) {
+                                        Assignment assignment =
+                                            assignments[index];
+                                        return AdvisorLayout
+                                            .createAssignmentContainer(
+                                          context,
+                                          assignment,
+                                          AppRoutes.ASSIGNMENT_ADVISOR,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const Text(
-                "ประวัติการดำเนิน",
-                style: TextStyle(fontSize: 24),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 15),
-                child: RawScrollbar(
-                  thumbColor: const Color(0xFFBBB9F4),
-                  thumbVisibility: true,
-                  radius: const Radius.circular(20),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 6.0, vertical: 10),
-                  thickness: 5,
-                  child: Container(
-                    height: 309,
-                    width: 324,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFFFFF),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: DefaultTextStyle(
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: const Color(0xFF36338C),
-                            fontSize: 15.0,
-                          ),
-                      child: ListView.builder(
-                        itemCount: AssignmentStatusContainerList.length,
-                        itemBuilder: (context, index) {
-                          return AssignmentStatusContainerList[index];
-                        },
                       ),
                     ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+                  );
+                });
+          }
+        });
   }
 
   @override

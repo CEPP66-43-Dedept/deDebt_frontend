@@ -20,6 +20,14 @@ class UserService {
     }
   }
 
+  Future<void> updateAssignmentStatus(String assignmentID) async {
+    try {
+      await _userRepository.updateAssignmentByID(assignmentID);
+    } catch (e) {
+      print('Error getting user data: $e');
+    }
+  }
+
   Future<Map<String, dynamic>?> getUserActiveRequest(String userId) async {
     try {
       return await _userRepository.getUserActiveRequest(userId);
@@ -43,6 +51,14 @@ class UserService {
       await _userRepository.createRequest(request);
     } catch (e) {
       print('Error create request data: $e');
+    }
+  }
+
+  Future<void> getAssignmentById(String taskId) async {
+    try {
+      await _userRepository.getAssignmentByID(taskId);
+    } catch (e) {
+      print('Error getting user data: $e');
     }
   }
 
@@ -79,6 +95,15 @@ class UserService {
       return null;
     } catch (e) {
       print('Error getting user data: $e');
+      return null;
+    }
+  }
+
+  Future<Assignment?> getAssignmentByID(String assignmentID) async {
+    try {
+      return await _userRepository.getAssignmentByID(assignmentID);
+    } catch (e) {
+      print('Error getting user all request: $e');
       return null;
     }
   }

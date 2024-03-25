@@ -52,7 +52,6 @@ class UserRepository {
       QuerySnapshot<Object?> querySnapshot =
           await collection.where('userId', isEqualTo: userId).get();
       List<Map<String, dynamic>> requestsData = [];
-      print(querySnapshot.docs.map((doc) => doc.data()));
       if (querySnapshot.docs.isNotEmpty) {
         requestsData = querySnapshot.docs
             .map((doc) => doc.data() as Map<String, dynamic>)
@@ -75,12 +74,14 @@ class UserRepository {
           .where('taskId', isEqualTo: taskId)
           .where('status', isEqualTo: 1)
           .get();
+
       List<Map<String, dynamic>> assignmentsData = [];
       if (querySnapshot.docs.isNotEmpty) {
         assignmentsData = querySnapshot.docs
             .map((doc) => doc.data() as Map<String, dynamic>)
             .toList();
       }
+
       List<Assignment> assignments =
           assignmentsData.map((data) => Assignment.fromMap(data)).toList();
 
@@ -93,6 +94,7 @@ class UserRepository {
 
   Future<List<Assignment>> getAllAssignments(String taskId) async {
     try {
+      print(111111);
       CollectionReference collection =
           FirebaseFirestore.instance.collection("assignments");
       QuerySnapshot<Object?> querySnapshot =
@@ -103,12 +105,40 @@ class UserRepository {
             .map((doc) => doc.data() as Map<String, dynamic>)
             .toList();
       }
+      print("assignmentsData");
+      print(querySnapshot.docs.map((doc) => doc.data()));
       List<Assignment> assignments =
           assignmentsData.map((data) => Assignment.fromMap(data)).toList();
       return assignments;
     } catch (e) {
       print('Error getting all assignments: $e');
       return [];
+    }
+  }
+
+  Future<Assignment?> getAssignmentByID(String assignmentID) {
+    CollectionReference collection =
+        FirebaseFirestore.instance.collection("assignments");
+    return collection
+        .doc(assignmentID)
+        .get()
+        .then(
+            (value) => Assignment.fromMap(value.data() as Map<String, dynamic>))
+        .catchError((error) {
+      print('Error getting assignment by ID: $error');
+      return null;
+    });
+  }
+
+  Future<void> updateAssignmentByID(String assignmentID) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection("assignments");
+      await collection.doc(assignmentID).update({'status': 0});
+      print('Assignment with ID $assignmentID updated successfully.');
+    } catch (error) {
+      print('Error updating assignment: $error');
+      throw error;
     }
   }
 

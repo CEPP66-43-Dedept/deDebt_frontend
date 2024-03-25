@@ -1,16 +1,30 @@
+import 'dart:async';
+
+import 'package:dedebt_application/repositories/userRepository.dart';
+import 'package:dedebt_application/services/userService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class appointmentUserScreen extends StatefulWidget {
-  const appointmentUserScreen({super.key});
+  final assignmentId;
+  const appointmentUserScreen({super.key, this.assignmentId});
 
   @override
   State<appointmentUserScreen> createState() => _appointmentUserScreen();
 }
 
 class _appointmentUserScreen extends State<appointmentUserScreen> {
+  late final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late final UserRepository userRepository =
+      UserRepository(firestore: firestore);
+  late final UserService userService =
+      UserService(userRepository: userRepository);
+  late StreamController<Assignment?> _userAssignmentController;
+  late User? user = FirebaseAuth.instance.currentUser;
+
   //Mockup Data
   Assignment userAppointment = Assignment(
     id: "0",
@@ -25,6 +39,20 @@ class _appointmentUserScreen extends State<appointmentUserScreen> {
   );
   static Color appBarColor = const Color(0xFF444371);
   @override
+  void initState() {
+    super.initState();
+    _userAssignmentController = StreamController<Assignment>();
+    _getAssignmentByID(user!.uid).then((assignmentData) {
+      _userAssignmentController.add(assignmentData);
+    }).catchError((error) {
+      _userAssignmentController.addError(error);
+    });
+  }
+
+  Future<Assignment?> _getAssignmentByID(String assign) async {
+    return userService.getAssignmentByID(assign);
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

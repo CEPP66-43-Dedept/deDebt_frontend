@@ -1,3 +1,9 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dedebt_application/repositories/advisorRepository.dart';
+import 'package:dedebt_application/services/advisorService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/screens/layouts/advisorLayout.dart';
 import 'package:dedebt_application/models/requestModel.dart';
@@ -10,14 +16,45 @@ class requestListAdvisorScreen extends StatefulWidget {
 
 class _requestListAdvisorScreen extends State<requestListAdvisorScreen> {
   //Mockup Data
+  static Color primaryColor = const Color(0xFFF3F5FE);
+  late final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late final AdvisorRepository _advisorRepository =
+      AdvisorRepository(firestore: firestore);
+  late final AdvisorService _advisorService =
+      AdvisorService(advisorRepository: _advisorRepository);
+  late StreamController<List<Request>> _advisorRequestController;
+  late User? user = FirebaseAuth.instance.currentUser;
+  bool isExpanded = false;
 
-  dynamic getBody() {
+  @override
+  void initState() {
+    super.initState();
+    _advisorRequestController = StreamController<List<Request>>();
+    _getAdvisorActiveRequests(user!.uid).then((requestData) {
+      _advisorRequestController.add(requestData!);
+    }).catchError((error) {
+      print('Error fetching user requests: $error');
+      _advisorRequestController.addError(error);
+    });
+  }
+
+  @override
+  void dispose() {
+    _advisorRequestController.close();
+    super.dispose();
+  }
+
+  Future<List<Request>?> _getAdvisorActiveRequests(String userId) async {
+    return _advisorService.getAdvisorActiveRequest(userId);
+  }
+
+  dynamic getBody(List<Request>? requests) {
     bool isHavedata = false;
     List<Widget> containerList = [
       const SizedBox(height: 10),
     ];
 
-    List<Request> _request = [];
+    List<Request> _request = requests ?? [];
     //สร้าง Listview ที่จะมีคำร้องต่างๆ ของ User
     for (Request requestItem in _request) {
       Widget container = AdvisorLayout.createRequestBox(context, requestItem);
@@ -65,8 +102,12 @@ class _requestListAdvisorScreen extends State<requestListAdvisorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: getBody(),
-    );
+    return StreamBuilder<List<Request>>(
+        stream: _advisorRequestController.stream,
+        builder: (context, snapshot) {
+          return Scaffold(
+            body: getBody(snapshot.data),
+          );
+        });
   }
 }
