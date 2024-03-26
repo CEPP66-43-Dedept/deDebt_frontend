@@ -58,7 +58,7 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
           } catch (e) {
             value = "";
           }
-          if (value == "นัดหมาย") {
+          if (value == 1) {
             if (containerList.length > 5) {
               containerList.removeLast();
             }
@@ -86,7 +86,7 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
                         showSelectAppointmentDate();
                       },
                       child: TextFormField(
-                         style: TextStyle(color: Colors.black),
+                        style: TextStyle(color: Colors.black),
                         enabled: false,
                         controller: timeSelectController,
                       ),
@@ -97,7 +97,7 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
             );
 
             setState(() {});
-          } else if (value == "กรอกเอกสาร") {
+          } else if (value == 0) {
             if (containerList.length > 5) {
               containerList.removeLast();
             }
@@ -364,6 +364,7 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
                       child: TextFormField(
                         enabled: false,
                         controller: dateSelectorController,
+                        style: TextStyle(color: Colors.black),
                         decoration: InputDecoration(
                           hintText: 'เลือกวัน', // Your hint text
                         ),
@@ -410,6 +411,7 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
                       child: TextFormField(
                         enabled: false,
                         controller: timeSelectorController,
+                        style: TextStyle(color: Colors.black),
                         decoration: InputDecoration(
                           hintText: 'เลือกวัน', // Your hint text
                         ),
