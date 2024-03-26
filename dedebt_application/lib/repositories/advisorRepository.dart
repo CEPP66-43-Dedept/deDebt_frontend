@@ -96,7 +96,10 @@ class AdvisorRepository {
     try {
       CollectionReference collection =
           FirebaseFirestore.instance.collection("assignments");
-      await collection.add(assignment.toMap());
+      DocumentReference documentRef = await collection.add(assignment.toMap());
+      String documentId = documentRef.id;
+
+      await documentRef.update({"id": documentId});
     } catch (e) {
       print('Error creating assignment: $e');
     }
