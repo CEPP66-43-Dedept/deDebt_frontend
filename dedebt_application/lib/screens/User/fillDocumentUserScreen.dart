@@ -1,10 +1,15 @@
+import 'dart:async';
+
+import 'package:dedebt_application/repositories/userRepository.dart';
+import 'package:dedebt_application/services/userService.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class fillDocumentUserScreen extends StatefulWidget {
-  const fillDocumentUserScreen({super.key});
+  final String assignmentId;
+  const fillDocumentUserScreen({super.key, required this.assignmentId});
 
   @override
   State<fillDocumentUserScreen> createState() => _fillDocumentUserScreen();
@@ -12,6 +17,12 @@ class fillDocumentUserScreen extends StatefulWidget {
 
 class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
   static Color appBarColor = const Color(0xFF444371);
+  late final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late final UserRepository userRepository =
+      UserRepository(firestore: firestore);
+  late final UserService userService =
+      UserService(userRepository: userRepository);
+  late StreamController<Assignment?> _userAssignmentController;
 
   final AccountController = TextEditingController();
   final AccountTypeContoller = TextEditingController();
@@ -125,16 +136,20 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                 child: Container(
                   width: 360,
                   height: 490,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 15,
+                  ),
                   child: ListView(
                     children: [
                       createTextField("เลขที่บัญชี", true, AccountController),
-                      createTextField("ประเภทบัญชี", false, AccountTypeContoller),
-                      createTextField("สำนักงาน / สาขา", false, BranchController),
-                      createTextField("ที่อยู่กาาจัดส่ง", false, DeliveryAddressController),
+                      createTextField(
+                          "ประเภทบัญชี", false, AccountTypeContoller),
+                      createTextField(
+                          "สำนักงาน / สาขา", false, BranchController),
+                      createTextField(
+                          "ที่อยู่กาาจัดส่ง", false, DeliveryAddressController),
                       createTextField("รหัสไปรษณีย์", false, PostNoController),
-                      createTextField("โทรศัพท์มือถือ",true, PhoneController),
+                      createTextField("โทรศัพท์มือถือ", true, PhoneController),
                     ],
                   ),
                 ),

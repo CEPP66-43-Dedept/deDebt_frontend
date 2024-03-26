@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:dedebt_application/repositories/userRepository.dart';
+import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/services/userService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class appointmentUserScreen extends StatefulWidget {
@@ -23,8 +25,6 @@ class _appointmentUserScreen extends State<appointmentUserScreen> {
   late final UserService userService =
       UserService(userRepository: userRepository);
   late StreamController<Assignment?> _userAssignmentController;
-  late User? user = FirebaseAuth.instance.currentUser;
-
   //Mockup Data
   Assignment userAppointment = Assignment(
     id: "0",
@@ -42,7 +42,7 @@ class _appointmentUserScreen extends State<appointmentUserScreen> {
   void initState() {
     super.initState();
     _userAssignmentController = StreamController<Assignment>();
-    _getAssignmentByID(user!.uid).then((assignmentData) {
+    _getAssignmentByID(widget.assignmentId).then((assignmentData) {
       _userAssignmentController.add(assignmentData);
     }).catchError((error) {
       _userAssignmentController.addError(error);
@@ -51,6 +51,10 @@ class _appointmentUserScreen extends State<appointmentUserScreen> {
 
   Future<Assignment?> _getAssignmentByID(String assign) async {
     return userService.getAssignmentByID(assign);
+  }
+
+  Future<void> _updateAssignmentStatus(String assignmentId) async {
+    return userService.updateAssignmentStatus(assignmentId);
   }
 
   Widget build(BuildContext context) {
@@ -213,6 +217,10 @@ class _appointmentUserScreen extends State<appointmentUserScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         // Handle button press
+                        context.go(AppRoutes.ASSIGNMENT_SUCCESS_USER +
+                            '{$widget.assignmentId}' +
+                            '/' +
+                            '1');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2DC09C),

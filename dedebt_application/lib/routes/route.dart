@@ -8,6 +8,9 @@ class AppRoutes {
   static const SEND_REQUESt_SUCCESS_USER = '/send-request-success-user';
   static const ASSIGNMENT_USER = '/assignment-user';
   static const ASSIGNMENT_SUCCESS_USER = '/assignment-sucess-user';
+  static const ASSIGNMENT_DOC_USER = '/assignment-Doc-user';
+  static const ASSIGNMENT_APPOINT_USER = '/assignment-Appoint-user';
+  static const ASSIGNMENT_FILL_DOC_USER = '/assignment-Fill-Doc-user';
   static const HISTORY_USER = '/history-user';
   static const PROFILE_USER = '/profile-user';
   static const MAIN_ADMIN = '/main-admin';

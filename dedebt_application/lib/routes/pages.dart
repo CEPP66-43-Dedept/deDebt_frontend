@@ -6,7 +6,11 @@ import 'package:dedebt_application/screens/Advisor/successAdvisorScreen.dart';
 import 'package:dedebt_application/screens/HomeScreen.dart';
 import 'package:dedebt_application/screens/Matcher/homeMatcher.dart';
 import 'package:dedebt_application/screens/Matcher/requestDetailMatcherScreen.dart';
+import 'package:dedebt_application/screens/User/appointmentUserScreen.dart';
+import 'package:dedebt_application/screens/User/assignmentSuccessScreen.dart';
 import 'package:dedebt_application/screens/User/assignmentUserScreen.dart';
+import 'package:dedebt_application/screens/User/docAssignmentScreen.dart';
+import 'package:dedebt_application/screens/User/fillDocumentUserScreen.dart';
 import 'package:dedebt_application/screens/User/historyUserScreen.dart';
 import 'package:dedebt_application/screens/User/homeUserScreen.dart';
 import 'package:dedebt_application/screens/User/profileUserScreen.dart';
@@ -92,6 +96,57 @@ class ROUTE {
 
       GoRoute(
           name: '/assignment-user',
+          path: AppRoutes.ASSIGNMENT_USER + '/:assignmentID',
+          builder: (context, state) {
+            final assignmentID =
+                state.pathParameters['assignmentID'] as String?;
+            return assignmentUserScreen(assignmentId: assignmentID ?? '');
+          }),
+      GoRoute(
+          name: '/assignment-sucess/user',
+          path: AppRoutes.ASSIGNMENT_USER + '/:assignmentID/:type',
+          builder: (context, state) {
+            final assignmentID = state.pathParameters['assignmentID'] as String;
+            final type =
+                int.parse(state.pathParameters['type'] as String? ?? '0');
+
+            return assignmentSuccessScreen(
+                successType: type, assignmentId: assignmentID);
+          }),
+      GoRoute(
+          name: '/assignment-appoint/user',
+          path: AppRoutes.ASSIGNMENT_APPOINT_USER + '/:assignmentID',
+          builder: (context, state) {
+            final assignmentID = state.pathParameters['assignmentID'] as String;
+
+            return appointmentUserScreen(
+              assignmentId: assignmentID,
+            );
+          }),
+
+      GoRoute(
+          name: '/assignment-doc/user',
+          path: AppRoutes.ASSIGNMENT_DOC_USER + '/:assignmentID',
+          builder: (context, state) {
+            final assignmentID = state.pathParameters['assignmentID'] as String;
+
+            return DocAssignScreen(
+              assignmentId: assignmentID,
+            );
+          }),
+      GoRoute(
+          name: '/assignment-fill-doc/user',
+          path: AppRoutes.ASSIGNMENT_FILL_DOC_USER + '/:assignmentID',
+          builder: (context, state) {
+            final assignmentID = state.pathParameters['assignmentID'] as String;
+
+            return fillDocumentUserScreen(
+              assignmentId: assignmentID,
+            );
+          }),
+
+      GoRoute(
+          name: 'send-request-users',
           path: AppRoutes.ASSIGNMENT_USER + '/:assignmentID',
           builder: (context, state) {
             final assignmentID =

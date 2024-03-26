@@ -3,8 +3,8 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dedebt_application/screens/Admin/adminHomeScreen.dart';
+import 'package:dedebt_application/screens/Advisor/addAssignmentAdvisorScreen.dart';
 import 'package:dedebt_application/screens/Matcher/homeMatcher.dart';
-import 'package:dedebt_application/screens/User/docAssignmentScreen.dart';
 import 'package:dedebt_application/screens/User/homeUserScreen.dart';
 import 'package:dedebt_application/screens/Advisor/homeAdvisorScreen.dart';
 import 'package:dedebt_application/screens/layouts/adminLayout.dart';
@@ -116,15 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (matcherSnapshot.docs.isNotEmpty) {
       return {'collection': 'matcher'};
     }
-    final QuerySnapshot<Map<String, dynamic>> advisorSnapshot =
-        await FirebaseFirestore.instance
-            .collection('advisors')
-            .where('email', isEqualTo: currentUser.email)
-            .get();
-
-    if (advisorSnapshot.docs.isNotEmpty) {
-      return {'collection': 'advisors'};
-    }
     final QuerySnapshot<Map<String, dynamic>> userSnapshot =
         await FirebaseFirestore.instance
             .collection('users')
@@ -132,6 +123,15 @@ class _HomeScreenState extends State<HomeScreen> {
             .get();
     if (userSnapshot.docs.isNotEmpty) {
       return {'collection': 'users'};
+    }
+
+    final QuerySnapshot<Map<String, dynamic>> advisorSnapshot =
+        await FirebaseFirestore.instance
+            .collection('advisors')
+            .where('email', isEqualTo: currentUser.email)
+            .get();
+    if (advisorSnapshot.docs.isNotEmpty) {
+      return {'collection': 'advisors'};
     }
 
     return {'collection': 'none'};

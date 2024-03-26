@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class assignmentSuccessScreen extends StatefulWidget {
-  int successType;
+  final int successType;
+  final String assignmentId;
   // 0 เป็นการกรอกเอกสาร
   // 1 เป็นการนัดหมาย
-  assignmentSuccessScreen({super.key, required this.successType});
+  assignmentSuccessScreen(
+      {super.key, required this.successType, required this.assignmentId});
 
   @override
   State<assignmentSuccessScreen> createState() => _assignmentSuccessScreen();

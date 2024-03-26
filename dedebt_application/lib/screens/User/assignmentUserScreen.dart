@@ -87,6 +87,8 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
             backgroundColor: const Color(0xFFBBB9F4),
           ),
           onPressed: () {
+            context.go(
+                AppRoutes.ASSIGNMENT_FILL_DOC_USER + '/' + '${_assignment.id}');
             //function ที่เปลี่ยนไปหน้ากรอกเอกสาร
             //fillDocumentUserScreen.dart
           },
@@ -104,6 +106,8 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
             backgroundColor: const Color(0xFFBBB9F4),
           ),
           onPressed: () {
+            context.go(
+                AppRoutes.ASSIGNMENT_APPOINT_USER + '/' + '${_assignment.id}');
             //function ที่เปลี่ยนไปหน้ายืนยันเวลานัดหมาย
             //appointmentUserScreen.dart
           },
@@ -371,15 +375,9 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
                               onPressed: () {
                                 // Handle button press
                                 _updateAssignmentStatus(_assignment!.id!);
-                                Navigator.pop(context);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        assignmentSuccessScreen(
-                                            successType: _assignment!.type),
-                                  ),
-                                );
+                                context.go(AppRoutes.REQUEST_USER +
+                                    '/' +
+                                    '${_assignment!.taskId}');
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF2DC09C),
