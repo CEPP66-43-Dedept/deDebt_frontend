@@ -98,7 +98,6 @@ class AdvisorRepository {
           FirebaseFirestore.instance.collection("assignments");
       DocumentReference documentRef = await collection.add(assignment.toMap());
       String documentId = documentRef.id;
-
       await documentRef.update({"id": documentId});
     } catch (e) {
       print('Error creating assignment: $e');
@@ -157,15 +156,18 @@ class AdvisorRepository {
       Timestamp endOfDay = Timestamp.fromDate(DateTime(
           day.toDate().year, day.toDate().month, day.toDate().day + 1));
 
-      // Fetch documents matching taskIds
-      QuerySnapshot<Object?> tasksSnapshot =
-          await collection.where('taskId', whereIn: requestList).get();
+      // Fetch documents matching taskIds and type == 0
+      QuerySnapshot<Object?> tasksSnapshot = await collection
+          .where('taskId', whereIn: requestList)
+          .where('type',
+              isEqualTo: 0) // Add this line for filtering by type == 0
+          .get();
 
       // Filter documents by appointmentTime
       List<DocumentSnapshot<Object?>> filteredDocs = [];
       for (var doc in tasksSnapshot.docs) {
-        if (doc.get('appointmentTime') is Timestamp) {
-          Timestamp appointmentTime = doc.get('appointmentTime') as Timestamp;
+        if (doc.get('startTime') is Timestamp) {
+          Timestamp appointmentTime = doc.get('startTime') as Timestamp;
           if (appointmentTime.compareTo(startOfDay) >= 0 &&
               appointmentTime.compareTo(endOfDay) < 0) {
             filteredDocs.add(doc);

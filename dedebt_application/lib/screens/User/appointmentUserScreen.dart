@@ -36,7 +36,6 @@ class _appointmentUserScreen extends State<appointmentUserScreen> {
     taskId: "TaskID",
     startTime: Timestamp.fromDate(DateTime(2023, 2, 27, 13, 0)),
     endTime: Timestamp.fromDate(DateTime(2023, 2, 27, 17, 0)),
-    appointmentTime: null,
   );
   static Color appBarColor = const Color(0xFF444371);
   @override

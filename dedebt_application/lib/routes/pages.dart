@@ -2,6 +2,7 @@ import 'package:dedebt_application/routes/transitionRoute.dart';
 
 import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/screens/Admin/adminHomeScreen.dart';
+import 'package:dedebt_application/screens/Advisor/successAdvisorScreen.dart';
 import 'package:dedebt_application/screens/HomeScreen.dart';
 import 'package:dedebt_application/screens/Matcher/homeMatcher.dart';
 import 'package:dedebt_application/screens/Matcher/requestDetailMatcherScreen.dart';
@@ -160,12 +161,21 @@ class ROUTE {
           }),
 
       GoRoute(
-        name: '/add-assignment-advisor',
-        path: AppRoutes.ADD_ASSIGNMENT_ADVISOR,
-        builder: (context, state) => TransitionRoutePage(
-          child: addAssignmentAdvisorScreen(),
-        ),
-      ),
+          name: '/add-assignment-advisor',
+          path: AppRoutes.ADD_ASSIGNMENT_ADVISOR + '/:requestID',
+          builder: (context, state) {
+            final requestID = state.pathParameters['requestID'] as String?;
+
+            return addAssignmentAdvisorScreen(requestID: requestID!);
+          }),
+      GoRoute(
+          name: '/add-assignment-success-advisor',
+          path: AppRoutes.ADD_ASSIGNMENT_SUCCESS_ADVISOR + '/:requestID',
+          builder: (context, state) {
+            final requestID = state.pathParameters['requestID'] as String?;
+
+            return successAdvisorScreen(requestID: requestID!);
+          }),
       GoRoute(
         name: '/history-advisor',
         path: AppRoutes.HISTORY_ADVISOR,

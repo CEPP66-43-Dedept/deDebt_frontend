@@ -1,4 +1,9 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dedebt_application/models/assignmentModel.dart';
+import 'package:dedebt_application/repositories/advisorRepository.dart';
+import 'package:dedebt_application/services/advisorService.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:go_router/go_router.dart';
@@ -7,12 +12,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 class addAssignmentAdvisorScreen extends StatefulWidget {
-  const addAssignmentAdvisorScreen({super.key});
+  final String requestID;
+  const addAssignmentAdvisorScreen({super.key, required this.requestID});
   State<addAssignmentAdvisorScreen> createState() =>
       _addAssignmentAdvisorScreen();
 }
 
 class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
+  static Color primaryColor = const Color(0xFFF3F5FE);
+  late final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late final AdvisorRepository _advisorRepository =
+      AdvisorRepository(firestore: firestore);
+  late final AdvisorService _advisorService =
+      AdvisorService(advisorRepository: _advisorRepository);
+
   static Color appBarColor = const Color(0xFF444371);
   static Color navBarColor = const Color(0xFF2DC09C);
   final assignmentTypeController = SingleValueDropDownController();
@@ -36,6 +49,19 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
     DropDownValueModel(name: "กรอกเอกสาร", value: 0),
     DropDownValueModel(name: "นัดหมาย", value: 1)
   ];
+  Future<void> _createAssignment() async {
+    Assignment assignment = Assignment(
+      id: "",
+      type: getAssignmentType(),
+      title: getAssignmentTitle(),
+      detail: getAssignmentdetail(),
+      status: 1,
+      taskId: widget.requestID,
+      startTime: getstartTime(),
+      endTime: getendTime(),
+    );
+    await _advisorService.createAssignment(assignment);
+  }
 
   void initState() {
     super.initState();
@@ -546,17 +572,23 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
   }
 
   Timestamp getstartTime() {
+    if (pickedDate == null || pickedTime == null) {
+      return Timestamp.fromDate(DateTime.now());
+    }
     return Timestamp.fromDate(DateTime(pickedDate!.year, pickedDate!.month,
         pickedDate!.day, pickedTime!.hour, pickedTime!.minute));
   }
 
   Timestamp getendTime() {
+    if (pickedDate == null || pickedTime == null) {
+      return Timestamp.fromDate(DateTime.now());
+    }
     return Timestamp.fromDate(DateTime(
         pickedDate!.year,
         pickedDate!.month,
         pickedDate!.day,
         pickedTime!.hour +
-            int.parse(hourSelectorController.dropDownValue!.value),
+            int.parse(hourSelectorController.dropDownValue!.value.toString()),
         pickedTime!.minute));
   }
 
@@ -586,7 +618,8 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
               children: [
                 IconButton(
                   onPressed: () {
-                    context.go(AppRoutes.REQUEST_ADVISOR);
+                    context
+                        .go(AppRoutes.REQUEST_ADVISOR + '/' + widget.requestID);
                     //Icon function
                   },
                   icon: const Icon(
@@ -624,6 +657,10 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
         bottomNavigationBar: InkWell(
           onTap: () {
             // function ในการดึงข้อมูล
+            _createAssignment();
+            context.go(AppRoutes.ADD_ASSIGNMENT_SUCCESS_ADVISOR +
+                '/' +
+                widget.requestID);
           },
           child: BottomAppBar(
             color: navBarColor,

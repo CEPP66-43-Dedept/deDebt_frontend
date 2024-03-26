@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class successAdvisorScreen extends StatefulWidget {
-  const successAdvisorScreen({super.key});
+  final String requestID;
+  const successAdvisorScreen({super.key, required this.requestID});
 
   @override
   State<successAdvisorScreen> createState() => _successAdvisorScreen();
@@ -24,7 +25,10 @@ class _successAdvisorScreen extends State<successAdvisorScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  context
+                      .go(AppRoutes.REQUEST_ADVISOR + '/' + widget.requestID);
+                },
                 icon: const Icon(
                   Icons.arrow_back,
                   size: 35,
@@ -75,7 +79,8 @@ class _successAdvisorScreen extends State<successAdvisorScreen> {
             Expanded(
               child: InkWell(
                 onTap: () {
-                  Navigator.pop(context);
+                  context
+                      .go(AppRoutes.REQUEST_ADVISOR + '/' + widget.requestID);
                 },
                 child: Center(
                   child: Text(

@@ -9,18 +9,17 @@ class Assignment {
   final String taskId;
   final Timestamp startTime;
   final Timestamp endTime;
-  final Timestamp? appointmentTime;
 
-  Assignment(
-      {this.id,
-      required this.type,
-      required this.title,
-      required this.detail,
-      required this.status,
-      required this.taskId,
-      required this.startTime,
-      required this.endTime,
-      required this.appointmentTime});
+  Assignment({
+    this.id,
+    required this.type,
+    required this.title,
+    required this.detail,
+    required this.status,
+    required this.taskId,
+    required this.startTime,
+    required this.endTime,
+  });
 
   factory Assignment.fromMap(Map<String, dynamic> map) {
     return Assignment(
@@ -32,7 +31,6 @@ class Assignment {
       taskId: map['taskId'] ?? '',
       startTime: map['startTime'] ?? DateTime.now(),
       endTime: map['endTime'] ?? DateTime.now(),
-      appointmentTime: map['appointmentTime'],
     );
   }
 
@@ -46,7 +44,6 @@ class Assignment {
       'taskId': taskId,
       'endTime': endTime,
       'startTime': startTime,
-      'appointmentTime': appointmentTime,
     };
   }
 }

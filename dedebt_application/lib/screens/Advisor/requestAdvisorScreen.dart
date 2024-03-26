@@ -396,7 +396,9 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(20),
                     onTap: () {
-                      context.go(AppRoutes.ADD_ASSIGNMENT_ADVISOR);
+                      context.go(AppRoutes.ADD_ASSIGNMENT_ADVISOR +
+                          '/' +
+                          widget.requestId);
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(16),

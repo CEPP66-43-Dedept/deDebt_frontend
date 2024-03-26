@@ -7,6 +7,7 @@ class AppRoutes {
   static const SEND_REQUEST_PAGE2_USER = '/send-request-page2-users';
   static const SEND_REQUESt_SUCCESS_USER = '/send-request-success-user';
   static const ASSIGNMENT_USER = '/assignment-user';
+  static const ASSIGNMENT_SUCCESS_USER = '/assignment-sucess-user';
   static const HISTORY_USER = '/history-user';
   static const PROFILE_USER = '/profile-user';
   static const MAIN_ADMIN = '/main-admin';
@@ -18,6 +19,8 @@ class AppRoutes {
   static const REQUEST_ADVISOR = '/request-advisor';
   static const ASSIGNMENT_ADVISOR = '/assignment-advisor';
   static const ADD_ASSIGNMENT_ADVISOR = '/add-assignment-advisor';
+  static const ADD_ASSIGNMENT_SUCCESS_ADVISOR =
+      '/add-assignment-advisor/success';
   static const HISTORY_ADVISOR = '/history-advisor';
   static const PROFILE_ADVISOR = '/profile-advisor';
   static const SIGN_IN = '/sign_in';
