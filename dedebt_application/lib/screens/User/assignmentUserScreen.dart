@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:dedebt_application/repositories/userRepository.dart';
+import 'package:dedebt_application/services/userService.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:go_router/go_router.dart';
@@ -15,7 +19,33 @@ class assignmentUserScreen extends StatefulWidget {
 
 class _assignmentUserScreen extends State<assignmentUserScreen> {
   //mockup data
-  final _assignment = Assignment(
+  late final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late final UserRepository userRepository =
+      UserRepository(firestore: firestore);
+  late final UserService userService =
+      UserService(userRepository: userRepository);
+  late StreamController<Assignment?> _userAssignmentController;
+  void initState() {
+    super.initState();
+    _userAssignmentController = StreamController<Assignment?>();
+    _getAssignmentByID(widget.assignmentId).then((assignmentData) {
+      _userAssignmentController.add(assignmentData);
+    }).catchError((error) {
+      _userAssignmentController.addError(error);
+    });
+  }
+
+  @override
+  void dispose() {
+    _userAssignmentController.close();
+    super.dispose();
+  }
+
+  Future<Assignment?> _getAssignmentByID(String assignmentId) async {
+    return userService.getAssignmentByID(assignmentId);
+  }
+
+  Assignment? _assignment = Assignment(
     id: "abc123",
     type: 1,
     title: "ทำเอกสารหักเงิยของธนาคารกรุงเทพ",
@@ -79,6 +109,9 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
             backgroundColor: const Color(0xFFBBB9F4),
           ),
           onPressed: () {
+            context.go(
+                AppRoutes.ASSIGNMENT_FILL_DOC_USER + '/' + '${_assignment.id}');
+
             //function ที่เปลี่ยนไปหน้ากรอกเอกสาร
             //fillDocumentUserScreen.dart
           },
@@ -95,6 +128,8 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
             backgroundColor: const Color(0xFFBBB9F4),
           ),
           onPressed: () {
+            context.go(
+                AppRoutes.ASSIGNMENT_APPOINT_USER + '/' + '${_assignment.id}');
             //function ที่เปลี่ยนไปหน้ายืนยันเวลานัดหมาย
             //appointmentUserScreen.dart
           },
@@ -159,236 +194,261 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-          appBar: AppBar(
-              backgroundColor: navbarColor,
-              surfaceTintColor: Colors.transparent,
-              toolbarHeight: 55,
-              title: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      //Icon function
-                      context.go(AppRoutes.REQUEST_USER);
-                    },
-                    icon: Icon(
-                      Icons.arrow_back,
-                      size: 35,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 50,
-                  ),
-                  const Text(
-                    "งานที่มอบหมาย",
-                    style: TextStyle(fontSize: 24, color: Colors.white),
-                  )
-                ],
-              )),
-          body: Scaffold(
-              body: Align(
-            alignment: Alignment.center,
-            child: Column(
-              children: [
-                RawScrollbar(
-                  thumbColor: const Color(0xFFBBB9F4),
-                  radius: const Radius.circular(20),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 6.0, vertical: 10),
-                  thickness: 5,
-                  child: Container(
-                      width: 415,
-                      height: 501,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 15),
-                      child: DefaultTextStyle(
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: const Color(0xFF36338C),
-                              fontSize: 15,
-                            ),
-                        child: ListView(children: [
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(33, 29, 33, 25),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Column(
-                              children: [
+      child: StreamBuilder<Assignment?>(
+          stream: _userAssignmentController.stream,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return const Center(child: Text('Error fetching assignments'));
+            }
+            _assignment = snapshot.data;
+            return Scaffold(
+                appBar: AppBar(
+                    backgroundColor: navbarColor,
+                    surfaceTintColor: Colors.transparent,
+                    toolbarHeight: 55,
+                    title: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            //Icon function
+                            context.go(AppRoutes.REQUEST_USER);
+                          },
+                          icon: Icon(
+                            Icons.arrow_back,
+                            size: 35,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        const Text(
+                          "งานที่มอบหมาย",
+                          style: TextStyle(fontSize: 24, color: Colors.white),
+                        )
+                      ],
+                    )),
+                body: Scaffold(
+                    body: Align(
+                  alignment: Alignment.center,
+                  child: Column(
+                    children: [
+                      RawScrollbar(
+                        thumbColor: const Color(0xFFBBB9F4),
+                        radius: const Radius.circular(20),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6.0, vertical: 10),
+                        thickness: 5,
+                        child: Container(
+                            width: 415,
+                            height: 501,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 15),
+                            child: DefaultTextStyle(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    color: const Color(0xFF36338C),
+                                    fontSize: 15,
+                                  ),
+                              child: ListView(children: [
                                 Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(28, 21, 28, 13),
+                                      const EdgeInsets.fromLTRB(33, 29, 33, 25),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFFDAEAFA),
+                                    color: Colors.white,
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        _assignment.title,
-                                        overflow: TextOverflow.visible,
-                                        style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Text(
-                                            "สถานะ: ",
-                                            style: TextStyle(
-                                                color: Color(0xFF5A55CA)),
-                                          ),
-                                          // create status container
-                                          getAssignmentStatusContainer(
-                                              _assignment),
-                                        ],
-                                      ),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            "รายละเอียด: ",
-                                            style: TextStyle(
-                                                color: Color(0xFF5A55CA)),
-                                          ),
-                                          Expanded(
-                                            child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    _assignment.detail,
-                                                    overflow:
-                                                        TextOverflow.visible,
-                                                  )
-                                                ]),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Text(
-                                              "วันสิ้นสุดการดำเนินการ: "),
-                                          //วันดำเนินการ
-
-                                          Text(
-                                              "${_assignment.startTime.toDate().day}/${_assignment.startTime.toDate().month}/${_assignment.startTime.toDate().year}")
-                                        ],
-                                      ),
                                       Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 10),
-                                          height: 55,
-                                          width: 258,
-                                          child:
-                                              getAssignmentButton(_assignment)),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            28, 21, 28, 13),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFDAEAFA),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              _assignment!.title,
+                                              overflow: TextOverflow.visible,
+                                              style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Text(
+                                                  "สถานะ: ",
+                                                  style: TextStyle(
+                                                      color: Color(0xFF5A55CA)),
+                                                ),
+                                                // create status container
+                                                getAssignmentStatusContainer(
+                                                    _assignment!),
+                                              ],
+                                            ),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const Text(
+                                                  "รายละเอียด: ",
+                                                  style: TextStyle(
+                                                      color: Color(0xFF5A55CA)),
+                                                ),
+                                                Expanded(
+                                                  child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          _assignment!.detail,
+                                                          overflow: TextOverflow
+                                                              .visible,
+                                                        )
+                                                      ]),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Text(
+                                                    "วันสิ้นสุดการดำเนินการ: "),
+                                                //วันดำเนินการ
+
+                                                Text(
+                                                    "${_assignment!.startTime.toDate().day}/${_assignment!.startTime.toDate().month}/${_assignment!.startTime.toDate().year}")
+                                              ],
+                                            ),
+                                            Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 10),
+                                                height: 55,
+                                                width: 258,
+                                                child: getAssignmentButton(
+                                                    _assignment!)),
+                                          ],
+                                        ),
+                                      )
                                     ],
                                   ),
                                 )
-                              ],
-                            ),
-                          )
-                        ]),
-                      )),
-                ),
-                Container(
-                  width: 390,
-                  height: 165,
-                  color: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  // แจ้งหมายเหตุ function
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFFF18F80),
-                                ),
-                                child: const Text(
-                                  'แจ้งหมายเหตุ',
-                                  style: TextStyle(
-                                      fontSize: 18.0, color: Colors.white),
-                                ),
+                              ]),
+                            )),
+                      ),
+                      Container(
+                        width: 390,
+                        height: 165,
+                        color: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        // แจ้งหมายเหตุ function
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            const Color(0xFFF18F80),
+                                      ),
+                                      child: const Text(
+                                        'แจ้งหมายเหตุ',
+                                        style: TextStyle(
+                                            fontSize: 18.0,
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  // Handle button press
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF2DC09C),
-                                ),
-                                child: const Text(
-                                  'เสร็จสิ้น',
-                                  style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.white), // Set text color
-                                ),
+                              const SizedBox(height: 15),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        // Handle button press
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            const Color(0xFF2DC09C),
+                                      ),
+                                      child: const Text(
+                                        'เสร็จสิ้น',
+                                        style: TextStyle(
+                                            fontSize: 18.0,
+                                            color:
+                                                Colors.white), // Set text color
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
-          )),
-          bottomNavigationBar: SizedBox(
-              height: 55,
-              child: BottomAppBar(
-                color: navbarColor,
-                padding: const EdgeInsets.all(0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    IconButton(
-                      icon: Icon(getIcon(0), size: 35, color: getIconColors(0)),
-                      onPressed: () {
-                        onTap(0);
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(getIcon(1), size: 35, color: getIconColors(1)),
-                      onPressed: () {
-                        onTap(1);
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(getIcon(2), size: 35, color: getIconColors(2)),
-                      onPressed: () {
-                        onTap(2);
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(getIcon(3), size: 35, color: getIconColors(3)),
-                      onPressed: () {
-                        onTap(3);
-                      },
-                    )
-                  ],
-                ),
-              ))),
+                )),
+                bottomNavigationBar: SizedBox(
+                    height: 55,
+                    child: BottomAppBar(
+                      color: navbarColor,
+                      padding: const EdgeInsets.all(0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          IconButton(
+                            icon: Icon(getIcon(0),
+                                size: 35, color: getIconColors(0)),
+                            onPressed: () {
+                              onTap(0);
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(getIcon(1),
+                                size: 35, color: getIconColors(1)),
+                            onPressed: () {
+                              onTap(1);
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(getIcon(2),
+                                size: 35, color: getIconColors(2)),
+                            onPressed: () {
+                              onTap(2);
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(getIcon(3),
+                                size: 35, color: getIconColors(3)),
+                            onPressed: () {
+                              onTap(3);
+                            },
+                          )
+                        ],
+                      ),
+                    )));
+          }),
     );
   }
 }

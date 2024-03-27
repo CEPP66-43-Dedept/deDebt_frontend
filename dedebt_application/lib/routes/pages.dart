@@ -89,7 +89,7 @@ class ROUTE {
           }),
       GoRoute(
           name: '/assignment-sucess/user',
-          path: AppRoutes.ASSIGNMENT_USER + '/:assignmentID/:type',
+          path: AppRoutes.ASSIGNMENT_SUCCESS_USER + '/:assignmentID' + '/:type',
           builder: (context, state) {
             final assignmentID = state.pathParameters['assignmentID'] as String;
             final type =

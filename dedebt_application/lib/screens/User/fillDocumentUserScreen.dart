@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:dedebt_application/repositories/userRepository.dart';
+import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/services/userService.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class fillDocumentUserScreen extends StatefulWidget {
@@ -76,7 +78,9 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.go(AppRoutes.REQUEST_USER);
+                },
                 icon: const Icon(
                   Icons.arrow_back,
                   size: 35,
@@ -194,6 +198,8 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         // Handle button press
+                        context.go(AppRoutes.ASSIGNMENT_SUCCESS_USER +
+                            '/${widget.assignmentId}/1');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2DC09C),

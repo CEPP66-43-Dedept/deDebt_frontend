@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dedebt_application/repositories/userRepository.dart';
 import 'package:dedebt_application/routes/route.dart';
+import 'package:dedebt_application/services/userService.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -32,7 +35,7 @@ class _assignmentSuccessScreen extends State<assignmentSuccessScreen> {
                 width: 45,
               ),
               Text(
-                widget.successType == 0 ? "กรอกเอกสาร" : "นักหมายเวลา",
+                widget.successType == 0 ? "กรอกเอกสาร" : "นัดหมายเวลา",
                 style: TextStyle(fontSize: 24, color: Colors.white),
               )
             ],
@@ -73,6 +76,7 @@ class _assignmentSuccessScreen extends State<assignmentSuccessScreen> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
+                  context.go(AppRoutes.REQUEST_USER);
                   //redirect ไปหน้าอื่นๆ
                 },
                 style: ElevatedButton.styleFrom(
