@@ -1,14 +1,18 @@
 import 'dart:async';
 
 import 'package:dedebt_application/models/fillAssignModel.dart';
+import 'package:dedebt_application/models/requestModel.dart';
+import 'package:dedebt_application/models/userModel.dart';
 import 'package:dedebt_application/repositories/userRepository.dart';
 import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/screens/User/docAssignmentScreen.dart';
 import 'package:dedebt_application/services/userService.dart';
 import 'package:dedebt_application/variables/color.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
@@ -22,7 +26,6 @@ class fillDocumentUserScreen extends StatefulWidget {
 
 class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
   static Color appBarColor = const Color(0xFF444371);
-
   final AccountNumberController = TextEditingController();
   final AccountNameController = TextEditingController();
   final CardNumberController = TextEditingController();
@@ -35,10 +38,12 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
       UserService(userRepository: userRepository);
   late StreamController<Assignment?> _userAssignmentController;
   late FillAssignment? dataAssignment;
-
+  late User? user = FirebaseAuth.instance.currentUser;
   final DeliveryAddressController = TextEditingController();
   final PostNoController = TextEditingController();
   final PhoneController = TextEditingController();
+  late Stream<Users?> _userDataStream;
+
   void saveDataToFirestore(FillAssignment data) async {
     try {
       final CollectionReference assignmentsCollection =
@@ -47,6 +52,16 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
       print('Data saved successfully to Firestore!');
     } catch (error) {
       print('Error saving data: $error');
+    }
+  }
+
+  Future<Users?> _getUserData(String userId) async {
+    Map<String, dynamic>? userData = await userService.getUserData(userId);
+    if (userData != null) {
+      Users user = Users.fromMap(userData);
+      return user;
+    } else {
+      throw Exception('User data not found');
     }
   }
 
@@ -83,6 +98,17 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
         ],
       ),
     );
+  }
+
+  void initState() {
+    super.initState();
+    _userDataStream = _getUserDataStream(user!.uid);
+  }
+
+  Stream<Users?> _getUserDataStream(String userId) {
+    return Stream<Map<String, dynamic>?>.fromFuture(
+            userService.getUserData(userId))
+        .map((userData) => userData != null ? Users.fromMap(userData) : null);
   }
 
   @override
@@ -127,6 +153,9 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(
+                      height: 20,
+                    ),
                     const Row(
                       children: [
                         SizedBox(
@@ -155,31 +184,23 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                       height: 470,
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: RawScrollbar(
-                          thumbColor: const Color(0xFFBBB9F4),
-                          thumbVisibility: true,
-                          radius: const Radius.circular(20),
+                        child: Container(
+                          width: 360,
+                          height: 490,
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 6.0, vertical: 10),
-                          thickness: 5,
-                          child: Container(
-                            width: 360,
-                            height: 490,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                            ),
-                            child: ListView(
-                              children: [
-                                createTextField("หมายเลขบัญชี", true,
-                                    AccountNumberController),
-                                createTextField(
-                                    "ชื่อบัญชี", false, AccountNameController),
-                                createTextField(
-                                    "หมายเลขบัตร", true, CardNumberController),
-                                createTextField("บัตรหมดอายุ", false,
-                                    ExpiredDateController),
-                              ],
-                            ),
+                            horizontal: 15,
+                          ),
+                          child: ListView(
+                            children: [
+                              createTextField("หมายเลขบัญชี", true,
+                                  AccountNumberController),
+                              createTextField(
+                                  "ชื่อบัญชี", false, AccountNameController),
+                              createTextField(
+                                  "หมายเลขบัตร", true, CardNumberController),
+                              createTextField(
+                                  "บัตรหมดอายุ", false, ExpiredDateController),
+                            ],
                           ),
                         ),
                       ),
@@ -203,20 +224,68 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         // แจ้งหมายเหตุ function
                         showModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return DocAssignScreen(
-                                lstString: [
-                                  AccountNumberController.text ?? '',
-                                  AccountNameController.text ?? '',
-                                  CardNumberController.text ?? '',
-                                  ExpiredDateController.text ?? '',
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Container(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  // ปุ่มย้อนกลับ
+                                  IconButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    icon: Icon(Icons.arrow_back),
+                                  ),
+                                  Expanded(
+                                    child: FutureBuilder<Users?>(
+                                      future: _getUserData(user!.uid),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          // Return a loading indicator if data is still loading
+                                          return Scaffold(
+                                            body: CircularProgressIndicator(),
+                                          );
+                                        } else if (snapshot.hasError) {
+                                          // Return an error message if an error occurred
+                                          return Text(
+                                              'Error: ${snapshot.error}');
+                                        } else {
+                                          // If data is available, build your widget accordingly
+                                          Users? currentUser = snapshot.data;
+                                          if (currentUser != null) {
+                                            FillAssignment fillAssignment =
+                                                FillAssignment(
+                                              id: widget.assignmentId,
+                                              data: [
+                                                AccountNumberController.text,
+                                                AccountNameController.text,
+                                                CardNumberController.text,
+                                                ExpiredDateController.text,
+                                                "${currentUser.firstname} ${currentUser.lastname}",
+                                                "${currentUser.ssn}"
+                                              ],
+                                            );
+                                            return DocAssignScreen(
+                                                lstString: fillAssignment);
+                                          } else {
+                                            // Handle the case when user data is not available
+                                            print("User data is not available");
+                                            return Container();
+                                          }
+                                        }
+                                      },
+                                    ),
+                                  ),
                                 ],
-                              );
-                            });
+                              ),
+                            );
+                          },
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: ColorGuide.blueDarken,
@@ -236,22 +305,28 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        // Handle button press
-                        FillAssignment fillAssignment = FillAssignment(
-                          id: widget.assignmentId,
-                          data: [
-                            AccountNumberController.text,
-                            AccountNameController.text,
-                            CardNumberController.text,
-                            ExpiredDateController.text,
-                          ],
-                        );
-                        saveDataToFirestore(fillAssignment);
-                        context.go(AppRoutes.ASSIGNMENT_PREVIEW_DOC_USER +
-                            '/' +
-                            widget.assignmentId);
-                        // context.go(AppRoutes.ASSIGNMENT_SUCCESS_USER +
-                        //     '/${widget.assignmentId}/1');
+                        _userDataStream.listen((Users? currentUser) {
+                          if (currentUser != null) {
+                            FillAssignment fillAssignment = FillAssignment(
+                              id: widget.assignmentId,
+                              data: [
+                                AccountNumberController.text,
+                                AccountNameController.text,
+                                CardNumberController.text,
+                                ExpiredDateController.text,
+                                "${currentUser.firstname} ${currentUser.lastname}",
+                                "${currentUser.ssn}"
+                              ],
+                            );
+                            saveDataToFirestore(fillAssignment);
+                            context.go(AppRoutes.ASSIGNMENT_PREVIEW_DOC_USER +
+                                '/' +
+                                widget.assignmentId);
+                          } else {
+                            // Handle the case when user data is not available
+                            print("User data is not available");
+                          }
+                        });
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2DC09C),

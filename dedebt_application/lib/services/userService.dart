@@ -20,6 +20,15 @@ class UserService {
     }
   }
 
+  Future<Request?> getRequestByrequestID(String requestID) async {
+    try {
+      return await _userRepository.getRequestByrequestID(requestID);
+    } catch (e) {
+      print('Error getting user data: $e');
+      return null;
+    }
+  }
+
   Future<void> updateAssignmentStatus(String assignmentID) async {
     try {
       await _userRepository.updateAssignmentByID(assignmentID);
