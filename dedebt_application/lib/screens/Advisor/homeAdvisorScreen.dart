@@ -320,7 +320,11 @@ class _homeAdvisorScreen extends State<homeAdvisorScreen> {
                                                     context,
                                                     assignmentThisdayData![
                                                         index],
-                                                    AppRoutes.REQUEST_ADVISOR);
+                                                    AppRoutes.REQUEST_ADVISOR +
+                                                        '/' +
+                                                        assignmentThisdayData![
+                                                                index]
+                                                            .taskId);
                                           })),
                                 ),
                               ),

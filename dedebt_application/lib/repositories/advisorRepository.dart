@@ -160,7 +160,7 @@ class AdvisorRepository {
       QuerySnapshot<Object?> tasksSnapshot = await collection
           .where('taskId', whereIn: requestList)
           .where('type',
-              isEqualTo: 0) // Add this line for filtering by type == 0
+              isEqualTo: 1) // Add this line for filtering by type == 0
           .get();
 
       // Filter documents by appointmentTime
@@ -179,7 +179,7 @@ class AdvisorRepository {
       for (var doc in filteredDocs) {
         assignments.add(Assignment.fromMap(doc.data() as Map<String, dynamic>));
       }
-
+      assignments.sort((a, b) => a.startTime.compareTo(b.startTime));
       return assignments;
     } catch (e) {
       print('Error getting user request: $e');
