@@ -25,17 +25,9 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
 
   final AccountNumberController = TextEditingController();
   final AccountNameController = TextEditingController();
-  final BranchController = TextEditingController();
+  final CardNumberController = TextEditingController();
   final ExpiredDateController = TextEditingController();
 
-  List<dynamic> getData() {
-    return [
-      AccountNumberController.text,
-      AccountNameController.text,
-      BranchController.text,
-      ExpiredDateController.text
-    ];
-  }
   late final FirebaseFirestore firestore = FirebaseFirestore.instance;
   late final UserRepository userRepository =
       UserRepository(firestore: firestore);
@@ -43,7 +35,7 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
       UserService(userRepository: userRepository);
   late StreamController<Assignment?> _userAssignmentController;
   late FillAssignment? dataAssignment;
-  
+
   final DeliveryAddressController = TextEditingController();
   final PostNoController = TextEditingController();
   final PhoneController = TextEditingController();
@@ -183,7 +175,7 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                                 createTextField(
                                     "ชื่อบัญชี", false, AccountNameController),
                                 createTextField(
-                                    "หมายเลขบัตร", true, BranchController),
+                                    "หมายเลขบัตร", true, CardNumberController),
                                 createTextField("บัตรหมดอายุ", false,
                                     ExpiredDateController),
                               ],
@@ -218,12 +210,10 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                             builder: (BuildContext context) {
                               return DocAssignScreen(
                                 lstString: [
-                                  AccountController.text ?? '',
-                                  AccountTypeContoller.text ?? '',
-                                  BranchController.text ?? '',
-                                  DeliveryAddressController.text ?? '',
-                                  PostNoController.text ?? '',
-                                  PhoneController.text ?? ''
+                                  AccountNumberController.text ?? '',
+                                  AccountNameController.text ?? '',
+                                  CardNumberController.text ?? '',
+                                  ExpiredDateController.text ?? '',
                                 ],
                               );
                             });
@@ -250,12 +240,10 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                         FillAssignment fillAssignment = FillAssignment(
                           id: widget.assignmentId,
                           data: [
-                            AccountController.text,
-                            AccountTypeContoller.text,
-                            BranchController.text,
-                            DeliveryAddressController.text,
-                            PostNoController.text,
-                            PhoneController.text
+                            AccountNumberController.text,
+                            AccountNameController.text,
+                            CardNumberController.text,
+                            ExpiredDateController.text,
                           ],
                         );
                         saveDataToFirestore(fillAssignment);
