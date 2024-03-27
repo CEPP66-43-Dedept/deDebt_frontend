@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:dedebt_application/models/fillAssignModel.dart';
 import 'package:dedebt_application/repositories/userRepository.dart';
 import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/screens/User/docAssignmentScreen.dart';
 import 'package:dedebt_application/services/userService.dart';
+import 'package:dedebt_application/variables/color.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,13 +28,24 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
   late final UserService userService =
       UserService(userRepository: userRepository);
   late StreamController<Assignment?> _userAssignmentController;
-
+  late FillAssignment? dataAssignment;
   final AccountController = TextEditingController();
   final AccountTypeContoller = TextEditingController();
   final BranchController = TextEditingController();
   final DeliveryAddressController = TextEditingController();
   final PostNoController = TextEditingController();
   final PhoneController = TextEditingController();
+  void saveDataToFirestore(FillAssignment data) async {
+    try {
+      final CollectionReference assignmentsCollection =
+          FirebaseFirestore.instance.collection('documents');
+      await assignmentsCollection.doc(data.id).set(data.toMap());
+      print('Data saved successfully to Firestore!');
+    } catch (error) {
+      print('Error saving data: $error');
+    }
+  }
+
   Container createTextField(
       String TextBanner, bool isNumberOnly, TextEditingController controller) {
     return Container(
@@ -184,21 +197,21 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                             builder: (BuildContext context) {
                               return DocAssignScreen(
                                 lstString: [
-                                  AccountController.text,
-                                  AccountTypeContoller.text,
-                                  BranchController.text,
-                                  DeliveryAddressController.text,
-                                  PostNoController.text,
-                                  PhoneController.text
+                                  AccountController.text ?? '',
+                                  AccountTypeContoller.text ?? '',
+                                  BranchController.text ?? '',
+                                  DeliveryAddressController.text ?? '',
+                                  PostNoController.text ?? '',
+                                  PhoneController.text ?? ''
                                 ],
                               );
                             });
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFF18F80),
+                        backgroundColor: ColorGuide.blueDarken,
                       ),
                       child: const Text(
-                        'ยกเลิก',
+                        'พรีวิว',
                         style: TextStyle(fontSize: 18.0, color: Colors.white),
                       ),
                     ),
@@ -213,6 +226,18 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         // Handle button press
+                        FillAssignment fillAssignment = FillAssignment(
+                          id: widget.assignmentId,
+                          data: [
+                            AccountController.text,
+                            AccountTypeContoller.text,
+                            BranchController.text,
+                            DeliveryAddressController.text,
+                            PostNoController.text,
+                            PhoneController.text
+                          ],
+                        );
+                        saveDataToFirestore(fillAssignment);
                         context.go(AppRoutes.ASSIGNMENT_PREVIEW_DOC_USER +
                             '/' +
                             widget.assignmentId);

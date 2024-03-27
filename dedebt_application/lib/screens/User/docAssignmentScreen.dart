@@ -1,74 +1,82 @@
 import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dedebt_application/models/assignmentModel.dart';
-import 'package:dedebt_application/repositories/userRepository.dart';
-import 'package:dedebt_application/services/userService.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'dart:typed_data';
+import 'package:http/http.dart' as http;
 import 'package:pdf/pdf.dart';
-import 'package:printing/printing.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:flutter/material.dart';
+import 'package:printing/printing.dart';
 
 class DocAssignScreen extends StatefulWidget {
   final List<String> lstString;
-  const DocAssignScreen({super.key, required this.lstString});
+  const DocAssignScreen({Key? key, required this.lstString}) : super(key: key);
 
   @override
   State<DocAssignScreen> createState() => _DocAssignScreenState();
 }
 
 class _DocAssignScreenState extends State<DocAssignScreen> {
-  late final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  late final UserRepository userRepository =
-      UserRepository(firestore: firestore);
-  late final UserService userService =
-      UserService(userRepository: userRepository);
-  late StreamController<Assignment?> _userAssignmentController;
-
-  PrintingInfo? printingInfo;
+  late final String _imageUrl =
+      'https://media.discordapp.net/attachments/1027767973286510602/1222481727616978954/K_Xpress_Cash_AutoPayment_TH_page-0001.jpg?ex=66165fd4&is=6603ead4&hm=6b1c463aff267f3abfe3eaef47a82232075b1501fa49cb2ce97c7bb46479225e&=&format=webp&width=752&height=1064';
+  late Uint8List _backgroundImageBytes = Uint8List(0);
 
   @override
-  final String title = "test";
+  void initState() {
+    super.initState();
+    _downloadBackgroundImage();
+  }
 
+  Future<void> _downloadBackgroundImage() async {
+    final response = await http.get(Uri.parse(_imageUrl));
+    if (response.statusCode == 200) {
+      setState(() {
+        _backgroundImageBytes = response.bodyBytes;
+      });
+    } else {
+      throw Exception('Failed to load background image');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: Text(title)),
+        appBar: AppBar(title: const Text('สร้างเอกสาร')),
         body: PdfPreview(
-          build: (format) => _generatePdf(format, title),
+          build: (format) => _generatePdf(PdfPageFormat.a4),
         ),
       ),
     );
   }
 
-  Future<Uint8List> _generatePdf(PdfPageFormat format, String title) async {
-    final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
-    final font = await PdfGoogleFonts.nunitoExtraLight();
+  Future<Uint8List> _generatePdf(PdfPageFormat format) async {
+    final pdf = pw.Document();
+    final imageProvider = MemoryImage(_backgroundImageBytes);
 
     pdf.addPage(
       pw.Page(
-        pageFormat: format,
+        pageFormat: PdfPageFormat(format.width, format.height),
         build: (context) {
-          return pw.Column(
-            children: [
-              pw.SizedBox(
-                width: double.infinity,
-                child: pw.FittedBox(
-                  child: pw.Text(widget.lstString[0],
-                      style: pw.TextStyle(font: font)),
+          return pw.Container(
+            width: format.width,
+            height: format.height,
+            child: pw.Stack(
+              children: [
+                // พื้นหลัง
+                pw.Image(
+                  pw.MemoryImage(_backgroundImageBytes),
+                  fit: pw.BoxFit.cover,
+                  width: format.width,
+                  height: format.height,
                 ),
-              ),
-              pw.SizedBox(
-                width: double.infinity,
-                child: pw.FittedBox(
-                  child: pw.Text(widget.lstString[1],
-                      style: pw.TextStyle(font: font)),
+                // ข้อความ
+                pw.Center(
+                  child: pw.Text(
+                    '${widget.lstString.join('\n')}',
+                    style: pw.TextStyle(fontSize: 14, color: PdfColors.black),
+                  ),
                 ),
-              ),
-              pw.SizedBox(height: 20),
-              pw.Flexible(child: pw.FlutterLogo())
-            ],
+              ],
+            ),
           );
         },
       ),

@@ -56,12 +56,6 @@ class AdvisorLayout extends StatefulWidget {
     return statusContainer;
   }
 
-  Future<void> signOut() async {
-    try {
-      await Auth().signOut();
-    } on FirebaseAuthException {}
-  }
-
   static GestureDetector createRequestBox(
       BuildContext context, Request _request) {
     return GestureDetector(
@@ -364,10 +358,13 @@ class _AdvisorLayoutState extends State<AdvisorLayout> {
     super.initState();
   }
 
-  String? errorMessage = '';
   Future<void> signOut() async {
     try {
       await Auth().signOut();
+      setState(() {
+        // Set current page to zero or whatever initial page you prefer
+        widget.currentPage = 0;
+      });
     } on FirebaseAuthException {}
   }
 
