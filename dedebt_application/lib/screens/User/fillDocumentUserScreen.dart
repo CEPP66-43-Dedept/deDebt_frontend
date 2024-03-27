@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dedebt_application/repositories/userRepository.dart';
 import 'package:dedebt_application/routes/route.dart';
+import 'package:dedebt_application/screens/User/docAssignmentScreen.dart';
 import 'package:dedebt_application/services/userService.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
@@ -178,6 +179,20 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         // แจ้งหมายเหตุ function
+                        showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return DocAssignScreen(
+                                lstString: [
+                                  AccountController.text,
+                                  AccountTypeContoller.text,
+                                  BranchController.text,
+                                  DeliveryAddressController.text,
+                                  PostNoController.text,
+                                  PhoneController.text
+                                ],
+                              );
+                            });
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFF18F80),
@@ -198,8 +213,11 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         // Handle button press
-                        context.go(AppRoutes.ASSIGNMENT_SUCCESS_USER +
-                            '/${widget.assignmentId}/1');
+                        context.go(AppRoutes.ASSIGNMENT_PREVIEW_DOC_USER +
+                            '/' +
+                            widget.assignmentId);
+                        // context.go(AppRoutes.ASSIGNMENT_SUCCESS_USER +
+                        //     '/${widget.assignmentId}/1');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2DC09C),

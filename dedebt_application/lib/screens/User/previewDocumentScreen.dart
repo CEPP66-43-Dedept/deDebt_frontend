@@ -1,10 +1,13 @@
+import 'package:dedebt_application/routes/route.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class previewDocumentScreen extends StatefulWidget {
-  const previewDocumentScreen({super.key});
+  final String assignmentId;
+  const previewDocumentScreen({super.key, required this.assignmentId});
 
   @override
   State<previewDocumentScreen> createState() => _previewDocumentScreen();
@@ -65,7 +68,9 @@ class _previewDocumentScreen extends State<previewDocumentScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.go(AppRoutes.ASSIGNMENT_FILL_DOC_USER);
+                },
                 icon: const Icon(
                   Icons.arrow_back,
                   size: 35,
@@ -215,6 +220,8 @@ class _previewDocumentScreen extends State<previewDocumentScreen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
+                        context.go(AppRoutes.ASSIGNMENT_SUCCESS_USER +
+                            '/${widget.assignmentId}/1');
                         // ปุ่มเสร็จสิ้นงาน
                       },
                       style: ElevatedButton.styleFrom(

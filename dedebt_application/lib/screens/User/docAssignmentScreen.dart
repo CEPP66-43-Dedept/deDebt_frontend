@@ -11,8 +11,8 @@ import 'package:printing/printing.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 class DocAssignScreen extends StatefulWidget {
-  final String assignmentId;
-  const DocAssignScreen({super.key, required this.assignmentId});
+  final List<String> lstString;
+  const DocAssignScreen({super.key, required this.lstString});
 
   @override
   State<DocAssignScreen> createState() => _DocAssignScreenState();
@@ -55,7 +55,15 @@ class _DocAssignScreenState extends State<DocAssignScreen> {
               pw.SizedBox(
                 width: double.infinity,
                 child: pw.FittedBox(
-                  child: pw.Text(title, style: pw.TextStyle(font: font)),
+                  child: pw.Text(widget.lstString[0],
+                      style: pw.TextStyle(font: font)),
+                ),
+              ),
+              pw.SizedBox(
+                width: double.infinity,
+                child: pw.FittedBox(
+                  child: pw.Text(widget.lstString[1],
+                      style: pw.TextStyle(font: font)),
                 ),
               ),
               pw.SizedBox(height: 20),

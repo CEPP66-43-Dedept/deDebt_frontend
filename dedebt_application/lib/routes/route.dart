@@ -11,6 +11,7 @@ class AppRoutes {
   static const ASSIGNMENT_DOC_USER = '/assignment-Doc-user';
   static const ASSIGNMENT_APPOINT_USER = '/assignment-Appoint-user';
   static const ASSIGNMENT_FILL_DOC_USER = '/assignment-Fill-Doc-user';
+  static const ASSIGNMENT_PREVIEW_DOC_USER = '/assignment-Preview-Doc-user';
   static const HISTORY_USER = '/history-user';
   static const PROFILE_USER = '/profile-user';
   static const MAIN_ADMIN = '/main-admin';

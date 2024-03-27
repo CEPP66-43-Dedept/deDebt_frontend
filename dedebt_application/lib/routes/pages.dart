@@ -13,6 +13,7 @@ import 'package:dedebt_application/screens/User/docAssignmentScreen.dart';
 import 'package:dedebt_application/screens/User/fillDocumentUserScreen.dart';
 import 'package:dedebt_application/screens/User/historyUserScreen.dart';
 import 'package:dedebt_application/screens/User/homeUserScreen.dart';
+import 'package:dedebt_application/screens/User/previewDocumentScreen.dart';
 import 'package:dedebt_application/screens/User/profileUserScreen.dart';
 import 'package:dedebt_application/screens/User/requestUserScreen.dart';
 import 'package:dedebt_application/screens/User/sendRequestPage2Screen.dart';
@@ -109,12 +110,12 @@ class ROUTE {
             );
           }),
       GoRoute(
-          name: '/assignment-doc/user',
-          path: AppRoutes.ASSIGNMENT_DOC_USER + '/:assignmentID',
+          name: '/assignment-preview/user',
+          path: AppRoutes.ASSIGNMENT_PREVIEW_DOC_USER + '/:assignmentID',
           builder: (context, state) {
             final assignmentID = state.pathParameters['assignmentID'] as String;
 
-            return DocAssignScreen(
+            return previewDocumentScreen(
               assignmentId: assignmentID,
             );
           }),
