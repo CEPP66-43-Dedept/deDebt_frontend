@@ -22,6 +22,12 @@ class fillDocumentUserScreen extends StatefulWidget {
 
 class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
   static Color appBarColor = const Color(0xFF444371);
+
+  final AccountNumberController = TextEditingController();
+  final AccountNameController = TextEditingController();
+  final CardNumberController = TextEditingController();
+  final ExpiredDateController = TextEditingController();
+
   late final FirebaseFirestore firestore = FirebaseFirestore.instance;
   late final UserRepository userRepository =
       UserRepository(firestore: firestore);
@@ -29,9 +35,7 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
       UserService(userRepository: userRepository);
   late StreamController<Assignment?> _userAssignmentController;
   late FillAssignment? dataAssignment;
-  final AccountController = TextEditingController();
-  final AccountTypeContoller = TextEditingController();
-  final BranchController = TextEditingController();
+
   final DeliveryAddressController = TextEditingController();
   final PostNoController = TextEditingController();
   final PhoneController = TextEditingController();
@@ -117,63 +121,72 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                 color: const Color(0xFF000000),
                 fontSize: 18.0,
               ),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Row(
-              children: [
-                const SizedBox(
-                  width: 20,
-                ),
-                const Icon(
-                  Icons.account_balance,
-                  size: 65,
-                  color: Color(0xFF36338C),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Flexible(
-                  child: const Text(
-                    //เปลี่ชนชื่อธนาตาร
-                    "ใบหักเงินจากธนาคารกสิกรไทย",
-                    overflow: TextOverflow.visible,
-                    style: TextStyle(fontSize: 24, color: Color(0xFF36338C)),
-                  ),
-                )
-              ],
+          child: SingleChildScrollView(
+            child: GestureDetector(
+              onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Row(
+                      children: [
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Icon(
+                          Icons.account_balance,
+                          size: 65,
+                          color: Color(0xFF36338C),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Flexible(
+                          child: Text(
+                            //เปลี่ชนชื่อธนาตาร
+                            "ใบหักเงินจากธนาคารกสิกรไทย",
+                            overflow: TextOverflow.visible,
+                            style: TextStyle(
+                                fontSize: 24, color: Color(0xFF36338C)),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 470,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: RawScrollbar(
+                          thumbColor: const Color(0xFFBBB9F4),
+                          thumbVisibility: true,
+                          radius: const Radius.circular(20),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6.0, vertical: 10),
+                          thickness: 5,
+                          child: Container(
+                            width: 360,
+                            height: 490,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15,
+                            ),
+                            child: ListView(
+                              children: [
+                                createTextField("หมายเลขบัญชี", true,
+                                    AccountNumberController),
+                                createTextField(
+                                    "ชื่อบัญชี", false, AccountNameController),
+                                createTextField(
+                                    "หมายเลขบัตร", true, CardNumberController),
+                                createTextField("บัตรหมดอายุ", false,
+                                    ExpiredDateController),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: RawScrollbar(
-                thumbColor: const Color(0xFFBBB9F4),
-                thumbVisibility: true,
-                radius: const Radius.circular(20),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 6.0, vertical: 10),
-                thickness: 5,
-                child: Container(
-                  width: 360,
-                  height: 490,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                  ),
-                  child: ListView(
-                    children: [
-                      createTextField("เลขที่บัญชี", true, AccountController),
-                      createTextField(
-                          "ประเภทบัญชี", false, AccountTypeContoller),
-                      createTextField(
-                          "สำนักงาน / สาขา", false, BranchController),
-                      createTextField(
-                          "ที่อยู่กาาจัดส่ง", false, DeliveryAddressController),
-                      createTextField("รหัสไปรษณีย์", false, PostNoController),
-                      createTextField("โทรศัพท์มือถือ", true, PhoneController),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ]),
+          ),
         ),
       ),
       bottomNavigationBar: Container(
@@ -197,12 +210,10 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                             builder: (BuildContext context) {
                               return DocAssignScreen(
                                 lstString: [
-                                  AccountController.text ?? '',
-                                  AccountTypeContoller.text ?? '',
-                                  BranchController.text ?? '',
-                                  DeliveryAddressController.text ?? '',
-                                  PostNoController.text ?? '',
-                                  PhoneController.text ?? ''
+                                  AccountNumberController.text ?? '',
+                                  AccountNameController.text ?? '',
+                                  CardNumberController.text ?? '',
+                                  ExpiredDateController.text ?? '',
                                 ],
                               );
                             });
@@ -229,12 +240,10 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                         FillAssignment fillAssignment = FillAssignment(
                           id: widget.assignmentId,
                           data: [
-                            AccountController.text,
-                            AccountTypeContoller.text,
-                            BranchController.text,
-                            DeliveryAddressController.text,
-                            PostNoController.text,
-                            PhoneController.text
+                            AccountNumberController.text,
+                            AccountNameController.text,
+                            CardNumberController.text,
+                            ExpiredDateController.text,
                           ],
                         );
                         saveDataToFirestore(fillAssignment);
