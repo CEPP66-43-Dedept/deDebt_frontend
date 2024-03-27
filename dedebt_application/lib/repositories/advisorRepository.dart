@@ -96,7 +96,9 @@ class AdvisorRepository {
     try {
       CollectionReference collection =
           FirebaseFirestore.instance.collection("assignments");
-      await collection.add(assignment.toMap());
+      DocumentReference documentRef = await collection.add(assignment.toMap());
+      String documentId = documentRef.id;
+      await documentRef.update({"id": documentId});
     } catch (e) {
       print('Error creating assignment: $e');
     }
@@ -129,7 +131,7 @@ class AdvisorRepository {
       CollectionReference collection =
           FirebaseFirestore.instance.collection("requests");
       QuerySnapshot<Object?> querySnapshot =
-          await collection.where('userId', isEqualTo: advisorId).get();
+          await collection.where('advisorId', isEqualTo: advisorId).get();
       List<String> requestsData = [];
       if (querySnapshot.docs.isNotEmpty) {
         requestsData = querySnapshot.docs.map((doc) => doc.id).toList();
@@ -142,26 +144,45 @@ class AdvisorRepository {
   }
 
   Future<List<Assignment>> getAssignmentByDay(
-      List<String> requestList, Timestamp day) async {
+    List<String> requestList,
+    Timestamp day,
+  ) async {
     try {
       CollectionReference collection =
           FirebaseFirestore.instance.collection("assignments");
-      QuerySnapshot<Object?> querySnapshot = await collection
+
+      Timestamp startOfDay = Timestamp.fromDate(
+          DateTime(day.toDate().year, day.toDate().month, day.toDate().day));
+      Timestamp endOfDay = Timestamp.fromDate(DateTime(
+          day.toDate().year, day.toDate().month, day.toDate().day + 1));
+
+      // Fetch documents matching taskIds and type == 0
+      QuerySnapshot<Object?> tasksSnapshot = await collection
           .where('taskId', whereIn: requestList)
-          .where('starttime', isGreaterThanOrEqualTo: day)
-          .where('starttime', isLessThan: day.toDate().add(Duration(days: 1)))
+          .where('type',
+              isEqualTo: 1) // Add this line for filtering by type == 0
           .get();
-      List<Map<String, dynamic>> assignmentsData = [];
-      if (querySnapshot.docs.isNotEmpty) {
-        assignmentsData = querySnapshot.docs
-            .map((doc) => doc.data() as Map<String, dynamic>)
-            .toList();
+
+      // Filter documents by appointmentTime
+      List<DocumentSnapshot<Object?>> filteredDocs = [];
+      for (var doc in tasksSnapshot.docs) {
+        if (doc.get('startTime') is Timestamp) {
+          Timestamp appointmentTime = doc.get('startTime') as Timestamp;
+          if (appointmentTime.compareTo(startOfDay) >= 0 &&
+              appointmentTime.compareTo(endOfDay) < 0) {
+            filteredDocs.add(doc);
+          }
+        }
       }
-      List<Assignment> assignments =
-          assignmentsData.map((data) => Assignment.fromMap(data)).toList();
+
+      List<Assignment> assignments = [];
+      for (var doc in filteredDocs) {
+        assignments.add(Assignment.fromMap(doc.data() as Map<String, dynamic>));
+      }
+      assignments.sort((a, b) => a.startTime.compareTo(b.startTime));
       return assignments;
     } catch (e) {
-      print('Error getting user  request: $e');
+      print('Error getting user request: $e');
       return [];
     }
   }

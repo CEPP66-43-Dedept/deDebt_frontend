@@ -59,36 +59,6 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
 
   //Mockup Data
 
-  Assignment userAppointment = Assignment(
-    id: "0",
-    type: 0,
-    title: "การนัดคุยทางโทรศัพท์",
-    detail: "โทรทางมือถือเบอร์ 123-456-7890",
-    status: 0,
-    taskId: "TSETTaskID",
-    startTime: Timestamp.fromDate(DateTime(2023, 2, 27, 13, 0)),
-    endTime: Timestamp.fromDate(DateTime(2023, 2, 27, 17, 0)),
-  );
-  Assignment userAssignment = Assignment(
-    id: "1",
-    type: 1,
-    title: "กรอกเอกสาร",
-    detail: "กรอกเอกสารหักเงินของกสิกร",
-    status: 0,
-    taskId: "TSETTaskID",
-    startTime: Timestamp.fromDate(DateTime(2023, 2, 26, 13, 0)),
-    endTime: Timestamp.fromDate(DateTime(2023, 2, 26, 17, 0)),
-  );
-  Assignment userAssignment_2 = Assignment(
-    id: "1",
-    type: 1,
-    title: "กรอกเอกสาร",
-    detail: "กรอกเอกสารหักเงินของกสิกร",
-    status: 0,
-    taskId: "TSETTaskID",
-    startTime: Timestamp.fromDate(DateTime(2023, 2, 26, 13, 0)),
-    endTime: Timestamp.fromDate(DateTime(2023, 2, 26, 17, 0)),
-  );
   String getRequestDetailString(Request _request) {
     String returnString = "ขณะนี้เป็นหนี้กับผู้ให้บริการ";
     for (int i = 0; i < _request.provider.length; i++) {
@@ -173,9 +143,8 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
       const SizedBox(height: 5),
     ];
     for (Assignment assignment_item in u_assignment) {
-      Widget container = AdvisorLayout.createAssignmentContainer(
-          context, assignment_item, AppRoutes.ASSIGNMENT_ADVISOR);
-
+      Widget container =
+          AdvisorLayout.createAssignmentContainer(context, assignment_item);
       AssignmentStatusContainerList.add(container);
       AssignmentStatusContainerList.add(const SizedBox(height: 5));
     }
@@ -389,7 +358,6 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
                                             .createAssignmentContainer(
                                           context,
                                           assignment,
-                                          AppRoutes.ASSIGNMENT_ADVISOR,
                                         );
                                       },
                                     ),
@@ -428,7 +396,9 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(20),
                     onTap: () {
-                      context.go(AppRoutes.ADD_ASSIGNMENT_ADVISOR);
+                      context.go(AppRoutes.ADD_ASSIGNMENT_ADVISOR +
+                          '/' +
+                          widget.requestId);
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(16),

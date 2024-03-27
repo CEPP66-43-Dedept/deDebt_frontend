@@ -2,12 +2,18 @@ import 'package:dedebt_application/routes/transitionRoute.dart';
 
 import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/screens/Admin/adminHomeScreen.dart';
+import 'package:dedebt_application/screens/Advisor/successAdvisorScreen.dart';
 import 'package:dedebt_application/screens/HomeScreen.dart';
 import 'package:dedebt_application/screens/Matcher/homeMatcher.dart';
 import 'package:dedebt_application/screens/Matcher/requestDetailMatcherScreen.dart';
+import 'package:dedebt_application/screens/User/appointmentUserScreen.dart';
+import 'package:dedebt_application/screens/User/assignmentSuccessScreen.dart';
 import 'package:dedebt_application/screens/User/assignmentUserScreen.dart';
+import 'package:dedebt_application/screens/User/docAssignmentScreen.dart';
+import 'package:dedebt_application/screens/User/fillDocumentUserScreen.dart';
 import 'package:dedebt_application/screens/User/historyUserScreen.dart';
 import 'package:dedebt_application/screens/User/homeUserScreen.dart';
+import 'package:dedebt_application/screens/User/previewDocumentScreen.dart';
 import 'package:dedebt_application/screens/User/profileUserScreen.dart';
 import 'package:dedebt_application/screens/User/requestUserScreen.dart';
 import 'package:dedebt_application/screens/User/sendRequestPage2Screen.dart';
@@ -65,32 +71,66 @@ class ROUTE {
         ),
       ),
       GoRoute(
-        name: '/request-user',
-        path: AppRoutes.REQUEST_USER,
-        builder: (context, state) => TransitionRoutePage(
-          child: UserLayout(
-            Body: requestUserScreen(),
-            currentPage: 1,
-          ),
-        ),
-      ),
-      // GoRoute(
-      //   name: '/send-request-page2-users',
-      //   path: AppRoutes.SEND_REQUEST_PAGE2_USER,
-      //   builder: (context, state) => TransitionRoutePage(
-      //     child: sendRequestPage2Screen(),
-      //   ),
-      // ),
-      // GoRoute(
-      //   name: '/send-request-user',
-      //   path: AppRoutes.SEND_REQUEST_USER,
-      //   builder: (context, state) => TransitionRoutePage(
-      //     child: sendRequestScreen(),
-      //   ),
-      // ),
-
+          name: '/request-user',
+          path: AppRoutes.REQUEST_USER,
+          builder: (context, state) {
+            return UserLayout(
+              Body: requestUserScreen(),
+              currentPage: 1,
+            );
+          }),
       GoRoute(
           name: '/assignment-user',
+          path: AppRoutes.ASSIGNMENT_USER + '/:assignmentID',
+          builder: (context, state) {
+            final assignmentID =
+                state.pathParameters['assignmentID'] as String?;
+
+            return assignmentUserScreen(assignmentId: assignmentID ?? '');
+          }),
+      GoRoute(
+          name: '/assignment-sucess/user',
+          path: AppRoutes.ASSIGNMENT_SUCCESS_USER + '/:assignmentID' + '/:type',
+          builder: (context, state) {
+            final assignmentID = state.pathParameters['assignmentID'] as String;
+            final type =
+                int.parse(state.pathParameters['type'] as String? ?? '0');
+
+            return assignmentSuccessScreen(
+                successType: type, assignmentId: assignmentID);
+          }),
+      GoRoute(
+          name: '/assignment-appoint/user',
+          path: AppRoutes.ASSIGNMENT_APPOINT_USER + '/:assignmentID',
+          builder: (context, state) {
+            final assignmentID = state.pathParameters['assignmentID'] as String;
+
+            return appointmentUserScreen(
+              assignmentId: assignmentID,
+            );
+          }),
+      GoRoute(
+          name: '/assignment-preview/user',
+          path: AppRoutes.ASSIGNMENT_PREVIEW_DOC_USER + '/:assignmentID',
+          builder: (context, state) {
+            final assignmentID = state.pathParameters['assignmentID'] as String;
+
+            return previewDocumentScreen(
+              assignmentId: assignmentID,
+            );
+          }),
+      GoRoute(
+          name: '/assignment-fill-doc/user',
+          path: AppRoutes.ASSIGNMENT_FILL_DOC_USER + '/:assignmentID',
+          builder: (context, state) {
+            final assignmentID = state.pathParameters['assignmentID'] as String;
+
+            return fillDocumentUserScreen(
+              assignmentId: assignmentID,
+            );
+          }),
+      GoRoute(
+          name: 'send-request-users',
           path: AppRoutes.ASSIGNMENT_USER + '/:assignmentID',
           builder: (context, state) {
             final assignmentID =
@@ -135,7 +175,6 @@ class ROUTE {
           ),
         ),
       ),
-
       GoRoute(
           name: '/request-advisor',
           path: AppRoutes.REQUEST_ADVISOR + '/:requestID',
@@ -148,19 +187,32 @@ class ROUTE {
             );
           }),
       GoRoute(
-        name: '/assignment-advisor',
-        path: AppRoutes.ASSIGNMENT_ADVISOR,
-        builder: (context, state) => TransitionRoutePage(
-          child: assignmentAdvisorScreen(),
-        ),
-      ),
+          name: '/assignment-advisor',
+          path: AppRoutes.ASSIGNMENT_ADVISOR + '/:assignmentID',
+          builder: (context, state) {
+            final assignmentID =
+                state.pathParameters['assignmentID'] as String?;
+
+            return assignmentAdvisorScreen(
+              assignmentID: assignmentID!,
+            );
+          }),
       GoRoute(
-        name: '/add-assignment-advisor',
-        path: AppRoutes.ADD_ASSIGNMENT_ADVISOR,
-        builder: (context, state) => TransitionRoutePage(
-          child: addAssignmentAdvisorScreen(),
-        ),
-      ),
+          name: '/add-assignment-advisor',
+          path: AppRoutes.ADD_ASSIGNMENT_ADVISOR + '/:requestID',
+          builder: (context, state) {
+            final requestID = state.pathParameters['requestID'] as String?;
+
+            return addAssignmentAdvisorScreen(requestID: requestID!);
+          }),
+      GoRoute(
+          name: '/add-assignment-success-advisor',
+          path: AppRoutes.ADD_ASSIGNMENT_SUCCESS_ADVISOR + '/:requestID',
+          builder: (context, state) {
+            final requestID = state.pathParameters['requestID'] as String?;
+
+            return successAdvisorScreen(requestID: requestID!);
+          }),
       GoRoute(
         name: '/history-advisor',
         path: AppRoutes.HISTORY_ADVISOR,

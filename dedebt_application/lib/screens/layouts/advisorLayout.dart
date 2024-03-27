@@ -56,12 +56,6 @@ class AdvisorLayout extends StatefulWidget {
     return statusContainer;
   }
 
-  Future<void> signOut() async {
-    try {
-      await Auth().signOut();
-    } on FirebaseAuthException {}
-  }
-
   static GestureDetector createRequestBox(
       BuildContext context, Request _request) {
     return GestureDetector(
@@ -150,10 +144,10 @@ class AdvisorLayout extends StatefulWidget {
   }
 
   static GestureDetector createAssignmentContainer(
-      BuildContext context, Assignment _assignment, String destination) {
+      BuildContext context, Assignment _assignment) {
     return GestureDetector(
       onTap: () => {
-        context.go(destination)
+        context.go(AppRoutes.ASSIGNMENT_ADVISOR + '/${_assignment.id}')
         //handle redirect ไปหน้าassignment
       },
       child: Container(
@@ -175,7 +169,7 @@ class AdvisorLayout extends StatefulWidget {
                   ),
                   Text(
                     //assignment type อาจจะต้องแก้ไข
-                    _assignment.type == "การนัดหมาย"
+                    _assignment.type == 1
                         //เพิ่มวันที่
                         ? "${_assignment.detail} "
                         : _assignment.detail,
@@ -364,10 +358,13 @@ class _AdvisorLayoutState extends State<AdvisorLayout> {
     super.initState();
   }
 
-  String? errorMessage = '';
   Future<void> signOut() async {
     try {
       await Auth().signOut();
+      setState(() {
+        // Set current page to zero or whatever initial page you prefer
+        widget.currentPage = 0;
+      });
     } on FirebaseAuthException {}
   }
 
