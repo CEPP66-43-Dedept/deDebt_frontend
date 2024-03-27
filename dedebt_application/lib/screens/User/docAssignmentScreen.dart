@@ -71,7 +71,7 @@ class _DocAssignScreenState extends State<DocAssignScreen> {
                 // ข้อความ
                 pw.Center(
                   child: pw.Text(
-                    '${widget.lstString.join('\n')}',
+                    '${widget.lstString[1]}',
                     style: pw.TextStyle(fontSize: 14, color: PdfColors.black),
                   ),
                 ),

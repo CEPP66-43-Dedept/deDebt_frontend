@@ -1,9 +1,15 @@
+import 'dart:typed_data';
+
 import 'package:dedebt_application/routes/route.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/models/assignmentModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class previewDocumentScreen extends StatefulWidget {
   final String assignmentId;
@@ -15,13 +21,64 @@ class previewDocumentScreen extends StatefulWidget {
 
 class _previewDocumentScreen extends State<previewDocumentScreen> {
   static Color appBarColor = const Color(0xFF444371);
+  late final String _imageUrl =
+      'https://media.discordapp.net/attachments/1027767973286510602/1222481727616978954/K_Xpress_Cash_AutoPayment_TH_page-0001.jpg?ex=66165fd4&is=6603ead4&hm=6b1c463aff267f3abfe3eaef47a82232075b1501fa49cb2ce97c7bb46479225e&=&format=webp&width=752&height=1064';
+  late Uint8List _backgroundImageBytes = Uint8List(0);
 
-  final AccountController = TextEditingController();
-  final AccountTypeContoller = TextEditingController();
-  final BranchController = TextEditingController();
-  final DeliveryAddressController = TextEditingController();
-  final PostNoController = TextEditingController();
-  final PhoneController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _downloadBackgroundImage();
+  }
+
+  Future<void> _downloadBackgroundImage() async {
+    final response = await http.get(Uri.parse(_imageUrl));
+    if (response.statusCode == 200) {
+      setState(() {
+        _backgroundImageBytes = response.bodyBytes;
+      });
+    } else {
+      throw Exception('Failed to load background image');
+    }
+  }
+
+  Future<Uint8List> _generatePdf(PdfPageFormat format) async {
+    final pdf = pw.Document();
+    final imageProvider = MemoryImage(_backgroundImageBytes);
+
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat(format.width, format.height),
+        build: (context) {
+          return pw.Container(
+            width: format.width,
+            height: format.height,
+            child: pw.Stack(
+              children: [
+                // พื้นหลัง
+                pw.Image(
+                  pw.MemoryImage(_backgroundImageBytes),
+                  fit: pw.BoxFit.cover,
+                  width: format.width,
+                  height: format.height,
+                ),
+                // ข้อความ
+                pw.Center(
+                  child: pw.Text(
+                    'test',
+                    style: pw.TextStyle(fontSize: 14, color: PdfColors.black),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+
+    return pdf.save();
+  }
+
   Container createTextField(
       String TextBanner, bool isNumberOnly, TextEditingController controller) {
     return Container(
@@ -135,27 +192,15 @@ class _previewDocumentScreen extends State<previewDocumentScreen> {
                     child: Stack(
                       children: [
                         Container(
-                          width: 301,
-                          height: 321,
+                          width: 320,
+                          height: 400,
                           decoration: const BoxDecoration(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20.0)),
                             color: Colors.white,
                           ),
-                          child: Text("PDF To shown"),
-                        ),
-                        Positioned(
-                          bottom: 1.0,
-                          right: 1.0,
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.zoom_out_map,
-                              color: Colors.black,
-                            ),
-                            onPressed: () {
-                              // ปุ่มดู pdf
-                              print('Info button pressed!');
-                            },
+                          child: PdfPreview(
+                            build: (format) => _generatePdf(PdfPageFormat.a4),
                           ),
                         ),
                       ],
