@@ -10,15 +10,16 @@ class Assignment {
   final Timestamp startTime;
   final Timestamp endTime;
 
-  Assignment(
-      {this.id,
-      required this.type,
-      required this.title,
-      required this.detail,
-      required this.status,
-      required this.taskId,
-      required this.startTime,
-      required this.endTime});
+  Assignment({
+    this.id,
+    required this.type,
+    required this.title,
+    required this.detail,
+    required this.status,
+    required this.taskId,
+    required this.startTime,
+    required this.endTime,
+  });
 
   factory Assignment.fromMap(Map<String, dynamic> map) {
     return Assignment(
@@ -42,7 +43,7 @@ class Assignment {
       'status': status,
       'taskId': taskId,
       'endTime': endTime,
-      'startTime': startTime
+      'startTime': startTime,
     };
   }
 }

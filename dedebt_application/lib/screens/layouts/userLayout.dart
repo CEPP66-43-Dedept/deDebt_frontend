@@ -180,13 +180,7 @@ class UserLayout extends StatefulWidget {
       BuildContext context, Assignment _assignment) {
     return GestureDetector(
       onTap: () => {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                assignmentUserScreen(assignmentId: _assignment.id!),
-          ),
-        )
+        context.go(AppRoutes.ASSIGNMENT_USER + '/' + _assignment.id!),
       },
       child: Container(
         margin: const EdgeInsets.fromLTRB(19, 10, 19, 0),
