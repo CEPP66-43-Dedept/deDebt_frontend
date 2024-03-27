@@ -70,36 +70,21 @@ class ROUTE {
         ),
       ),
       GoRoute(
-        name: '/request-user',
-        path: AppRoutes.REQUEST_USER,
-        builder: (context, state) => TransitionRoutePage(
-          child: UserLayout(
-            Body: requestUserScreen(),
-            currentPage: 1,
-          ),
-        ),
-      ),
-      // GoRoute(
-      //   name: '/send-request-page2-users',
-      //   path: AppRoutes.SEND_REQUEST_PAGE2_USER,
-      //   builder: (context, state) => TransitionRoutePage(
-      //     child: sendRequestPage2Screen(),
-      //   ),
-      // ),
-      // GoRoute(
-      //   name: '/send-request-user',
-      //   path: AppRoutes.SEND_REQUEST_USER,
-      //   builder: (context, state) => TransitionRoutePage(
-      //     child: sendRequestScreen(),
-      //   ),
-      // ),
-
+          name: '/request-user',
+          path: AppRoutes.REQUEST_USER,
+          builder: (context, state) {
+            return UserLayout(
+              Body: requestUserScreen(),
+              currentPage: 1,
+            );
+          }),
       GoRoute(
           name: '/assignment-user',
           path: AppRoutes.ASSIGNMENT_USER + '/:assignmentID',
           builder: (context, state) {
             final assignmentID =
                 state.pathParameters['assignmentID'] as String?;
+
             return assignmentUserScreen(assignmentId: assignmentID ?? '');
           }),
       GoRoute(
@@ -123,7 +108,6 @@ class ROUTE {
               assignmentId: assignmentID,
             );
           }),
-
       GoRoute(
           name: '/assignment-doc/user',
           path: AppRoutes.ASSIGNMENT_DOC_USER + '/:assignmentID',
@@ -144,7 +128,6 @@ class ROUTE {
               assignmentId: assignmentID,
             );
           }),
-
       GoRoute(
           name: 'send-request-users',
           path: AppRoutes.ASSIGNMENT_USER + '/:assignmentID',
@@ -191,7 +174,6 @@ class ROUTE {
           ),
         ),
       ),
-
       GoRoute(
           name: '/request-advisor',
           path: AppRoutes.REQUEST_ADVISOR + '/:requestID',
@@ -214,7 +196,6 @@ class ROUTE {
               assignmentID: assignmentID!,
             );
           }),
-
       GoRoute(
           name: '/add-assignment-advisor',
           path: AppRoutes.ADD_ASSIGNMENT_ADVISOR + '/:requestID',

@@ -154,6 +154,8 @@ class _requestUserScreen extends State<requestUserScreen> {
           } else if (requestSnapshot.hasError) {
             return const Center(child: Text('Error fetching data'));
           } else if (!requestSnapshot.hasData) {
+            // แสดง UI เมื่อไม่มีข้อมูล
+          } else if (!requestSnapshot.hasData) {
             return Stack(children: [
               const Positioned(
                 top: 0,
