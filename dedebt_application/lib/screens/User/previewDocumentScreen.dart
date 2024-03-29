@@ -90,6 +90,11 @@ class _previewDocumentScreen extends State<previewDocumentScreen> {
       pw.Page(
         pageFormat: PdfPageFormat(format.width, format.height),
         build: (context) {
+          if (lstString!.data.isEmpty) {
+            return pw.Center(
+              child: pw.Text('No data'),
+            );
+          }
           return pw.Container(
             width: format.width,
             height: format.height,
@@ -387,7 +392,7 @@ class _previewDocumentScreen extends State<previewDocumentScreen> {
                           child: ElevatedButton(
                             onPressed: () {
                               context.go(AppRoutes.ASSIGNMENT_SUCCESS_USER +
-                                  '/${widget.assignmentId}/1');
+                                  '/${widget.assignmentId}/0');
                               // ปุ่มเสร็จสิ้นงาน
                             },
                             style: ElevatedButton.styleFrom(

@@ -23,6 +23,17 @@ class UserRepository {
     }
   }
 
+  Future<void> UpdateUserRequest(String requestId) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection("requests");
+      await collection.doc(requestId).update({'requestStatus': 2});
+    } catch (error) {
+      print('Error updating Request: $error');
+      throw error;
+    }
+  }
+
   Future<Map<String, dynamic>?> getUserActiveRequest(String userId) async {
     try {
       print(userId);

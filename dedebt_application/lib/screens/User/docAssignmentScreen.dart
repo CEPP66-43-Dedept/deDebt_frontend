@@ -56,6 +56,11 @@ class _DocAssignScreenState extends State<DocAssignScreen> {
       pw.Page(
         pageFormat: PdfPageFormat(format.width, format.height),
         build: (context) {
+          if (widget.lstString.data.isEmpty) {
+            return pw.Center(
+              child: pw.Text('No data'),
+            );
+          }
           return pw.Container(
             width: format.width,
             height: format.height,

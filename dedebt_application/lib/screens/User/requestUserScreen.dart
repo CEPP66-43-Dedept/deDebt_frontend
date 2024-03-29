@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dedebt_application/repositories/userRepository.dart';
 import 'package:dedebt_application/screens/User/sendRequestScreen.dart';
 import 'package:dedebt_application/services/userService.dart';
+import 'package:dedebt_application/variables/color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dedebt_application/screens/layouts/userLayout.dart';
@@ -123,6 +124,10 @@ class _requestUserScreen extends State<requestUserScreen> {
     return userService.getUserActiveRequest(userId);
   }
 
+  Future<void> _UpdateUserRequest(String requestId) async {
+    return userService.UpdateUserRequest(requestId);
+  }
+
   Future<List<Assignment>> _getAllAssignments(String taskId) async {
     return userService.getAllAssignments(taskId);
   }
@@ -153,9 +158,7 @@ class _requestUserScreen extends State<requestUserScreen> {
             return const Center(child: CircularProgressIndicator());
           } else if (requestSnapshot.hasError) {
             return const Center(child: Text('Error fetching data'));
-          } else if (!requestSnapshot.hasData) {
-            // แสดง UI เมื่อไม่มีข้อมูล
-          } else if (!requestSnapshot.hasData) {
+          } else if (!requestSnapshot.hasData || requestSnapshot.data == null) {
             return Stack(children: [
               const Positioned(
                 top: 0,
@@ -237,226 +240,320 @@ class _requestUserScreen extends State<requestUserScreen> {
                 ),
               )
             ]);
-          }
-          print(requestSnapshot.data);
-          Request userrequest = Request.fromMap(requestSnapshot.data!);
-          return FutureBuilder<List<Assignment>>(
-            future: _getAllAssignments(userrequest.id),
-            builder: (context, assignmentSnapshot) {
-              if (assignmentSnapshot.connectionState ==
-                  ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (assignmentSnapshot.hasError) {
-                return const Center(child: Text('Error fetching assignments'));
-              } else {
-                List<Assignment> assignments = assignmentSnapshot.data!;
-                List<Widget> assignmentWidget =
-                    createAssignmentStatusContainerList(context, assignments);
-                return Container(
-                  child: SingleChildScrollView(
-                    controller: _scrollController,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.fromLTRB(90, 25, 10, 0),
-                            child: Text(
-                              "คำร้องปัจจุบัน",
-                              style: TextStyle(fontSize: 24),
-                            ),
-                          ),
-                          SizedBox(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF36338C),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              width: 324,
-                              padding: const EdgeInsets.all(16.0),
-                              margin:
-                                  const EdgeInsets.symmetric(vertical: 16.0),
-                              child: DefaultTextStyle(
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                      color: Colors.white,
-                                      fontSize: 15.0,
-                                    ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 10),
-                                      child: SizedBox(
-                                        width: 310,
-                                        child: Text(
-                                          userrequest.title,
-                                          style: const TextStyle(fontSize: 24),
-                                          overflow: isExpanded
-                                              ? TextOverflow.visible
-                                              : TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ),
-                                    Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            const Text("สถานะ : "),
-                                            UserLayout
-                                                .getRequestStatusContainer(
-                                                    userrequest),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Row(
-                                          children: [
-                                            const Text("ผู้รับผิดชอบ : "),
-                                            Flexible(
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0xFFF0F4FD),
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 10.0),
-                                                child: Text(
-                                                  userrequest.advisorFullName ==
-                                                          ""
-                                                      ? "ยังไม่มีผู้รับผิดชอบ"
-                                                      : userrequest
-                                                          .advisorFullName,
-                                                  style: const TextStyle(
-                                                      color: Color(0xFF2DC09C)),
-                                                  softWrap: true,
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Text("ประเภท : "),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    userrequest.type.join(","),
-                                                    overflow: isExpanded
-                                                        ? TextOverflow.visible
-                                                        : TextOverflow.ellipsis,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Text("รายละเอียด : "),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    getRequestDetailString(
-                                                        userrequest),
-                                                    overflow: isExpanded
-                                                        ? TextOverflow.visible
-                                                        : TextOverflow.ellipsis,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        IconButton(
-                                          visualDensity: VisualDensity(
-                                              horizontal: -4, vertical: -4),
-                                          icon: Icon(
-                                            isExpanded
-                                                ? Icons.keyboard_arrow_up
-                                                : Icons.keyboard_arrow_down,
-                                            size: 42,
-                                            color: Colors.white,
-                                          ),
-                                          onPressed: () {
-                                            print(getRequestDetailString(
-                                                userrequest));
-                                            setState(() {
-                                              isExpanded = !isExpanded;
-                                            });
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          const Text(
-                            "ประวัติการดำเนิน",
-                            style: TextStyle(fontSize: 24),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 15),
-                            child: RawScrollbar(
-                              thumbColor: const Color(0xFFBBB9F4),
-                              thumbVisibility: true,
-                              radius: const Radius.circular(20),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 6.0, vertical: 10),
-                              thickness: 5,
-                              child: Container(
-                                height: 309,
-                                width: 324,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFFFFFF),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: DefaultTextStyle(
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .copyWith(
-                                        color: const Color(0xFF36338C),
-                                        fontSize: 15.0,
-                                      ),
-                                  child: ListView.builder(
-                                    itemCount: assignmentWidget.length,
-                                    itemBuilder: (context, index) {
-                                      return assignmentWidget[index];
-                                    },
+          } else {
+            Request userrequest = Request.fromMap(requestSnapshot.data!);
+            return FutureBuilder<List<Assignment>>(
+              future: _getAllAssignments(userrequest.id),
+              builder: (context, assignmentSnapshot) {
+                if (assignmentSnapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (assignmentSnapshot.hasError) {
+                  return const Center(
+                      child: Text('Error fetching assignments'));
+                } else {
+                  List<Assignment> assignments = assignmentSnapshot.data!;
+                  List<Widget> assignmentWidget =
+                      createAssignmentStatusContainerList(context, assignments);
+                  return Stack(
+                    children: [
+                      Container(
+                        child: SingleChildScrollView(
+                          controller: _scrollController,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.fromLTRB(90, 25, 10, 0),
+                                  child: Text(
+                                    "คำร้องปัจจุบัน",
+                                    style: TextStyle(fontSize: 24),
                                   ),
                                 ),
+                                SizedBox(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF36338C),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    width: 324,
+                                    padding: const EdgeInsets.all(16.0),
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 16.0),
+                                    child: DefaultTextStyle(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                            color: Colors.white,
+                                            fontSize: 15.0,
+                                          ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 10),
+                                            child: SizedBox(
+                                              width: 310,
+                                              child: Text(
+                                                userrequest.title,
+                                                style: const TextStyle(
+                                                    fontSize: 24),
+                                                overflow: isExpanded
+                                                    ? TextOverflow.visible
+                                                    : TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ),
+                                          Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  const Text("สถานะ : "),
+                                                  UserLayout
+                                                      .getRequestStatusContainer(
+                                                          userrequest),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 5),
+                                              Row(
+                                                children: [
+                                                  const Text("ผู้รับผิดชอบ : "),
+                                                  Flexible(
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        color: const Color(
+                                                            0xFFF0F4FD),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20),
+                                                      ),
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 10.0),
+                                                      child: Text(
+                                                        userrequest.advisorFullName ==
+                                                                ""
+                                                            ? "ยังไม่มีผู้รับผิดชอบ"
+                                                            : userrequest
+                                                                .advisorFullName,
+                                                        style: const TextStyle(
+                                                            color: Color(
+                                                                0xFF2DC09C)),
+                                                        softWrap: true,
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              const SizedBox(height: 5),
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const Text("ประเภท : "),
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          userrequest.type
+                                                              .join(","),
+                                                          overflow: isExpanded
+                                                              ? TextOverflow
+                                                                  .visible
+                                                              : TextOverflow
+                                                                  .ellipsis,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 5),
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const Text("รายละเอียด : "),
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          getRequestDetailString(
+                                                              userrequest),
+                                                          overflow: isExpanded
+                                                              ? TextOverflow
+                                                                  .visible
+                                                              : TextOverflow
+                                                                  .ellipsis,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              IconButton(
+                                                visualDensity: VisualDensity(
+                                                    horizontal: -4,
+                                                    vertical: -4),
+                                                icon: Icon(
+                                                  isExpanded
+                                                      ? Icons.keyboard_arrow_up
+                                                      : Icons
+                                                          .keyboard_arrow_down,
+                                                  size: 42,
+                                                  color: Colors.white,
+                                                ),
+                                                onPressed: () {
+                                                  print(getRequestDetailString(
+                                                      userrequest));
+                                                  setState(() {
+                                                    isExpanded = !isExpanded;
+                                                  });
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const Text(
+                                  "ประวัติการดำเนิน",
+                                  style: TextStyle(fontSize: 24),
+                                ),
+                                Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 15),
+                                  child: RawScrollbar(
+                                    thumbColor: const Color(0xFFBBB9F4),
+                                    thumbVisibility: true,
+                                    radius: const Radius.circular(20),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6.0, vertical: 10),
+                                    thickness: 5,
+                                    child: Container(
+                                      height: 309,
+                                      width: 324,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFFFFFFF),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: DefaultTextStyle(
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .copyWith(
+                                              color: const Color(0xFF36338C),
+                                              fontSize: 15.0,
+                                            ),
+                                        child: ListView.builder(
+                                          itemCount: assignmentWidget.length,
+                                          itemBuilder: (context, index) {
+                                            return assignmentWidget[index];
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 16,
+                        bottom: 16,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: ColorGuide.greenAccent,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(20),
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('ต้องการจบคำร้องปัจจุบัน ?'),
+                                      content: Text(
+                                          'โปรดทราบว่าคุณไม่สามารถกลับมาแก้ไขได้อีก'),
+                                      actions: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            _UpdateUserRequest(userrequest.id);
+
+                                            Navigator.of(context).pop();
+                                            setState(() {
+                                              _userRequestController =
+                                                  StreamController<
+                                                      Map<String, dynamic>?>();
+                                            });
+                                          },
+                                          child: const Text(
+                                            'จบคำร้อง',
+                                            style: TextStyle(
+                                                color: ColorGuide.white),
+                                          ),
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    ColorGuide.greenAccent),
+                                          ),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text(
+                                            'ปิด',
+                                            style: TextStyle(
+                                                color: ColorGuide.white),
+                                          ),
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    ColorGuide.redAccent),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.all(16),
+                                child: Icon(
+                                  Icons.check_rounded,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
                               ),
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                );
-              }
-            },
-          );
+                    ],
+                  );
+                }
+              },
+            );
+          }
         });
   }
 

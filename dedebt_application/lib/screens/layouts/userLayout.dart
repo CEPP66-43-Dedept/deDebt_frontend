@@ -257,7 +257,7 @@ class _UserLayoutState extends State<UserLayout> {
 
   Future<void> signOut() async {
     try {
-      await Auth().signOut();
+      await FirebaseAuth.instance.signOut();
     } on FirebaseAuthException {}
   }
 
