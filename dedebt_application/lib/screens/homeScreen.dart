@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? errorMessage = '';
   Future<void> signOut() async {
     try {
-      await _auth.signOut();
+      await FirebaseAuth.instance.signOut();
     } on FirebaseAuthException {}
   }
 

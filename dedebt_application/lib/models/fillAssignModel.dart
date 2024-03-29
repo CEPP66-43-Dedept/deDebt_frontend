@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FillAssignment {
   String? id;
-  List<String> data;
+  List<dynamic> data;
   FillAssignment({
     this.id,
     this.data = const [],

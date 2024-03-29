@@ -23,6 +23,17 @@ class UserRepository {
     }
   }
 
+  Future<void> UpdateUserRequest(String requestId) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection("requests");
+      await collection.doc(requestId).update({'requestStatus': 2});
+    } catch (error) {
+      print('Error updating Request: $error');
+      throw error;
+    }
+  }
+
   Future<Map<String, dynamic>?> getUserActiveRequest(String userId) async {
     try {
       print(userId);
@@ -41,6 +52,24 @@ class UserRepository {
       }
     } catch (e) {
       print('Error getting user active request: $e');
+      return null;
+    }
+  }
+
+  Future<Request?> getRequestByrequestID(String requestID) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection("requests");
+      QuerySnapshot<Object?> querySnapshot =
+          await collection.where('id', isEqualTo: requestID).limit(1).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return Request.fromMap(
+            querySnapshot.docs.first.data() as Map<String, dynamic>);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error getting request By requestID: $e');
       return null;
     }
   }

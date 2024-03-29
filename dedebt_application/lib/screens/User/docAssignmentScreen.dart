@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'package:dedebt_application/models/fillAssignModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -7,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 
 class DocAssignScreen extends StatefulWidget {
-  final List<String> lstString;
+  final FillAssignment lstString;
   const DocAssignScreen({Key? key, required this.lstString}) : super(key: key);
 
   @override
@@ -16,7 +17,7 @@ class DocAssignScreen extends StatefulWidget {
 
 class _DocAssignScreenState extends State<DocAssignScreen> {
   late final String _imageUrl =
-      'https://media.discordapp.net/attachments/1027767973286510602/1222481727616978954/K_Xpress_Cash_AutoPayment_TH_page-0001.jpg?ex=66165fd4&is=6603ead4&hm=6b1c463aff267f3abfe3eaef47a82232075b1501fa49cb2ce97c7bb46479225e&=&format=webp&width=752&height=1064';
+      'https://media.discordapp.net/attachments/1027767973286510602/1222528540793114644/K_Xpress_Cash_AutoPayment_TH_page-0001_1.jpg?ex=66168b6d&is=6604166d&hm=4697848aa76bbfad2591702b31a9c3176550b16e26c0314954fc2965c8298854&=&format=webp&width=752&height=1064';
   late Uint8List _backgroundImageBytes = Uint8List(0);
 
   @override
@@ -40,7 +41,6 @@ class _DocAssignScreenState extends State<DocAssignScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: const Text('สร้างเอกสาร')),
         body: PdfPreview(
           build: (format) => _generatePdf(PdfPageFormat.a4),
         ),
@@ -56,6 +56,11 @@ class _DocAssignScreenState extends State<DocAssignScreen> {
       pw.Page(
         pageFormat: PdfPageFormat(format.width, format.height),
         build: (context) {
+          if (widget.lstString.data.isEmpty) {
+            return pw.Center(
+              child: pw.Text('No data'),
+            );
+          }
           return pw.Container(
             width: format.width,
             height: format.height,
@@ -68,11 +73,76 @@ class _DocAssignScreenState extends State<DocAssignScreen> {
                   width: format.width,
                   height: format.height,
                 ),
-                // ข้อความ
-                pw.Center(
+
+                pw.Positioned(
+                  left: 137,
+                  top: 113,
                   child: pw.Text(
-                    '${widget.lstString.join('\n')}',
-                    style: pw.TextStyle(fontSize: 14, color: PdfColors.black),
+                    widget.lstString.data.isNotEmpty
+                        ? widget.lstString.data[4]
+                        : '',
+                    style: pw.TextStyle(fontSize: 12, color: PdfColors.black),
+                  ),
+                ),
+                pw.Positioned(
+                  left: 400,
+                  top: 113,
+                  child: pw.Text(
+                    widget.lstString.data.isNotEmpty
+                        ? widget.lstString.data[5]
+                        : '',
+                    style: pw.TextStyle(fontSize: 12, color: PdfColors.black),
+                  ),
+                ),
+                // ข้อความ
+                pw.Positioned(
+                  left: 125,
+                  top: 227,
+                  child: pw.Text(
+                    widget.lstString.data.isNotEmpty
+                        ? widget.lstString.data[0]
+                        : '',
+                    style: pw.TextStyle(fontSize: 12, color: PdfColors.black),
+                  ),
+                ),
+                pw.Positioned(
+                  left: 330,
+                  top: 227,
+                  child: pw.Text(
+                    widget.lstString.data.isNotEmpty
+                        ? widget.lstString.data[1]
+                        : '',
+                    style: pw.TextStyle(fontSize: 12, color: PdfColors.black),
+                  ),
+                ),
+                pw.Positioned(
+                  left: 120,
+                  top: 270,
+                  child: pw.Text(
+                    widget.lstString.data.isNotEmpty
+                        ? widget.lstString.data[4]
+                        : '',
+                    style: pw.TextStyle(fontSize: 12, color: PdfColors.black),
+                  ),
+                ),
+                pw.Positioned(
+                  left: 120,
+                  top: 293,
+                  child: pw.Text(
+                    widget.lstString.data.isNotEmpty
+                        ? widget.lstString.data[2]
+                        : '',
+                    style: pw.TextStyle(fontSize: 12, color: PdfColors.black),
+                  ),
+                ),
+                pw.Positioned(
+                  left: 430,
+                  top: 295,
+                  child: pw.Text(
+                    widget.lstString.data.isNotEmpty
+                        ? widget.lstString.data[3]
+                        : '',
+                    style: pw.TextStyle(fontSize: 12, color: PdfColors.black),
                   ),
                 ),
               ],
