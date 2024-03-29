@@ -105,6 +105,11 @@ class _requestListAdvisorScreen extends State<requestListAdvisorScreen> {
     return StreamBuilder<List<Request>>(
         stream: _advisorRequestController.stream,
         builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError || !snapshot.hasData) {
+            return Center(child: Text('Error fetching data'));
+          }
           return Scaffold(
             body: getBody(snapshot.data),
           );
