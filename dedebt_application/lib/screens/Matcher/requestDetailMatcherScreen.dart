@@ -1,14 +1,17 @@
 import 'dart:async';
 
+import 'package:dedebt_application/variables/color.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dedebt_application/models/advisorModel.dart';
 import 'package:dedebt_application/models/requestModel.dart';
 import 'package:dedebt_application/repositories/matcherRepository.dart';
+import 'package:dedebt_application/routes/route.dart';
 import 'package:dedebt_application/services/matcherService.dart';
 import 'package:dedebt_application/variables/color.dart';
 import 'package:dedebt_application/widgets/showAdvisorBottomsheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class RequestMatcherScreen extends StatefulWidget {
   final String requestID;
@@ -139,14 +142,14 @@ class _RequestMatcherScreenState extends State<RequestMatcherScreen> {
     bool isCase1 = false;
     switch (_request.requestStatus) {
       case 0:
-        containerColor = const Color(0xFFE1E4F8);
+        containerColor = ColorGuide.whiteAccent;
         isCase1 = true;
         break;
       case 1:
-        containerColor = const Color(0xFFF18F80);
+        containerColor = ColorGuide.redAccent;
         break;
       case 2:
-        containerColor = const Color(0xFF2DC09C);
+        containerColor = ColorGuide.greenAccent;
         break;
       default:
         containerColor = const Color(0xFFFFFFFF);
@@ -170,87 +173,6 @@ class _RequestMatcherScreenState extends State<RequestMatcherScreen> {
       ),
     );
     return statusContainer;
-  }
-
-  @override
-  static Container createRequestBox(Request _request) {
-    return Container(
-      width: 324,
-      decoration: BoxDecoration(
-        color: const Color(0xFF36338C),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: const EdgeInsets.all(16.0),
-      margin: const EdgeInsets.symmetric(horizontal: 15),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: SizedBox(
-            width: 310,
-            child: Text(_request.title,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 24)),
-          ),
-        ),
-        Column(
-          children: [
-            Row(
-              children: [
-                const Text("สถานะ : "),
-                //สถานะ container
-                getRequestStatusContainer(_request),
-              ],
-            ),
-            const SizedBox(height: 5),
-            Row(
-              children: [
-                const Text("ผู้รับผิดชอบ : "),
-                Flexible(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF0F4FD),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Text(
-                      _request.advisorFullName,
-                      style: const TextStyle(color: Color(0xFF2DC09C)),
-                      softWrap: true,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 5),
-            Row(
-              children: [
-                const Text("ประเภท : "),
-                SizedBox(
-                  width: 200,
-                  child: Text(
-                    _request.type.join(","),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 5),
-            Row(
-              children: [
-                const Text("รายละเอียด : "),
-                SizedBox(
-                  width: 200,
-                  child: Text(
-                    _request.detail,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ]),
-    );
   }
 
   @override
@@ -284,7 +206,7 @@ class _RequestMatcherScreenState extends State<RequestMatcherScreen> {
                       SizedBox(
                         child: Container(
                           decoration: BoxDecoration(
-                            color: const Color(0xFF36338C),
+                            color: ColorGuide.blueAccent,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           width: 324,
@@ -318,6 +240,7 @@ class _RequestMatcherScreenState extends State<RequestMatcherScreen> {
                                   children: [
                                     Row(
                                       children: [
+                                        const Text("สถานะ : "),
                                         getRequestStatusContainer(request),
                                       ],
                                     ),
@@ -335,9 +258,12 @@ class _RequestMatcherScreenState extends State<RequestMatcherScreen> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 10.0),
                                             child: Text(
-                                              request.advisorFullName,
+                                              request.advisorFullName == ""
+                                                  ? "ยังไม่มีที่ปรึกษา"
+                                                  : request.advisorFullName,
                                               style: const TextStyle(
-                                                  color: Color(0xFF2DC09C)),
+                                                  color:
+                                                      ColorGuide.greenAccent),
                                               softWrap: true,
                                             ),
                                           ),
@@ -450,17 +376,31 @@ class _RequestMatcherScreenState extends State<RequestMatcherScreen> {
           }
         },
       ),
+      bottomNavigationBar: BottomAppBar(
+          color: ColorGuide.greenAccent,
+          height: 55,
+          child: InkWell(
+            onTap: () {
+              context.go(AppRoutes.MAIN_MATCHER);
+            },
+            child: Center(
+              child: Text(
+                'กลับหน้าหลัก',
+                style: const TextStyle(fontSize: 18.0, color: Colors.white),
+              ),
+            ),
+          )),
     );
   }
 
   Color _getRequestStatusColor(int status) {
     switch (status) {
       case 0:
-        return const Color(0xFFE1E4F8);
+        return ColorGuide.whiteAccent;
       case 1:
-        return const Color(0xFFF18F80);
+        return ColorGuide.redAccent;
       case 2:
-        return const Color(0xFF2DC09C);
+        return ColorGuide.greenAccent;
       default:
         return Colors.white;
     }
