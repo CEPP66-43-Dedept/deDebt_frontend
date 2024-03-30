@@ -275,7 +275,6 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
     List<String> tempList = [];
     for (var i = 0; i < ProviderControllerList.length; i++) {
       tempList.add(ProviderControllerList[i].dropDownValue!.value.toString());
-     
     }
     return tempList;
   }
@@ -332,36 +331,31 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
         body: Scaffold(
             body: Align(
           alignment: Alignment.center,
-          child: Column(
-            children: [
-              RawScrollbar(
-                controller: _scrollController,
-                thumbColor: const Color(0xFFBBB9F4),
-                thumbVisibility: true,
-                radius: const Radius.circular(20),
+          child: RawScrollbar(
+            controller: _scrollController,
+            thumbColor: const Color(0xFFBBB9F4),
+            thumbVisibility: true,
+            radius: const Radius.circular(20),
+            padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 10),
+            thickness: 5,
+            child: Container(
+                width: 360,
+                height: 584,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 6.0, vertical: 10),
-                thickness: 5,
-                child: Container(
-                    width: 360,
-                    height: 602,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 15),
-                    child: DefaultTextStyle(
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: const Color(0xFF000000),
-                            fontSize: 18.0,
-                          ),
-                      child: ListView.builder(
-                        controller: _scrollController,
-                        itemCount: RowOfFinancial.length,
-                        itemBuilder: (context, index) {
-                          return RowOfFinancial[index];
-                        },
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                child: DefaultTextStyle(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: const Color(0xFF000000),
+                        fontSize: 18.0,
                       ),
-                    )),
-              ),
-            ],
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: RowOfFinancial.length,
+                    itemBuilder: (context, index) {
+                      return RowOfFinancial[index];
+                    },
+                  ),
+                )),
           ),
         )),
         bottomNavigationBar: BottomAppBar(
