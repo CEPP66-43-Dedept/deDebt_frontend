@@ -162,7 +162,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
             ? "เสร็จสิ้น"
             : _assignment.status == 1
                 ? "ดำเนินการ"
-                : _assignment.status == 1
+                : _assignment.status == 2
                     ? "ยกเลิก"
                     : "",
         style: TextStyle(color: textColor),
@@ -284,7 +284,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
                                     color: Colors.black,
                                   ),
                                   Text(
-                                      "วันที่ ${_assignment.startTime.toDate().day}/${_assignment.startTime.toDate().month}/${_assignment.startTime.toDate().year}\nเวลา ${DateFormat("HH:mm").format(_assignment.startTime.toDate())} : ${DateFormat("HH:mm").format(_assignment.endTime.toDate())}")
+                                      "วันที่ ${_assignment.startTime.toDate().day}/${_assignment.startTime.toDate().month}/${_assignment.startTime.toDate().year}\nเวลา ${DateFormat("HH:mm").format(_assignment.startTime.toDate())} น. - ${DateFormat("HH:mm").format(_assignment.endTime.toDate())} น.")
                                 ],
                               )
                             ],
@@ -321,6 +321,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
 
     String UsersName = "Areeya Suwannathot";
     String Action = "";
+    double boxheight = 243;
     var Content;
     //เป็นการนัดหมาย
     FillAssignment? fillAssignment =
@@ -328,6 +329,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
 
     if (fillAssignment != null) {
       Action = "กรอกเอกสารแล้ว";
+      boxheight = 443;
       Content = Container(
         width: 280,
         height: 280,
@@ -366,8 +368,22 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
           ],
         ),
       );
-    } else {
-      Action = "ยังไม่ได้กรอกเอกสาร";
+    } else if (_assignment.status == 1) {
+      Action = "ยังไม่กรอกเอกสาร";
+      Content = Container(
+        padding: EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          children: [
+            Icon(
+              Icons.account_balance,
+              size: 55,
+              color: Colors.black,
+            ),
+            Text("ใบหักเงินในบัญชี\nธนาคารกสิกรไทย")
+          ],
+        ),
+      );
+    } else if (_assignment.status == 2) {
       Content = Row(
         children: [
           Icon(
@@ -375,7 +391,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
             size: 55,
             color: Colors.black,
           ),
-          Text("ยังไม่ได้กรอกเอกสาร")
+          Text("ยกเลิกการกรอกเอกสาร")
         ],
       );
     }
@@ -394,8 +410,8 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
                 child: Align(
                   alignment: Alignment.center,
                   child: Container(
-                    width: 340.0, // Set width
-                    height: 443.0, // Set height
+                    width: 340.0,
+                    height: boxheight,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -433,7 +449,6 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
                                       color: Colors.black),
                                 ),
                               ),
-                              //เพิ่มให้สแดงเอกสารรตรงนี้
                               Content,
                             ],
                           ),
@@ -625,7 +640,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
                       ),
                       Container(
                         width: 390,
-                        height: 65,
+                        height: 48,
                         child: Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,

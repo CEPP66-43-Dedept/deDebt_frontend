@@ -45,6 +45,10 @@ class AdvisorRepository {
       }
       List<Request> requests =
           requestsData.map((data) => Request.fromMap(data)).toList();
+
+      // เรียงลำดับคำร้องตามสถานะ
+      requests.sort((a, b) => a.requestStatus.compareTo(b.requestStatus));
+
       return requests;
     } catch (e) {
       print('Error getting user  request: $e');
