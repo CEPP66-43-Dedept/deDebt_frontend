@@ -168,7 +168,7 @@ class _appointmentUserScreen extends State<appointmentUserScreen> {
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 15, horizontal: 45),
+                            vertical: 10, horizontal: 45),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

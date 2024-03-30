@@ -175,7 +175,7 @@ class _homeAdvisorScreen extends State<homeAdvisorScreen> {
                                 horizontal: 6.0, vertical: 10),
                             thickness: 5,
                             child: Container(
-                              height: 218,
+                              height: 200,
                               width: 324,
                               decoration: BoxDecoration(
                                 color: const Color(0xFFFFFFFF),
