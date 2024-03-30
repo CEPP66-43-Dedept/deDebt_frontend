@@ -53,6 +53,10 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
     return _advisorService.getRequestByrequestID(requestId);
   }
 
+  Future<String?> _getUserName(String userId) async {
+    return _advisorService.getUserFullnameByID(userId);
+  }
+
   Future<List<Assignment>?> _getAllAssignment(String requestId) async {
     return _advisorService.getAllAssignments(requestId);
   }
@@ -230,24 +234,44 @@ class _requestAdvisorScreen extends State<requestAdvisorScreen> {
                                               const Text("เจ้าของคำร้อง : "),
                                               Flexible(
                                                 child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                        const Color(0xFFF0F4FD),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
-                                                  ),
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 10.0),
-                                                  child: Text(
-                                                    _request.userFullName,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            Color(0xFF2DC09C)),
-                                                    softWrap: true,
-                                                  ),
-                                                ),
+                                                    decoration: BoxDecoration(
+                                                      color: const Color(
+                                                          0xFFF0F4FD),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                    ),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 10.0),
+                                                    child:
+                                                        FutureBuilder<String?>(
+                                                      future: _getUserName(
+                                                          _request.userId),
+                                                      builder: (BuildContext
+                                                              context,
+                                                          AsyncSnapshot<String?>
+                                                              snapshot) {
+                                                        if (snapshot
+                                                                .connectionState ==
+                                                            ConnectionState
+                                                                .waiting) {
+                                                          return CircularProgressIndicator();
+                                                        } else if (snapshot
+                                                            .hasError) {
+                                                          return Text(
+                                                              'Error: ${snapshot.error}');
+                                                        } else {
+                                                          return Text(
+                                                            snapshot.data ??
+                                                                'Unknown',
+                                                            style: TextStyle(
+                                                                color: const Color(
+                                                                    0xFF2DC09C)),
+                                                          );
+                                                        }
+                                                      },
+                                                    )),
                                               )
                                             ],
                                           ),
