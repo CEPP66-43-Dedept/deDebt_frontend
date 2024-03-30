@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:dedebt_application/models/fillAssignModel.dart';
 import 'package:dedebt_application/models/requestModel.dart';
 import 'package:dedebt_application/repositories/advisorRepository.dart';
+import 'package:dedebt_application/screens/User/docAssignmentScreen.dart';
 import 'package:dedebt_application/services/advisorService.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +43,33 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
     }).catchError((error) {
       _assignmentController.addError(error);
     });
+  }
+
+  Future<FillAssignment?> _getDocumentData(String documentId) async {
+    try {
+      final DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection('documents')
+          .doc(documentId)
+          .get();
+
+      if (documentSnapshot.exists) {
+        final data = documentSnapshot.data()
+            as Map<String, dynamic>; // Access data as a Map
+        if (data != null && data['data'] is List<dynamic>) {
+          Map<String, dynamic> dataMap = {'data': data['data']};
+          return FillAssignment.fromMap(dataMap);
+        } else {
+          print('Document data does not have a valid "data" list');
+          return null;
+        }
+      } else {
+        print('Document does not exist');
+        return null;
+      }
+    } catch (error) {
+      print('Error getting document data: $error');
+      return null;
+    }
   }
 
   Future<Assignment?> _getAssignmentByID(String assignmentID) async {
@@ -148,7 +177,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
         padding: const EdgeInsets.symmetric(vertical: 5),
         child: ElevatedButton(
           onPressed: () {
-            showDocumentDialog(assignment.status);
+            showDocumentDialog();
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFBBB9F4),
@@ -188,7 +217,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
     String UsersName = "Areeya Suwannathot";
     String Action = "";
     //เป็นการนัดหมาย
-    if (isAppointmentconfirmed) {
+    if (_assignment.status == 0) {
       Action = "ยืนยันการนัดหมาย";
     } else {
       Action = "ยังไม่ยืนยันการนัดหมาย";
@@ -287,13 +316,18 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
     );
   }
 
-  void showDocumentDialog(int status) {
+  Future<void> showDocumentDialog() async {
+    bool isFillDoc = true;
+
     String UsersName = "Areeya Suwannathot";
     String Action = "";
     double boxheight = 243;
     var Content;
     //เป็นการนัดหมาย
-    if (status == 0) {
+    FillAssignment? fillAssignment =
+        await _getDocumentData(_assignment.id ?? '');
+
+    if (fillAssignment != null) {
       Action = "กรอกเอกสารแล้ว";
       boxheight = 443;
       Content = Container(
@@ -313,7 +347,9 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(20.0)),
                 color: Colors.white,
               ),
-              child: Text("PDF To shown"),
+              child: DocAssignScreen(
+                lstString: fillAssignment ?? FillAssignment(),
+              ),
             ),
             Positioned(
               bottom: 1.0,
@@ -332,7 +368,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
           ],
         ),
       );
-    } else if (status == 1) {
+    } else if (_assignment.status == 1) {
       Action = "ยังไม่กรอกเอกสาร";
       Content = Container(
         padding: EdgeInsets.symmetric(vertical: 8),
@@ -347,7 +383,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
           ],
         ),
       );
-    } else if (status == 2) {
+    } else if (_assignment.status == 2) {
       Content = Row(
         children: [
           Icon(
@@ -447,9 +483,21 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
     return StreamBuilder<Assignment>(
         stream: _assignmentController.stream,
         builder: (context, assignmentSnapshot) {
+          if (assignmentSnapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (assignmentSnapshot.hasError ||
+              !assignmentSnapshot.hasData) {
+            return Center(child: Text('Error fetching data'));
+          }
           print(widget.assignmentID);
           print(assignmentSnapshot.data);
           _assignment = assignmentSnapshot.data ?? _assignment;
+          if (assignmentSnapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (assignmentSnapshot.hasError ||
+              !assignmentSnapshot.hasData) {
+            return Center(child: Text('Error fetching data'));
+          }
           return GestureDetector(
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
             child: Scaffold(

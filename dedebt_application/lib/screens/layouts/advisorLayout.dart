@@ -46,7 +46,7 @@ class AdvisorLayout extends StatefulWidget {
             ? "จัดหาที่ปรึกษา"
             : _request.requestStatus == 1
                 ? "กำลังปรึกษา"
-                : _request.requestStatus == 1
+                : _request.requestStatus == 2
                     ? "เสร็จสิ้น"
                     : "",
 
@@ -57,7 +57,7 @@ class AdvisorLayout extends StatefulWidget {
   }
 
   static GestureDetector createRequestBox(
-      BuildContext context, Request _request) {
+      BuildContext context, Request _request, String userFullname) {
     return GestureDetector(
       onTap: () {
         context.go(AppRoutes.REQUEST_ADVISOR + '/${_request.id}');
@@ -102,7 +102,7 @@ class AdvisorLayout extends StatefulWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Text(
                         //แก้ดึงข้อมูลชื่อ User
-                        _request.userFullName,
+                        userFullname,
                         style: const TextStyle(color: Color(0xFF2DC09C)),
                         softWrap: true,
                       ),
