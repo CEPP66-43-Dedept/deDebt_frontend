@@ -244,7 +244,7 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
                         thickness: 5,
                         child: Container(
                             width: 415,
-                            height: 501,
+                            height: 500,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 15, vertical: 15),
                             child: DefaultTextStyle(
@@ -349,7 +349,7 @@ class _assignmentUserScreen extends State<assignmentUserScreen> {
                       ),
                       Container(
                         width: 390,
-                        height: 165,
+                        height: 145,
                         color: Colors.white,
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: Center(
