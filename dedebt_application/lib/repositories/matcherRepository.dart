@@ -43,6 +43,65 @@ class MatcherRepository {
     }
   }
 
+  Future<List<Advisors>> processTimestampData(Timestamp timestamp) async {
+    try {
+      DateTime dateTime = timestamp.toDate();
+      print(dateTime);
+      QuerySnapshot<Map<String, dynamic>> assignmentSnapshotStartTime =
+          await FirebaseFirestore.instance
+              .collection('assignments')
+              .where('startTime', isLessThanOrEqualTo: dateTime)
+              .get();
+      QuerySnapshot<Map<String, dynamic>> assignmentSnapshotEndTime =
+          await FirebaseFirestore.instance
+              .collection('assignments')
+              .where('endTime', isGreaterThanOrEqualTo: dateTime)
+              .get();
+      List<String> taskIdsStartTime = assignmentSnapshotStartTime.docs
+          .map((doc) => doc['taskId'] as String)
+          .toList();
+      List<String> taskIdsEndTime = assignmentSnapshotEndTime.docs
+          .map((doc) => doc['taskId'] as String)
+          .toList();
+
+      List<String> commonTaskIds = taskIdsStartTime
+          .where((taskId) => taskIdsEndTime.contains(taskId))
+          .toList();
+
+      if (commonTaskIds.isNotEmpty) {
+        QuerySnapshot<Map<String, dynamic>> requestSnapshot =
+            await FirebaseFirestore.instance
+                .collection('requests')
+                .where('id', whereIn: commonTaskIds)
+                .get();
+
+        List<String> advisorIds = requestSnapshot.docs
+            .map((doc) => doc['advisorId'] as String)
+            .toList();
+
+        List<Advisors> allAdvisors = await getAllAdvisorsData();
+        List<Advisors> unavailableAdvisors = await FirebaseFirestore.instance
+            .collection('advisors')
+            .where('uid', whereNotIn: advisorIds)
+            .get()
+            .then((querySnapshot) => querySnapshot.docs
+                .map((doc) => Advisors.fromMap(doc.data()))
+                .toList());
+        print('Unavailable Advisors:');
+        for (var advisor in unavailableAdvisors) {
+          print('Advisor UID: ${advisor.uid}');
+        }
+
+        return unavailableAdvisors;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print('Error processing timestamp data: $e');
+      return [];
+    }
+  }
+
   Future<Request?> getRequestByrequestID(String requestID) async {
     try {
       CollectionReference collection =

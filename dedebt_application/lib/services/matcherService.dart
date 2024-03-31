@@ -39,6 +39,15 @@ class MatcherService {
     }
   }
 
+  Future<List<Advisors>> processTimestampData(Timestamp timestamp) async {
+    try {
+      return await _matcherRepository.processTimestampData(timestamp);
+    } catch (e) {
+      print('Error fetching users data: $e');
+      return [];
+    }
+  }
+
   Future<void> matchRequestWithAdvisor(
       Advisors advisors, Request request) async {
     try {
