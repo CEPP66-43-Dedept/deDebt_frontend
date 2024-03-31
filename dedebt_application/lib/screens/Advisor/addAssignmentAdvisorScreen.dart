@@ -643,14 +643,16 @@ class _addAssignmentAdvisorScreen extends State<addAssignmentAdvisorScreen> {
             padding: EdgeInsets.symmetric(vertical: 10),
             width: 330,
             height: 690,
-            child: DefaultTextStyle(
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: const Color(0xFF000000),
-                    fontSize: 18.0,
-                  ),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: containerList),
+            child: SingleChildScrollView(
+              child: DefaultTextStyle(
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: const Color(0xFF000000),
+                      fontSize: 18.0,
+                    ),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: containerList),
+              ),
             ),
           ),
         ),

@@ -153,8 +153,10 @@ class _RequestMatcherListState extends State<RequestMatcherList> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: const Text(
-                            "นางสมหญิง หญิงมาก",
+                          child: Text(
+                            _request.advisorFullName == ""
+                                ? "ยังไม่มีที่ปรึกษา"
+                                : _request.advisorFullName,
                             style: TextStyle(color: Color(0xFF2DC09C)),
                             softWrap: true,
                           ),
