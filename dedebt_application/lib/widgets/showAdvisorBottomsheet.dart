@@ -72,7 +72,6 @@ class AdvisorlistBottomSheet extends StatelessWidget {
                                   currentRequest: currentRequest));
                         } catch (e) {
                           print('Error fetching advisors data: $e');
-                          // Handle error gracefully, e.g., show a snackbar or error message
                         }
                       },
                       style: ElevatedButton.styleFrom(

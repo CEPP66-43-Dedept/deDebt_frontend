@@ -103,14 +103,12 @@ class _historyAdvisorScreen extends State<historyAdvisorScreen> {
                       builder: (context, userSnapshot) {
                         if (userSnapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Container(); // Show loading indicator while waiting for user name
+                          return Container();
                         }
                         if (userSnapshot.hasError) {
-                          return Text(
-                              'Error: ${userSnapshot.error}'); // Show error if failed to fetch user name
+                          return Text('Error: ${userSnapshot.error}');
                         }
-                        final userName = userSnapshot.data ??
-                            'สมศรี มีดี'; // Use a default value if user name is not available
+                        final userName = userSnapshot.data ?? 'สมศรี มีดี';
                         return Column(
                           children: [
                             AdvisorLayout.createRequestBox(
