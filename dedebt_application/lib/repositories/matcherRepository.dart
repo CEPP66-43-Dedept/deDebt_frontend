@@ -63,9 +63,17 @@ class MatcherRepository {
 
   Future<void> createFirstAssignment(Request request) async {
     try {
+      QuerySnapshot assignmentSnapshot = await FirebaseFirestore.instance
+          .collection("assignments")
+          .where("taskId", isEqualTo: request.id)
+          .get();
+
+      if (assignmentSnapshot.docs.isNotEmpty) {
+        print("Assignment already exists for this request.");
+        return;
+      }
       Assignment assignment = Assignment(
-        // ไม่ต้องกำหนด ID ในนี้
-        type: 0,
+        type: 1,
         title: "การนัดหมายครั้งแรก",
         detail: "การนัดหมายสำหรับพูดคุยครั้งแรก",
         status: 0,
@@ -73,11 +81,12 @@ class MatcherRepository {
         startTime: Timestamp.now(),
         endTime: Timestamp.now(),
       );
-      CollectionReference assignments =
-          FirebaseFirestore.instance.collection("assignments");
-      DocumentReference docRef = await assignments.add(assignment.toMap());
-
+      DocumentReference docRef = await FirebaseFirestore.instance
+          .collection("assignments")
+          .add(assignment.toMap());
       String assignmentId = docRef.id;
+      assignment.id = assignmentId;
+      await docRef.update({"id": assignmentId});
 
       print('Assignment created successfully with ID: $assignmentId');
     } catch (e) {

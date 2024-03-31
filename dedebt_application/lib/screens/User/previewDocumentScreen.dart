@@ -246,7 +246,9 @@ class _previewDocumentScreen extends State<previewDocumentScreen> {
                   children: [
                     IconButton(
                       onPressed: () {
-                        context.go(AppRoutes.ASSIGNMENT_FILL_DOC_USER);
+                        context.go(AppRoutes.ASSIGNMENT_USER +
+                            '/' +
+                            widget.assignmentId);
                       },
                       icon: const Icon(
                         Icons.arrow_back,
