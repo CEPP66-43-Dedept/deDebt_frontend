@@ -76,7 +76,7 @@ class MatcherRepository {
         type: 1,
         title: "การนัดหมายครั้งแรก",
         detail: "การนัดหมายสำหรับพูดคุยครั้งแรก",
-        status: 0,
+        status: 1,
         taskId: request.id,
         startTime: Timestamp.now(),
         endTime: Timestamp.now(),
