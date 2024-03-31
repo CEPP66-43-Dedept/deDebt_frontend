@@ -79,7 +79,7 @@ class _requestListAdvisorScreenState extends State<requestListAdvisorScreen> {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: primaryColor,
-            title: const Text('ประวัติคำร้อง'),
+            title: Center(child: const Text('คำร้องปัจจุบัน')),
           ),
           body: _buildBody(requests),
         );
