@@ -90,7 +90,7 @@ class _previewDocumentScreen extends State<previewDocumentScreen> {
       pw.Page(
         pageFormat: PdfPageFormat(format.width, format.height),
         build: (context) {
-          if (lstString!.data.isEmpty) {
+          if (lstString!.data.isEmpty || lstString.data.length < 5) {
             return pw.Center(
               child: pw.Text('No data'),
             );
