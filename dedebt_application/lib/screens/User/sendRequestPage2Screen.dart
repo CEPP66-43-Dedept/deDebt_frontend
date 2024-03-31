@@ -282,7 +282,7 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
   List<String> getTypeList() {
     List<String> tempList = [];
     for (var i = 0; i < TypeControllerList.length; i++) {
-      tempList.add(ProviderControllerList[i].dropDownValue!.value.toString());
+      tempList.add(TypeControllerList[i].dropDownValue!.value.toString());
     }
     return tempList;
   }
@@ -421,7 +421,7 @@ class _sendRequestPage2Screen extends State<sendRequestPage2Screen> {
                           else
                             allProvider += _request.provider[i] + " ";
                         }
-                        _request.title = "แก้หนี้กับธนาคาร " + allProvider;
+                        _request.title = "แก้หนี้กับ " + allProvider;
                         createRequest(_request);
                         Navigator.pop(context);
                         Navigator.push(
