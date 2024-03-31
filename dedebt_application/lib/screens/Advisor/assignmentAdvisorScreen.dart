@@ -215,9 +215,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
   }
 
   void showAppointmentDialog() {
-    bool isAppointmentconfirmed = true;
 
-    String UsersName = "Areeya Suwannathot";
     String Action = "";
     //เป็นการนัดหมาย
     if (_assignment.status == 0) {
@@ -251,14 +249,14 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
                       children: [
                         Positioned(
                           top: 60,
-                          left: 36,
+                          left: 70,
                           child: Column(
                             children: [
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: Text(
-                                  "ผู้ใช้",
+                                  "ผู้ใช้ท่านนี้",
                                   style: TextStyle(
                                       decoration: TextDecoration.underline,
                                       decorationThickness: 0.0,
@@ -322,7 +320,6 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
   Future<void> showDocumentDialog() async {
     bool isFillDoc = true;
 
-    String UsersName = "Areeya Suwannathot";
     String Action = "";
     double boxheight = 243;
     var Content;
@@ -431,7 +428,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: Text(
-                                  "ผู้ใช้ [\"${UsersName}\"]",
+                                  "ผู้ใช้ท่านนี้",
                                   style: TextStyle(
                                       decoration: TextDecoration.underline,
                                       decorationThickness: 0.0,
