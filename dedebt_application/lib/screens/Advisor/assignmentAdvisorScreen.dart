@@ -32,7 +32,6 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
     super.initState();
 
     _assignmentController = StreamController<Assignment>();
-
     _getAssignmentByID(widget.assignmentID).then((assignmentData) {
       if (assignmentData != null) {
         _assignmentController.add(assignmentData);
@@ -43,6 +42,10 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
     }).catchError((error) {
       _assignmentController.addError(error);
     });
+  }
+
+  Future<String?> _getUserName(String userId) async {
+    return _advisorService.getUserFullnameByID(userId);
   }
 
   Future<FillAssignment?> _getDocumentData(String documentId) async {
@@ -255,7 +258,7 @@ class _assignmentAdvisorScreen extends State<assignmentAdvisorScreen> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: Text(
-                                  "ผู้ใช้ [\"${UsersName}\"]",
+                                  "ผู้ใช้",
                                   style: TextStyle(
                                       decoration: TextDecoration.underline,
                                       decorationThickness: 0.0,

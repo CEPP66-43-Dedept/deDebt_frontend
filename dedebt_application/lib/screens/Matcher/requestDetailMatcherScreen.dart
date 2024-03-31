@@ -335,7 +335,9 @@ class _RequestMatcherScreenState extends State<RequestMatcherScreen> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 10.0),
                                             child: Text(
-                                              request.advisorFullName,
+                                              request.advisorFullName == ""
+                                                  ? "ยังไม่มีที่ปรึกษา"
+                                                  : request.advisorFullName,
                                               style: const TextStyle(
                                                   color: Color(0xFF2DC09C)),
                                               softWrap: true,

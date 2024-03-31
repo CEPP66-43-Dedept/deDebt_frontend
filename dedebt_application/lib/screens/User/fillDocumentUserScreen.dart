@@ -65,6 +65,10 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
     }
   }
 
+  Future<void> _updateassignmentStatus(String assignmentID) async {
+    await userService.updateAssignmentStatus(assignmentID);
+  }
+
   Container createTextField(
       String TextBanner, bool isNumberOnly, TextEditingController controller) {
     return Container(
@@ -305,6 +309,7 @@ class _fillDocumentUserScreen extends State<fillDocumentUserScreen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
+                        _updateassignmentStatus(widget.assignmentId);
                         _userDataStream.listen((Users? currentUser) {
                           if (currentUser != null) {
                             FillAssignment fillAssignment = FillAssignment(
